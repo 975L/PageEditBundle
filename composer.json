@@ -1,0 +1,31 @@
+{
+    "name": "c975l/pageedit-bundle",
+    "type": "symfony-bundle",
+    "description": "Simple tool to edit content of twig pages",
+    "keywords": ["symfony", "bundle", "twig", "edit"],
+    "homepage": "https://github.com/975L/PageEditBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Laurent Marquet",
+            "email": "laurent.marquet@laposte.net",
+            "homepage": "https://github.com/Laurent3170",
+            "role": "Developer"
+        },
+        {
+            "name": "975L Community",
+            "homepage": "https://github.com/975L"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "symfony/framework-bundle": "^3.0",
+        "sensio/framework-extra-bundle": "^3.0.2",
+        "stfalcon/tinymce-bundle": "2.*"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": { "c975L\\PageEditBundle\\": ""
+        }
+    }
+}
