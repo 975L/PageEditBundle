@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" target-language="en" datatype="plaintext" original="messages.en.xlf">
+    <body>
+      <trans-unit id="1">
+        <source>label.content</source>
+        <target>Content</target>
+      </trans-unit>
+      <trans-unit id="2">
+        <source>label.modify</source>
+        <target>Modify</target>
+      </trans-unit>
+      <trans-unit id="3">
+        <source>label.page_edit_title</source>
+        <target>Editing content of "%page%"</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -21,7 +21,7 @@
         "php": ">=5.5.9",
         "symfony/framework-bundle": "^3.0",
         "sensio/framework-extra-bundle": "^3.0.2",
-        "stfalcon/tinymce-bundle": "2.*"
+        "symfony/assetic-bundle": "^2.8",
     },
     "minimum-stability": "dev",
     "autoload": {
