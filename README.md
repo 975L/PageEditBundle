@@ -13,8 +13,6 @@ It is, of course, still possible to modify directly those files with an editor.
 
 This Bundle relies on the use of [TinyMce](https://www.tinymce.com/).
 
-**As the files are edited online, if you use Git for version control, you need to add the path to them in the `.gitignore` file (explained below) to ignore them.**
-
 Bundle installation
 ===================
 
@@ -74,7 +72,7 @@ c975_l_page_edit:
     roleNeeded: 'ROLE_ADMIN'
 ```
 
-**If you use Git for version control system, you need to add the path to folder defined in `folderPages` (that contains the files) in the `.gitignore` file, otherwise all the content will be altered by Git.**
+**As the files are edited online, if you use Git for version control, you need to add the full path to them (defined in `folderPages`) in the `.gitignore` file to ignore them, otherwise all the content will be altered by Git.**
 
 Step 4: Enable the Routes
 -------------------------
@@ -116,18 +114,27 @@ Example of initialization (see `PageEdit.html.twig` file).
 
 ```javascript
     tinymce.init({
-        language_url : 'http://example.com/js/tinymce/fr_FR.js',
-        content_css : [
-            'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
-            'http://example.com/css/styles.css',
-        ],
         selector: 'textarea.tinymce',
-        statusbar: false,
-        plugins: 'code',
+        statusbar: true,
+        menubar: false,
         browser_spellcheck: true,
         contextmenu: false,
         schema: 'html5 strict',
-        toolbar: 'formatselect | bold italic | alignleft aligncenter alignright alignjustify | cut copy paste | undo redo bullist numlist outdent indent code',
+        image_advtab: true,
+        content_css : [
+            'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
+        ],
+        //language_url : 'http://example.com/js/tinymce/fr_FR.js',
+        plugins: [
+            'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+            'searchreplace wordcount visualblocks visualchars code fullscreen',
+            'insertdatetime media nonbreaking save table contextmenu directionality',
+            'emoticons template paste textcolor colorpicker textpattern imagetools codesample toc help',
+        ],
+        toolbar: [
+            'styleselect | removeformat bold italic strikethrough forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
+            'undo redo | cut copy paste | insert link image imagetools emoticons table | print preview code | fullscreen help',
+        ],
     });
 ```
 
@@ -145,6 +152,6 @@ Step 7: How to use
 
 The Route to display a page is `http://example.com/pages/{page}`, the one to edit is `http://example.com/pages/edit/{page}`.
 
-Toolbar to access modification is displayed below the page if allowed by access rule.
+Toolbar to display modification link is displayed below the page, if allowed by access rule.
 
 Link to a page, in Twig, can be done by `<a href="{{ path('975l_display_page', { 'page': 'slug' }) }}">Title of the page</a>`.

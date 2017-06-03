@@ -1,5 +1,9 @@
 # Changelog
 
+v1.1.1
+------
+- Changes in README.md
+
 v1.1
 ----
 - Add of code files (31/05/2017)
