@@ -38,29 +38,35 @@ class PageEditController extends Controller
             $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
             $filePath = $folderPath . '/' . $page . '.html.twig';
 
-            //Gets the content
-            $originalContent = null;
+            //Gets the template engine
             $parser = $this->get('templating.name_parser');
             $locator = $this->get('templating.locator');
-            $startTemplate = file_get_contents($locator->locate($parser->parse('c975LPageEditBundle::startTemplate.html.twig')));
-            $endTemplate = file_get_contents($locator->locate($parser->parse('c975LPageEditBundle::endTemplate.html.twig')));
 
-            //Existing file
+            //Gets the skeleton
+            $skeleton = file_get_contents($locator->locate($parser->parse('c975LPageEditBundle::skeleton.html.twig')));
+
+            $startBlock = '{% block pageEdit %}';
+            $endBlock = '{% endblock %}';
+
+            $entryPoint = strpos($skeleton, $startBlock) + strlen($startBlock);
+            $exitPoint = strpos($skeleton, $endBlock, $entryPoint);
+
+            $startSkeleton = trim(substr($skeleton, 0, $entryPoint));
+            $endSkeleton = trim(substr($skeleton, $exitPoint));
+
+            //Gets the content
+            $originalContent = null;
             if ($fs->exists($filePath)) {
-                $startBlock = '{% block pageEdit %}';
-                $endBlock = '{% endblock %}';
                 $fileContent = file_get_contents($filePath);
 
-                $startPoint = strpos($fileContent, $startBlock) + strlen($startBlock);
-                $endPoint = strpos($fileContent, $endBlock);
+                $entryPoint = strpos($fileContent, $startBlock) + strlen($startBlock);
+                $exitPoint = strpos($fileContent, $endBlock);
 
-                $originalContent = trim(substr($fileContent, $startPoint, $endPoint - $startPoint));
+                $originalContent = trim(substr($fileContent, $entryPoint, $exitPoint - $entryPoint));
             }
 
-            //Defines object
-            $pageEdit = new PageEdit($originalContent);
-
             //Defines form
+            $pageEdit = new PageEdit($originalContent);
             $form = $this->createForm(PageEditType::class, $pageEdit);
             $form->handleRequest($request);
 
@@ -78,7 +84,7 @@ class PageEditController extends Controller
                 }
 
                 //Writes new file
-                $fs->dumpFile($filePath, $startTemplate . "\n" . $newContent . "\n" . $endTemplate);
+                $fs->dumpFile($filePath, $startSkeleton . "\n" . $newContent . "\n\t\t" . $endSkeleton);
                 $fs->chmod($filePath, 0770);
 
                 //Clears the cache otherwise changes will not be reflected

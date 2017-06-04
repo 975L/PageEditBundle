@@ -1,0 +1,14 @@
+{% extends 'layout.html.twig' %}
+
+{# Set data here if needed #}
+
+{% block content %}
+    <div class="container">
+        {% block pageEdit %}
+{# Content will go there #}
+        {% endblock %}
+    </div>
+    {% block toolbar %}
+        {{ toolbar|raw }}
+    {% endblock %}
+{% endblock %}
