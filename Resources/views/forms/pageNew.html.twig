@@ -10,11 +10,12 @@
                     <span class="glyphicon glyphicon-plus"></span> {{ 'label.new_page'|trans }}
                 </button>
             </div>
-{# Cancel #}
-            <p class="text-center">
-                <a href="javascript:history.back()">
-                    {{ 'label.cancel'|trans }}</a>
-            </p>
         {{ form_end(form) }}
+
+{# Cancel #}
+        <p class="text-center">
+            <a href="javascript:history.back()">
+                {{ 'label.cancel'|trans }}</a>
+        </p>
     </div>
 {% endblock %}

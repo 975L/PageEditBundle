@@ -1,5 +1,12 @@
 # Changelog
 
+v1.4
+----
+- Move toolbar above content instead of below (04/06/2017)
+- Add of a message to prevent deletion of Twig calls between {}
+- Add 'action' to PageEdit object to differentiate call of form
+- Add of possibility to delete page
+
 v1.3.1
 ------
 - Corrections in translations files (04/06/2017)

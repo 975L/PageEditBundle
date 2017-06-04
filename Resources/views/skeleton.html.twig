@@ -7,14 +7,14 @@
 {# Your own data can go there #}
 
 {% block content %}
+{# Toolbar (KEEP) #}
+    {% block toolbar %}
+        {{ toolbar|raw }}
+    {% endblock %}
+
     <div class="container">
         {% block pageEdit %}
 {# Content will go there #}
         {% endblock %}
     </div>
-
-{# Toolbar (KEEP) #}
-    {% block toolbar %}
-        {{ toolbar|raw }}
-    {% endblock %}
 {% endblock %}

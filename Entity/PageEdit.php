@@ -19,16 +19,27 @@ class PageEdit
      * @Assert\NotBlank()
      */
     protected $slug;
+    protected $action;
 
 
-    public function __construct($content = null, $title = null, $slug = null)
+    public function __construct($action = null, $content = null, $title = null, $slug = null)
     {
+        $this->setAction($action);
         $this->setContent($content);
         $this->setTitle($title);
         $this->setSlug($slug);
     }
 
 
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    public function setAction($action)
+    {
+        $this->action = $action;
+    }
     public function getContent()
     {
         return $this->content;
@@ -58,5 +69,4 @@ class PageEdit
     {
         $this->slug = $slug;
     }
-
 }

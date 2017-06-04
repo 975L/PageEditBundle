@@ -3,6 +3,9 @@
 {% block pageedit_content %}
     <div class="container">
         {{ form_start(form) }}
+            <p class="alert alert-warning text-center">
+                {{ 'text.special_formatting'|trans }}
+            </p>
             {{ form_widget(form) }}
 
             <div class="form-group">
@@ -10,11 +13,12 @@
                     <span class="glyphicon glyphicon-edit"></span> {{ 'label.modify'|trans }}
                 </button>
             </div>
-{# Cancel #}
-            <p class="text-center">
-                <a href="{{ path('975l_display_page', {'page': slug}) }}">
-                    {{ 'label.cancel'|trans }}</a>
-            </p>
         {{ form_end(form) }}
+
+{# Cancel #}
+        <p class="text-center">
+            <a href="{{ path('975l_display_page', {'page': slug}) }}">
+                {{ 'label.cancel'|trans }}</a>
+        </p>
     </div>
 {% endblock %}

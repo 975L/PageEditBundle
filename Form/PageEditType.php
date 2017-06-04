@@ -4,6 +4,7 @@ namespace c975L\PageEditBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,29 +15,38 @@ class PageEditType extends AbstractType
     //Builds the form
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $disabled = $options['data']->getAction() == 'delete' ? true : false;
+
         $builder
             ->add('title', TextType::class, array(
                 'label' => 'label.title',
+                'disabled' => $disabled,
                 'required' => true,
                 'attr' => array(
                     'placeholder' => 'label.title',
                 )))
             ->add('slug', TextType::class, array(
                 'label' => 'label.semantic_url',
+                'disabled' => $disabled,
                 'required' => true,
                 'attr' => array(
                     'placeholder' => 'text.semantic_url',
                 )))
-            ->add('content', TextareaType::class, array(
-                'label' => 'label.content',
-                'required' => true,
-                'attr' => array(
-                    'class' => 'tinymce',
-                    'cols' => 100,
-                    'rows' => 25,
-                    'placeholder' => 'label.content',
-                )))
         ;
+        if ($disabled === false) {
+            $builder
+                ->add('content', TextareaType::class, array(
+                    'label' => 'label.content',
+                    'disabled' => $disabled,
+                    'required' => true,
+                    'attr' => array(
+                        'class' => 'tinymce',
+                        'cols' => 100,
+                        'rows' => 25,
+                        'placeholder' => 'label.content',
+                    )))
+            ;
+        }
     }
 
 

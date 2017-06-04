@@ -10,6 +10,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use c975L\PageEditBundle\Entity\PageEdit;
 use c975L\PageEditBundle\Form\PageEditType;
 
@@ -27,8 +28,14 @@ class PageEditController extends Controller
     public function displayAction($page)
     {
         $filePath = $this->getParameter('c975_l_page_edit.folderPages') . '/' . $page . '.html.twig';
+        $fileDeletedPath = $this->getParameter('c975_l_page_edit.folderPages') . '/deleted/' . $page . '.html.twig';
 
-        if (!$this->get('templating')->exists($filePath)) {
+        //Deleted page
+        if ($this->get('templating')->exists($fileDeletedPath)) {
+            throw new HttpException(410);
+        }
+        //Not existing page
+        elseif (!$this->get('templating')->exists($filePath)) {
             throw $this->createNotFoundException();
         }
 
@@ -46,12 +53,51 @@ class PageEditController extends Controller
         ));
     }
 
+//NEW
+    /**
+     * @Route("/pages/new",
+     *      name = "975l_page_new")
+     * )
+     */
+    public function newAction(Request $request)
+    {
+        //Gets the user
+        $user = $this->getUser();
+
+        //Defines the form
+        if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
+            //Defines form
+            $pageEdit = new PageEdit('new');
+            $form = $this->createForm(PageEditType::class, $pageEdit);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                //Writes file
+                $this->writeFile($form->getData()->getSlug(), null, $form->getData());
+
+                //Redirects to the page
+                return $this->redirectToRoute('975l_display_page', array(
+                    'page' => $form->getData()->getSlug(),
+                ));
+            }
+
+            //Returns the form to edit content
+            return $this->render('@c975LPageEdit/forms/pageNew.html.twig', array(
+                'form' => $form->createView(),
+                'title' => $this->get('translator')->trans('label.new_page'),
+                ));
+        }
+
+        //Access is denied
+        throw $this->createAccessDeniedException();
+    }
+
 //EDIT
     /**
      * @Route("/pages/edit/{page}",
      *      name = "975l_page_edit",
      *      requirements={
-     *          "page": "^([a-z0-9\-]+)"
+     *          "page": "^([a-z0-9\-\_]+)"
      *      })
      * )
      */
@@ -77,7 +123,7 @@ class PageEditController extends Controller
                 $startBlock = '{% block pageEdit %}';
                 $endBlock = '{% endblock %}';
                 $entryPoint = strpos($fileContent, $startBlock) + strlen($startBlock);
-                $exitPoint = strpos($fileContent, $endBlock);
+                $exitPoint = strpos($fileContent, $endBlock, $entryPoint);
 
                 $originalContent = trim(substr($fileContent, $entryPoint, $exitPoint - $entryPoint));
             }
@@ -89,7 +135,7 @@ class PageEditController extends Controller
             $slug = $matches[1];
 
             //Defines form
-            $pageEdit = new PageEdit($originalContent, $title, $slug);
+            $pageEdit = new PageEdit('edit', $originalContent, $title, $slug);
             $form = $this->createForm(PageEditType::class, $pageEdit);
             $form->handleRequest($request);
 
@@ -106,7 +152,7 @@ class PageEditController extends Controller
             //Returns the form to edit content
             return $this->render('@c975LPageEdit/forms/pageEdit.html.twig', array(
                 'form' => $form->createView(),
-                'title' => $title,
+                'title' => $this->get('translator')->trans('label.modify') . ' "' . $title . '"',
                 'slug' => $slug,
                 ));
         }
@@ -115,38 +161,75 @@ class PageEditController extends Controller
         throw $this->createAccessDeniedException();
     }
 
-//NEW
+//DELETE
     /**
-     * @Route("/pages/new",
-     *      name = "975l_page_new")
+     * @Route("/pages/delete/{page}",
+     *      name = "975l_page_delete",
+     *      requirements={
+     *          "page": "^([a-z0-9\-\_]+)"
+     *      })
      * )
      */
-    public function newAction(Request $request)
+    public function deleteAction(Request $request, $page)
     {
         //Gets the user
         $user = $this->getUser();
 
         //Defines the form
         if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
+            //Gets the FileSystem
+            $fs = new Filesystem();
+
+            //Defines paths
+            $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
+            $filePath = $folderPath . '/' . $page . '.html.twig';
+
+            //Gets the content
+            $originalContent = null;
+            if ($fs->exists($filePath)) {
+                $fileContent = file_get_contents($filePath);
+
+                $startBlock = '{% block pageEdit %}';
+                $endBlock = '{% endblock %}';
+                $entryPoint = strpos($fileContent, $startBlock) + strlen($startBlock);
+                $exitPoint = strpos($fileContent, $endBlock, $entryPoint);
+
+                $originalContent = trim(substr($fileContent, $entryPoint, $exitPoint - $entryPoint));
+            }
+
+            //Gets the metadata
+            preg_match('/pageedit_title=\"(.*)\"/', $fileContent, $matches);
+            $title = $matches[1];
+            preg_match('/pageedit_slug=\"(.*)\"/', $fileContent, $matches);
+            $slug = $matches[1];
+
             //Defines form
-            $pageEdit = new PageEdit();
+            $pageEdit = new PageEdit('delete', $originalContent, $title, $slug);
             $form = $this->createForm(PageEditType::class, $pageEdit);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                //Writes file
-                $this->writeFile($form->getData()->getSlug(), null, $form->getData());
+                //Creates folders
+                $deletedFolder = $folderPath . '/deleted';
+                $fs->mkdir($deletedFolder, 0770);
+
+                //Deletes file
+                if ($fs->exists($filePath)) {
+                    $fs->rename($filePath, $deletedFolder . '/' . $page . '.html.twig');
+                }
 
                 //Redirects to the page
                 return $this->redirectToRoute('975l_display_page', array(
-                    'page' => $form->getData()->getSlug(),
+                    'page' => $pageEdit->getSlug(),
                 ));
             }
 
             //Returns the form to edit content
-            return $this->render('@c975LPageEdit/forms/pageNew.html.twig', array(
+            return $this->render('@c975LPageEdit/forms/pageDelete.html.twig', array(
                 'form' => $form->createView(),
-                'title' => $this->get('translator')->trans('label.new_page'),
+                'title' => $this->get('translator')->trans('label.delete') . ' "' . $title . '"',
+                'slug' => $slug,
+                'pageContent' => $originalContent,
                 ));
         }
 
@@ -207,7 +290,7 @@ class PageEditController extends Controller
             $fs->rename($filePath, $archivesFolder . '/' . $page . '-' . date('Y-m-d-H-i-s') . '.html.twig');
         }
 
-        //Writes new file (can be different from orignal if slug has changed)
+        //Writes new file
         $newFilePath = $folderPath . '/' . $formData->getSlug() . '.html.twig';
         $fs->dumpFile($newFilePath, $finalContent);
         $fs->chmod($newFilePath, 0770);

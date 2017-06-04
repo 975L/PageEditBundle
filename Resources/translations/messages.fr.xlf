@@ -38,6 +38,14 @@
                 <source>text.semantic_url</source>
                 <target>Nom de lap page dans l'url</target>
             </trans-unit>
+            <trans-unit id="10">
+                <source>text.special_formatting</source>
+                <target>Important, le contenu entre {{...}} ou {%...%} doit être laissé tel quel, sous peine d'altérer l'affichage de la page.</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>text.delete_page</source>
+                <target>La page suivante sera archivée et supprimée. Tout appel futur de la page renverra un code d'erreur HTTP 410 (Gone).</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
