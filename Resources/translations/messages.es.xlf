@@ -1,19 +1,43 @@
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" target-language="es" datatype="plaintext" original="messages.en.xlf">
-    <body>
-      <trans-unit id="1">
-        <source>label.content</source>
-        <target>Contenido</target>
-      </trans-unit>
-      <trans-unit id="2">
-        <source>label.modify</source>
-        <target>Modificar</target>
-      </trans-unit>
-      <trans-unit id="3">
-        <source>label.page_edit_title</source>
-        <target>Edición del contenido de "%page%"</target>
-      </trans-unit>
-    </body>
-  </file>
+    <file source-language="en" target-language="es" datatype="plaintext" original="messages.en.xlf">
+        <body>
+            <trans-unit id="1">
+                <source>label.content</source>
+                <target>Contenido</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>label.modify</source>
+                <target>Modificar</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>label.cancel</source>
+                <target>Cancelar</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>label.new_page</source>
+                <target>Nueva página</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>label.delete</source>
+                <target>Suprimar</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>label.download</source>
+                <target>Descarga zip de las páginas</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>label.title</source>
+                <target>Título</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>label.url_slug</source>
+                <target>Semantic url (i.e. "organisation")</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>text.semantic_url</source>
+                <target>Nombre de la página en la url</target>
+            </trans-unit>
+        </body>
+    </file>
 </xliff>

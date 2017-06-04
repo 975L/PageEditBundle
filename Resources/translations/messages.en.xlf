@@ -1,19 +1,43 @@
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" target-language="en" datatype="plaintext" original="messages.en.xlf">
-    <body>
-      <trans-unit id="1">
-        <source>label.content</source>
-        <target>Content</target>
-      </trans-unit>
-      <trans-unit id="2">
-        <source>label.modify</source>
-        <target>Modify</target>
-      </trans-unit>
-      <trans-unit id="3">
-        <source>label.page_edit_title</source>
-        <target>Editing content of "%page%"</target>
-      </trans-unit>
-    </body>
-  </file>
+    <file source-language="en" target-language="en" datatype="plaintext" original="messages.en.xlf">
+        <body>
+            <trans-unit id="1">
+                <source>label.content</source>
+                <target>Content</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>label.modify</source>
+                <target>Modify</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>label.cancel</source>
+                <target>Cancel</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>label.new_page</source>
+                <target>New page</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>label.delete</source>
+                <target>Delete</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>label.download</source>
+                <target>Download zip of pages</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>label.title</source>
+                <target>Title</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>label.url_slug</source>
+                <target>Semantic url (i.e. "organisation")</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>text.semantic_url</source>
+                <target>Name of page in the url</target>
+            </trans-unit>
+        </body>
+    </file>
 </xliff>

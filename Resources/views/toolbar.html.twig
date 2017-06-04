@@ -1,9 +1,15 @@
 <div class="text-center">
     <div class="btn-group btn-group-md" role="group">
+
 {# Brand #}
-        <span class="btn btn-default"><strong>PageEdit</strong></span>
+        <span class="btn btn-success"><strong>PageEdit</strong></span>
+
 {# Modify #}
-        <a href="{{ path('975l_page_edit', {'page': page}) }}" class="btn btn-info" title="{{ 'label.modify'|trans }}" role="button">
+        <a href="{{ path('975l_page_edit', {'page': page}) }}" class="btn btn-default" title="{{ 'label.modify'|trans }}" role="button">
             <span class="glyphicon glyphicon-edit"></span></a>
+
+{# New page #}
+        <a href="{{ path('975l_page_new') }}" class="btn btn-default" title="{{ 'label.new_page'|trans }}" role="button">
+            <span class="glyphicon glyphicon-plus"></span></a>
     </div>
 </div>

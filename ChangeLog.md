@@ -1,5 +1,15 @@
 # Changelog
 
+v1.3
+----
+- Add of a link 'Cancel' on the Edit page (04/06/2017)
+- Group in one file for Controllers
+- Separation of data from pageEdit.html.twig to layout.html.twig to allow other forms
+- Move to sub-folder `forms`of template `pageEdit.html.twig`
+- Add of possibility to create a page
+- Add of title and slug data for page
+- Separation in functions in Controller for re-usable parts
+
 v1.2
 ----
 - Group in one file and rename of the template used as skeleton (04/06/2017)

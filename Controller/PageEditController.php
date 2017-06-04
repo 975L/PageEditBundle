@@ -15,7 +15,38 @@ use c975L\PageEditBundle\Form\PageEditType;
 
 class PageEditController extends Controller
 {
+//DISPLAY
+    /**
+     * @Route("/pages/{page}",
+     *      name="975l_display_page",
+     *      requirements={
+     *          "page": "^(?!new)([a-z0-9\-\_]+)"
+     *      })
+     * @Method({"GET", "HEAD"})
+     */
+    public function displayAction($page)
+    {
+        $filePath = $this->getParameter('c975_l_page_edit.folderPages') . '/' . $page . '.html.twig';
 
+        if (!$this->get('templating')->exists($filePath)) {
+            throw $this->createNotFoundException();
+        }
+
+        //Gets the user
+        $user = $this->getUser();
+
+        //Adds toolbar if rights are ok
+        $toolbar = null;
+        if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
+            $toolbar = $this->renderView('@c975LPageEdit/toolbar.html.twig', array('page' => $page));
+        }
+
+        return $this->render($filePath, array(
+            'toolbar' => $toolbar,
+        ));
+    }
+
+//EDIT
     /**
      * @Route("/pages/edit/{page}",
      *      name = "975l_page_edit",
@@ -24,7 +55,7 @@ class PageEditController extends Controller
      *      })
      * )
      */
-    public function pageEditAction(Request $request, $page)
+    public function editAction(Request $request, $page)
     {
         //Gets the user
         $user = $this->getUser();
@@ -38,72 +69,150 @@ class PageEditController extends Controller
             $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
             $filePath = $folderPath . '/' . $page . '.html.twig';
 
-            //Gets the template engine
-            $parser = $this->get('templating.name_parser');
-            $locator = $this->get('templating.locator');
-
-            //Gets the skeleton
-            $skeleton = file_get_contents($locator->locate($parser->parse('c975LPageEditBundle::skeleton.html.twig')));
-
-            $startBlock = '{% block pageEdit %}';
-            $endBlock = '{% endblock %}';
-
-            $entryPoint = strpos($skeleton, $startBlock) + strlen($startBlock);
-            $exitPoint = strpos($skeleton, $endBlock, $entryPoint);
-
-            $startSkeleton = trim(substr($skeleton, 0, $entryPoint));
-            $endSkeleton = trim(substr($skeleton, $exitPoint));
-
             //Gets the content
             $originalContent = null;
             if ($fs->exists($filePath)) {
                 $fileContent = file_get_contents($filePath);
 
+                $startBlock = '{% block pageEdit %}';
+                $endBlock = '{% endblock %}';
                 $entryPoint = strpos($fileContent, $startBlock) + strlen($startBlock);
                 $exitPoint = strpos($fileContent, $endBlock);
 
                 $originalContent = trim(substr($fileContent, $entryPoint, $exitPoint - $entryPoint));
             }
 
+            //Gets the metadata
+            preg_match('/pageedit_title=\"(.*)\"/', $fileContent, $matches);
+            $title = $matches[1];
+            preg_match('/pageedit_slug=\"(.*)\"/', $fileContent, $matches);
+            $slug = $matches[1];
+
             //Defines form
-            $pageEdit = new PageEdit($originalContent);
+            $pageEdit = new PageEdit($originalContent, $title, $slug);
             $form = $this->createForm(PageEditType::class, $pageEdit);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                //Creates folders
-                $archivesFolder = $folderPath . '/archives';
-                $fs->mkdir($archivesFolder, 0770);
-
-                //Gets data
-                $newContent = $form->getData()->getContent();
-
-                //Archives old file and writes new one if content has changed
-                if ($originalContent !== null && $originalContent !== $newContent) {
-                    $fs->rename($filePath, $archivesFolder . '/' . $page . '-' . date('Y-m-d-H-i-s') . '.html.twig');
-                }
-
-                //Writes new file
-                $fs->dumpFile($filePath, $startSkeleton . "\n" . $newContent . "\n\t\t" . $endSkeleton);
-                $fs->chmod($filePath, 0770);
-
-                //Clears the cache otherwise changes will not be reflected
-                $fs->remove($this->getParameter('kernel.cache_dir') . '/../prod/twig');
+                //Writes file
+                $this->writeFile($page, $originalContent, $form->getData());
 
                 //Redirects to the page
                 return $this->redirectToRoute('975l_display_page', array(
-                    'page' => $page,
+                    'page' => $form->getData()->getSlug(),
                 ));
             }
 
             //Returns the form to edit content
-            return $this->render('@c975LPageEdit/pageEdit.html.twig', array(
+            return $this->render('@c975LPageEdit/forms/pageEdit.html.twig', array(
                 'form' => $form->createView(),
-                'page' => $page,
+                'title' => $title,
+                'slug' => $slug,
                 ));
         }
 
         //Access is denied
         throw $this->createAccessDeniedException();
+    }
+
+//NEW
+    /**
+     * @Route("/pages/new",
+     *      name = "975l_page_new")
+     * )
+     */
+    public function newAction(Request $request)
+    {
+        //Gets the user
+        $user = $this->getUser();
+
+        //Defines the form
+        if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
+            //Defines form
+            $pageEdit = new PageEdit();
+            $form = $this->createForm(PageEditType::class, $pageEdit);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                //Writes file
+                $this->writeFile($form->getData()->getSlug(), null, $form->getData());
+
+                //Redirects to the page
+                return $this->redirectToRoute('975l_display_page', array(
+                    'page' => $form->getData()->getSlug(),
+                ));
+            }
+
+            //Returns the form to edit content
+            return $this->render('@c975LPageEdit/forms/pageNew.html.twig', array(
+                'form' => $form->createView(),
+                'title' => $this->get('translator')->trans('label.new_page'),
+                ));
+        }
+
+        //Access is denied
+        throw $this->createAccessDeniedException();
+    }
+
+
+
+//FUNCTIONS
+    //Gets the start and end of the skeleton
+    public function getSkeleton()
+    {
+        $parser = $this->get('templating.name_parser');
+        $locator = $this->get('templating.locator');
+
+        $skeleton = file_get_contents($locator->locate($parser->parse('c975LPageEditBundle::skeleton.html.twig')));
+
+        $startBlock = '{% block pageEdit %}';
+        $endBlock = '{% endblock %}';
+
+        $entryPoint = strpos($skeleton, $startBlock) + strlen($startBlock);
+        $exitPoint = strpos($skeleton, $endBlock, $entryPoint);
+
+        return array (
+            'startSkeleton' => trim(substr($skeleton, 0, $entryPoint)),
+            'endSkeleton' => trim(substr($skeleton, $exitPoint))
+            );
+    }
+
+
+    //Archives old file and writes new one
+    public function writeFile($page, $originalContent, $formData)
+    {
+        //Gets the FileSystem
+        $fs = new Filesystem();
+
+        //Defines paths
+        $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
+        $filePath = $folderPath . '/' . $page . '.html.twig';
+
+        //Creates folders
+        $archivesFolder = $folderPath . '/archives';
+        $fs->mkdir($archivesFolder, 0770);
+
+        //Gets the skeleton
+        extract($this->getSkeleton());
+
+        //Updates metadata
+        $startSkeleton = preg_replace('/pageedit_title=\"(.*)\"/', 'pageedit_title="' . $formData->getTitle() . '"', $startSkeleton);
+        $startSkeleton = preg_replace('/pageedit_slug=\"(.*)\"/', 'pageedit_slug="' . $formData->getSlug() . '"', $startSkeleton);
+
+        //Concatenate skeleton + metadata + content
+        $finalContent = $startSkeleton . "\n" . $formData->getContent() . "\n\t\t" . $endSkeleton;
+
+        //Archives old file if content or metadata are different
+        if ($fs->exists($filePath) && file_get_contents($filePath) !== $finalContent) {
+            $fs->rename($filePath, $archivesFolder . '/' . $page . '-' . date('Y-m-d-H-i-s') . '.html.twig');
+        }
+
+        //Writes new file (can be different from orignal if slug has changed)
+        $newFilePath = $folderPath . '/' . $formData->getSlug() . '.html.twig';
+        $fs->dumpFile($newFilePath, $finalContent);
+        $fs->chmod($newFilePath, 0770);
+
+        //Clears the cache otherwise changes will not be reflected
+        $fs->remove($this->getParameter('kernel.cache_dir') . '/../prod/twig');
     }
 }

@@ -94,23 +94,15 @@ Step 5: Link and initialization of TinyMce
 
 It is strongly recommend to use the [Override Templates from Third-Party Bundles feature](http://symfony.com/doc/current/templating/overriding.html) to integrate fully with your site.
 
-For this, simply, create the following structure `app/Resources/c975LPageEditBundle/views/` and then duplicate the file `pageEdit.html.twig` in it, to override the existing Bundle file.
+For this, simply, create the following structure `app/Resources/c975LPageEditBundle/views/` in your app and then duplicate the file `layout.html.twig` in it, to override the existing Bundle file.
 
 In the overridding file, you must add a link to the cloud version (recommended) `https://cloud.tinymce.com/stable/tinymce.min.js` of TinyMce. You will need a free API key (available from the download link) **OR** download and link to your project [https://www.tinymce.com/download/](https://www.tinymce.com/download/).
-
-You may wish to add an "if" call (to avoid call requests when PageEdit is not used) to the cloud/downloaded version in your `layout.html.twig`:
-```twig
-{# 975L PageEdit #}
-    {% if app.request.attributes.get('_route') == '975l_page_edit' %}
-        <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=YOUR_API_KEY"></script>
-    {% endif %}
-```
 
 You also need to initialize TinyMce ([language pack](https://www.tinymce.com/download/language-packages/) via `language_url`, css used by site via `content_css`, tools, etc.).
 
 Information about options is available at [https://www.tinymce.com/docs/get-started-cloud/editor-and-features/](https://www.tinymce.com/docs/get-started-cloud/editor-and-features/).
 
-Example of initialization (see `PageEdit.html.twig` file).
+Example of initialization (see `layout.html.twig` file).
 
 ```javascript
     tinymce.init({
@@ -143,7 +135,11 @@ Step 6: Definitions of start and end of template for file saving
 
 When the Twig file is saved, it is concatenated with the content of `Resources/views/skeleton.html.twig` to obtain the full file.
 
-This file must extends your layout in order to display correctly, so you need to override it as explained above for `pageEdit.html.twig`. So, duplicate the file `skeleton.html.twig` in `app/Resources/c975LPageEditBundle/views/` and set your data in it. **Take care to keep `{% block pageEdit %}` and `{% endblock %}` as they are the entry and exit points to defines content. Also, keep `{% block toolbar %}` to keep toolbar.**
+This file must extends your layout in order to display correctly, so you need to override it as explained above for `layout.html.twig`. So, duplicate the file `skeleton.html.twig` in `app/Resources/c975LPageEditBundle/views/` and set your data in it.
+
+**Take care to keep `{% block pageEdit %}` and `{% endblock %}` as they are the entry and exit points to defines content.**
+
+**Also, keep `{% block toolbar %}` to keep toolbar, `{% set pageedit_title="%title%" %}` and `{% set pageedit_slug="%slug%" %}` used for metadata.**
 
 Step 7: How to use
 ------------------

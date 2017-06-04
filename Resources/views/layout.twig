@@ -6,7 +6,7 @@
             <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
             <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=no" />
             <meta name="format-detection" content="telephone=no" />
-            <title>PageEdit -> {{ page }}</title>
+            <title>PageEdit -> {{ title }}</title>
             <base />
 
 {# Css #}
@@ -69,22 +69,7 @@
     </head>
 
     <body>
-        {% block content %}
-            <div class="container">
-                <h1 class="text-center">
-                    PageEdit -> {{ page }}
-                </h1>
-
-                {{ form_start(form) }}
-                    {{ form_widget(form) }}
-
-                    <div class="form-group">
-                        <button type="submit" name="submit" title="{{ 'label.modify'|trans }}" class="btn btn-lg btn-primary btn-block">
-                            <span class="glyphicon glyphicon-edit white"></span> {{ 'label.modify'|trans }}
-                        </button>
-                    </div>
-                {{ form_end(form) }}
-            </div>
+        {% block pageedit_content %}
         {% endblock %}
     </body>
 </html>

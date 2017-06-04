@@ -1,0 +1,20 @@
+{% extends "@c975LPageEdit/layout.html.twig" %}
+
+{% block pageedit_content %}
+    <div class="container">
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+
+            <div class="form-group">
+                <button type="submit" name="submit" title="{{ 'label.new_page'|trans }}" class="btn btn-lg btn-primary btn-block">
+                    <span class="glyphicon glyphicon-plus"></span> {{ 'label.new_page'|trans }}
+                </button>
+            </div>
+{# Cancel #}
+            <p class="text-center">
+                <a href="javascript:history.back()">
+                    {{ 'label.cancel'|trans }}</a>
+            </p>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

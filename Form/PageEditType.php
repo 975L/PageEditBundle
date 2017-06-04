@@ -5,6 +5,7 @@ namespace c975L\PageEditBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PageEditType extends AbstractType
@@ -14,9 +15,21 @@ class PageEditType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('title', TextType::class, array(
+                'label' => 'label.title',
+                'required' => true,
+                'attr' => array(
+                    'placeholder' => 'label.title',
+                )))
+            ->add('slug', TextType::class, array(
+                'label' => 'label.semantic_url',
+                'required' => true,
+                'attr' => array(
+                    'placeholder' => 'text.semantic_url',
+                )))
             ->add('content', TextareaType::class, array(
-                'label' => false,
-                'required' => false,
+                'label' => 'label.content',
+                'required' => true,
                 'attr' => array(
                     'class' => 'tinymce',
                     'cols' => 100,

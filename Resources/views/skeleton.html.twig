@@ -1,6 +1,10 @@
 {% extends 'layout.html.twig' %}
 
-{# Set data here if needed #}
+{# Metadata (KEEP) #}
+{% set pageedit_title="%title%" %}
+{% set pageedit_slug="%slug%" %}
+
+{# Your own data can go there #}
 
 {% block content %}
     <div class="container">
@@ -8,6 +12,8 @@
 {# Content will go there #}
         {% endblock %}
     </div>
+
+{# Toolbar (KEEP) #}
     {% block toolbar %}
         {{ toolbar|raw }}
     {% endblock %}
