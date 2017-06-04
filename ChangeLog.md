@@ -1,5 +1,9 @@
 # Changelog
 
+v1.3.1
+------
+- Corrections in translations files (04/06/2017)
+
 v1.3
 ----
 - Add of a link 'Cancel' on the Edit page (04/06/2017)

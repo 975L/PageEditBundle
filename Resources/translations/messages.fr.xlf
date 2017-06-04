@@ -32,7 +32,7 @@
             </trans-unit>
             <trans-unit id="8">
                 <source>label.semantic_url</source>
-                <target>Semantic url</target>
+                <target>Url sémantique</target>
             </trans-unit>
             <trans-unit id="9">
                 <source>text.semantic_url</source>
