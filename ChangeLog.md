@@ -1,5 +1,10 @@
 # Changelog
 
+v1.4.1
+------
+- Arrangments of getters and setters (05/06/2017)
+- Renaming of layout.html.twig
+
 v1.4
 ----
 - Move toolbar above content instead of below (04/06/2017)
@@ -39,6 +44,6 @@ v1.1
 - Add of code files (31/05/2017)
 - Add of explanations in README.md
 
-V1.0
+v1.0
 ----
 - Creation of bundle (20/05/2017)

@@ -31,42 +31,91 @@ class PageEdit
     }
 
 
+    /**
+     * Set action
+     *
+     * @return PageEdit
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+
+        return $this;
+    }
+
+    /**
+     * Get action
+     *
+     * @return string
+     */
     public function getAction()
     {
         return $this->action;
     }
 
-    public function setAction($action)
+    /**
+     * Set content
+     *
+     * @return PageEdit
+     */
+    public function setContent($content)
     {
-        $this->action = $action;
+        $this->content = $content;
+
+        return $this;
     }
+
+    /**
+     * Get content
+     *
+     * @return string
+     */
     public function getContent()
     {
         return $this->content;
     }
 
-    public function setContent($content)
+    /**
+     * Set title
+     *
+     * @return PageEdit
+     */
+    public function setTitle($title)
     {
-        $this->content = $content;
+        $this->title = $title;
+
+        return $this;
     }
 
+    /**
+     * Get title
+     *
+     * @return string
+     */
     public function getTitle()
     {
         return $this->title;
     }
 
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
-
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
+    /**
+     * Set slug
+     *
+     * @return PageEdit
+     */
     public function setSlug($slug)
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 }
