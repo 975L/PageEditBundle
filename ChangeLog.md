@@ -1,5 +1,9 @@
 # Changelog
 
+v1.4.1.2
+--------
+- Add mention lo License in php files (05/06/2017)
+
 v1.4.1.1
 --------
 - Suppression of button for download zip as function is not available yet (05/06/2017)
