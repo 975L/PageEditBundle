@@ -1,5 +1,9 @@
 # Changelog
 
+v1.4.1.1
+--------
+- Suppression of button for download zip as function is not available yet (05/06/2017)
+
 v1.4.1
 ------
 - Arrangments of getters and setters (05/06/2017)
