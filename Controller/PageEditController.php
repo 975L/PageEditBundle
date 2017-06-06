@@ -26,7 +26,7 @@ class PageEditController extends Controller
 //DISPLAY
     /**
      * @Route("/pages/{page}",
-     *      name="975l_display_page",
+     *      name="pageedit_display_page",
      *      requirements={
      *          "page": "^(?!new)([a-z0-9\-\_]+)"
      *      })

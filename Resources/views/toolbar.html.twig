@@ -15,5 +15,9 @@
 {# Delete page #}
         <a href="{{ path('975l_page_delete', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
             <span class="glyphicon glyphicon-trash"></span></a>
+
+{# Download zip of files #}
+        <a href="{{ path('975l_page_edit', {'page': page}) }}" class="btn btn-default" title="{{ 'label.download'|trans }}" role="button">
+            <span class="glyphicon glyphicon-compressed"></span></a>
     </div>
 </div>

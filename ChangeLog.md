@@ -1,5 +1,9 @@
 # Changelog
 
+v1.5
+----
+- Renaming of route `975l_display_page` by `pageedit_display_page` (more accurate) [BC-BREAK] (06/06/2017)
+
 v1.4.1.2
 --------
 - Add mention lo License in php files (05/06/2017)
