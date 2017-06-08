@@ -1,5 +1,9 @@
 # Changelog
 
+v1.6
+----
+- Renaming of routes `975l_XXX` and `pageedit_XXX` (more accurate) [BC-BREAK] (08/06/2017)
+
 v1.5
 ----
 - Renaming of route `975l_display_page` by `pageedit_display_page` (more accurate) [BC-BREAK] (06/06/2017)

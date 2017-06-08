@@ -26,7 +26,7 @@ class PageEditController extends Controller
 //DISPLAY
     /**
      * @Route("/pages/{page}",
-     *      name="pageedit_display_page",
+     *      name="pageedit_display",
      *      requirements={
      *          "page": "^(?!new)([a-z0-9\-\_]+)"
      *      })
@@ -63,7 +63,7 @@ class PageEditController extends Controller
 //NEW
     /**
      * @Route("/pages/new",
-     *      name = "975l_page_new")
+     *      name="pageedit_new")
      * )
      */
     public function newAction(Request $request)
@@ -83,7 +83,7 @@ class PageEditController extends Controller
                 $this->writeFile($form->getData()->getSlug(), null, $form->getData());
 
                 //Redirects to the page
-                return $this->redirectToRoute('975l_display_page', array(
+                return $this->redirectToRoute('pageedit_display', array(
                     'page' => $form->getData()->getSlug(),
                 ));
             }
@@ -102,8 +102,8 @@ class PageEditController extends Controller
 //EDIT
     /**
      * @Route("/pages/edit/{page}",
-     *      name = "975l_page_edit",
-     *      requirements={
+     *      name="pageedit_edit",
+     *      "requirements" ={
      *          "page": "^([a-z0-9\-\_]+)"
      *      })
      * )
@@ -151,7 +151,7 @@ class PageEditController extends Controller
                 $this->writeFile($page, $originalContent, $form->getData());
 
                 //Redirects to the page
-                return $this->redirectToRoute('975l_display_page', array(
+                return $this->redirectToRoute('pageedit_display', array(
                     'page' => $form->getData()->getSlug(),
                 ));
             }
@@ -171,8 +171,8 @@ class PageEditController extends Controller
 //DELETE
     /**
      * @Route("/pages/delete/{page}",
-     *      name = "975l_page_delete",
-     *      requirements={
+     *      name="pageedit_delete",
+     *      "requirements" ={
      *          "page": "^([a-z0-9\-\_]+)"
      *      })
      * )
@@ -226,7 +226,7 @@ class PageEditController extends Controller
                 }
 
                 //Redirects to the page
-                return $this->redirectToRoute('975l_display_page', array(
+                return $this->redirectToRoute('pageedit_display', array(
                     'page' => $pageEdit->getSlug(),
                 ));
             }

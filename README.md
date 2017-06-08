@@ -148,7 +148,7 @@ The Route to display a page is `http://example.com/pages/{page}`, the one to edi
 
 Toolbar to display modification link is displayed below the page, if allowed by access rule.
 
-Link to a page, in Twig, can be done by `<a href="{{ path('pageedit_display_page', { 'page': 'slug' }) }}">Title of the page</a>`.
+Link to a page, in Twig, can be done by `<a href="{{ path('pageedit_display', { 'page': 'slug' }) }}">Title of the page</a>`.
 
 Step 8 - Migrating existing files to PageEdit
 ---------------------------------------------
