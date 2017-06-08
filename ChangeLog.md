@@ -1,5 +1,9 @@
 # Changelog
 
+v1.6.3
+------
+- Correction (2) of routes in toolbar (08/06/2017)
+
 v1.6.2
 ------
 - Correction of routes in toolbar (08/06/2017)
