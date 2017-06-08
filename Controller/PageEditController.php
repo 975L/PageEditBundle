@@ -103,7 +103,7 @@ class PageEditController extends Controller
     /**
      * @Route("/pages/edit/{page}",
      *      name="pageedit_edit",
-     *      "requirements" ={
+     *      requirements={
      *          "page": "^([a-z0-9\-\_]+)"
      *      })
      * )
@@ -172,7 +172,7 @@ class PageEditController extends Controller
     /**
      * @Route("/pages/delete/{page}",
      *      name="pageedit_delete",
-     *      "requirements" ={
+     *      requirements={
      *          "page": "^([a-z0-9\-\_]+)"
      *      })
      * )

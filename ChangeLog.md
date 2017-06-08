@@ -1,5 +1,9 @@
 # Changelog
 
+v1.6.1
+------
+- Suppresion of " in Routes (08/06/2017)
+
 v1.6
 ----
 - Renaming of routes `975l_XXX` and `pageedit_XXX` (more accurate) [BC-BREAK] (08/06/2017)
