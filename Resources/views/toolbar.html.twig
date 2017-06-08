@@ -5,19 +5,19 @@
         <span class="btn btn-success"><strong>PageEdit</strong></span>
 
 {# Modify #}
-        <a href="{{ path('975l_page_edit', {'page': page}) }}" class="btn btn-default" title="{{ 'label.modify'|trans }}" role="button">
+        <a href="{{ path('pageedit_edit', {'page': page}) }}" class="btn btn-default" title="{{ 'label.modify'|trans }}" role="button">
             <span class="glyphicon glyphicon-edit"></span></a>
 
 {# New page #}
-        <a href="{{ path('975l_page_new') }}" class="btn btn-default" title="{{ 'label.new_page'|trans }}" role="button">
+        <a href="{{ path('pageedit_new') }}" class="btn btn-default" title="{{ 'label.new_page'|trans }}" role="button">
             <span class="glyphicon glyphicon-plus"></span></a>
 
 {# Delete page #}
-        <a href="{{ path('975l_page_delete', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
+        <a href="{{ path('pageedit_delete', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
             <span class="glyphicon glyphicon-trash"></span></a>
 
 {# Download zip of files #}
-        <a href="{{ path('975l_page_edit', {'page': page}) }}" class="btn btn-default" title="{{ 'label.download'|trans }}" role="button">
-            <span class="glyphicon glyphicon-compressed"></span></a>
+{#        <a href="{{ path('975l_page_edit', {'page': page}) }}" class="btn btn-default" title="{{ 'label.download'|trans }}" role="button">
+            <span class="glyphicon glyphicon-compressed"></span></a> #}
     </div>
 </div>
