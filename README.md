@@ -62,7 +62,7 @@ class AppKernel extends Kernel
 Step 3: Configure the Bundle
 ----------------------------
 
-Then, in the `app/config.yml` file of your project, define `folderPages` (path where the files will be stored) and `roleNeeded` (The role needed to enable access to the edition of page).
+Then, in the `app/config.yml` file of your project, define `folderPages` (path where the files will be stored) and `roleNeeded` (The user's role needed to enable access to the edition of page).
 
 ```yml
 #app/config/config.yml
@@ -137,7 +137,7 @@ When the Twig file is saved, it is concatenated with the content of `Resources/v
 
 This file must extends your layout in order to display correctly, so you need to override it as explained above for `layout.html.twig`. So, duplicate the file `skeleton.html.twig` in `app/Resources/c975LPageEditBundle/views/` and set your data in it.
 
-**Take care to keep `{% block pageEdit %}` and `{% endblock %}` as they are the entry and exit points to defines content.**
+**Take care to keep `{% block pageedit_content %}` and `{% endblock %}` as they are the entry and exit points to defines content.**
 
 **Also, keep `{% block toolbar %}` to keep toolbar, `{% set pageedit_title="%title%" %}` and `{% set pageedit_slug="%slug%" %}` used for metadata.**
 
@@ -149,6 +149,14 @@ The Route to display a page is `http://example.com/pages/{page}`, the one to edi
 Toolbar to display modification link is displayed below the page, if allowed by access rule.
 
 Link to a page, in Twig, can be done by `<a href="{{ path('pageedit_display', { 'page': 'slug' }) }}">Title of the page</a>`.
+
+The different Routes (naming self-explanatory) available are:
+* pageedit_display
+* pageedit_new
+* pageedit_edit
+* pageedit_delete
+* pageedit_dashboard
+* pageedit_help
 
 Step 8 - Migrating existing files to PageEdit
 ---------------------------------------------

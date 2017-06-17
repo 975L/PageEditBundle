@@ -1,0 +1,57 @@
+{% extends "@c975LPageEdit/layout.html.twig" %}
+
+{% block pageedit_content %}
+    <div class="container">
+{# Toolbar #}
+        <div class="text-center">
+            <div class="btn-group btn-group-md" role="group">
+{# New #}
+                <a href="{{ path('pageedit_new') }}" class="btn btn-info" title="{{ 'label.new_page'|trans }}" role="button">
+                    <span class="glyphicon glyphicon-plus"></span> {{ 'label.new_page'|trans }}</a>
+
+{# Help #}
+                <a href="{{ path('pageedit_help') }}" class="btn btn-info" title="{{ 'label.help'|trans }}" role="button">
+                    <span class="glyphicon glyphicon-flag"></span> {{ 'label.help'|trans }}</a>
+            </div>
+        </div>
+
+{# List of pages and actions #}
+        <div class="text-center">
+            <h2>
+                {{ 'text.list_pages'|trans }}
+            </h2>
+            <table class="table table-hover table-condensed table-responsive">
+                <thead>
+                    <tr>
+                        <th class="text-center">{{ 'label.title'|trans }}</th>
+                        <th class="text-center"><span class="glyphicon glyphicon-eye-open"></span> {{ 'label.display'|trans }}</th>
+                        <th class="text-center"><span class="glyphicon glyphicon-edit"></span> {{ 'label.modify'|trans }}</th>
+                        <th class="text-center"><span class="glyphicon glyphicon-trash"></span> {{ 'label.delete'|trans }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for slug, title in pages %}
+                        <tr>
+{# Title #}
+                            <td class="text-center">
+                                {{ title }}
+                            </td>
+{# Display #}
+                            <td class="text-center">
+                                <a href="{{ path('pageedit_display', {'page': slug}) }}" title="{{ 'label.display'|trans }}">{{ 'label.display'|trans }}</a>
+                            </td>
+{# Edit #}
+                            <td class="text-center">
+                                <a href="{{ path('pageedit_edit', {'page': slug}) }}" title="{{ 'label.modify'|trans }}">{{ 'label.modify'|trans }}</a>
+                            </td>
+{# Delete #}
+                            <td class="text-center">
+                                <a href="{{ path('pageedit_delete', {'page': slug}) }}" title="{{ 'label.delete'|trans }}" class="text-danger">{{ 'label.delete'|trans }}</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

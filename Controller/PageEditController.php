@@ -14,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -23,12 +24,59 @@ use c975L\PageEditBundle\Form\PageEditType;
 
 class PageEditController extends Controller
 {
+//DASHBOARD
+    /**
+     * @Route("/pages/dashboard",
+     *      name="pageedit_dashboard")
+     * @Method({"GET", "HEAD"})
+     */
+    public function dashboardAction()
+    {
+        //Gets the user
+        $user = $this->getUser();
+
+        //Returns the dashboard content
+        if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
+            //Gets the Finder
+            $finder = new Finder();
+
+            //Defines path
+            $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
+
+            //Finds pages
+            $finder
+                ->files()
+                ->in($folderPath)
+                ->depth('== 0')
+                ->name('*.html.twig')
+                ->sortByName()
+                ;
+
+            //Defines slug and title
+            $pages = array();
+            foreach ($finder as $file) {
+                $slug = str_replace('.html.twig', '', $file->getRelativePathname());
+                preg_match('/pageedit_title=\"(.*)\"/', $file->getContents(), $matches);
+                $pages[$slug] = $matches[1];
+            }
+
+            //Returns the dashboard
+            return $this->render('@c975LPageEdit/pages/dashboard.html.twig', array(
+                'pages' => $pages,
+                'title' => $this->get('translator')->trans('label.dashboard'),
+                ));
+        }
+
+        //Access is denied
+        throw $this->createAccessDeniedException();
+    }
+
 //DISPLAY
     /**
      * @Route("/pages/{page}",
      *      name="pageedit_display",
      *      requirements={
-     *          "page": "^(?!new)([a-z0-9\-\_]+)"
+     *          "page": "^(?!dashboard|help|new)([a-z0-9\-\_]+)"
      *      })
      * @Method({"GET", "HEAD"})
      */
@@ -79,12 +127,15 @@ class PageEditController extends Controller
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+                //Adjust semantic url (slug)
+                $slug = $this->slugify($form->getData()->getSlug());
+
                 //Writes file
-                $this->writeFile($form->getData()->getSlug(), null, $form->getData());
+                $this->writeFile($slug, null, $form->getData());
 
                 //Redirects to the page
                 return $this->redirectToRoute('pageedit_display', array(
-                    'page' => $form->getData()->getSlug(),
+                    'page' => $slug,
                 ));
             }
 
@@ -147,12 +198,21 @@ class PageEditController extends Controller
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+                //Adjust semantic url (slug)
+                $slug = $this->slugify($form->getData()->getSlug());
+
+                //Deletes file if slug has changed
+                if ($slug != $page) {
+                    //Deletes file
+                    $this->deleteFile($page);
+                }
+
                 //Writes file
-                $this->writeFile($page, $originalContent, $form->getData());
+                $this->writeFile($slug, $originalContent, $form->getData());
 
                 //Redirects to the page
                 return $this->redirectToRoute('pageedit_display', array(
-                    'page' => $form->getData()->getSlug(),
+                    'page' => $slug,
                 ));
             }
 
@@ -216,18 +276,12 @@ class PageEditController extends Controller
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                //Creates folders
-                $deletedFolder = $folderPath . '/deleted';
-                $fs->mkdir($deletedFolder, 0770);
-
                 //Deletes file
-                if ($fs->exists($filePath)) {
-                    $fs->rename($filePath, $deletedFolder . '/' . $page . '.html.twig');
-                }
+                $this->deleteFile($page);
 
-                //Redirects to the page
+                //Redirects to the page which will be HTTP 410
                 return $this->redirectToRoute('pageedit_display', array(
-                    'page' => $pageEdit->getSlug(),
+                    'page' => $page,
                 ));
             }
 
@@ -244,6 +298,28 @@ class PageEditController extends Controller
         throw $this->createAccessDeniedException();
     }
 
+//HELP
+    /**
+     * @Route("/pages/help",
+     *      name="pageedit_help")
+     * @Method({"GET", "HEAD"})
+     */
+    public function helpAction()
+    {
+        //Gets the user
+        $user = $this->getUser();
+
+        //Returns the dashboard content
+        if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
+            //Returns the help
+            return $this->render('@c975LPageEdit/pages/help.html.twig', array(
+                'title' => $this->get('translator')->trans('label.help'),
+                ));
+        }
+
+        //Access is denied
+        throw $this->createAccessDeniedException();
+    }
 
 
 //FUNCTIONS
@@ -268,17 +344,54 @@ class PageEditController extends Controller
     }
 
 
+    //Slugify function - https://gist.github.com/umidjons/9757010
+    public function slugify($text)
+    {
+        $slug = preg_replace('/\s\s+/', ' ', trim(mb_strtolower($text)));
+        $slug = str_replace(array(',',';','.',':','·','(',')','[',']','{','}','+','\\','/','#','~','&','$','£','µ','@','=','<','>','$','^','°','|','"',"'"),'', $slug);
+        $slug = str_replace(array('œ','Œ'), 'oe', $slug);
+        $slug = str_replace(array('æ','Æ'), 'ae', $slug);
+        $slug = str_replace(array(' '), '-', $slug);
+        $search =  array('ª','à','á','â','ã','ä','å','ç','è','é','ê','ë','ì','í','î','ï','ñ','º','ò','ó','ô','õ','ö','ø','ù','ú','û','ü','ŭ','µ','ý','ÿ','ß','æ','œ','_');
+        $replace = array('a','a','a','a','a','a','a','c','e','e','e','e','i','i','i','i','n','o','o','o','o','o','o','o','u','u','u','u','u','u','y','y','s','a','o','-');
+        $slug = str_replace($search, $replace, $slug);
+        $slug = str_replace(array('--', '--', '--'), '-', $slug);
+        return $slug;
+    }
+
+
+    //Moves to deleted folder the requested file
+    public function deleteFile($page)
+    {
+        //Gets the FileSystem
+        $fs = new Filesystem();
+
+        //Defines path
+        $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
+        $filePath = $folderPath . '/' . $page . '.html.twig';
+
+        //Creates folder
+        $deletedFolder = $folderPath . '/deleted';
+        $fs->mkdir($deletedFolder, 0770);
+
+        //Deletes file
+        if ($fs->exists($filePath)) {
+            $fs->rename($filePath, $deletedFolder . '/' . $page . '.html.twig');
+        }
+    }
+
+
     //Archives old file and writes new one
     public function writeFile($page, $originalContent, $formData)
     {
         //Gets the FileSystem
         $fs = new Filesystem();
 
-        //Defines paths
+        //Defines path
         $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
         $filePath = $folderPath . '/' . $page . '.html.twig';
 
-        //Creates folders
+        //Creates folder
         $archivesFolder = $folderPath . '/archives';
         $fs->mkdir($archivesFolder, 0770);
 
@@ -287,7 +400,7 @@ class PageEditController extends Controller
 
         //Updates metadata
         $startSkeleton = preg_replace('/pageedit_title=\"(.*)\"/', 'pageedit_title="' . $formData->getTitle() . '"', $startSkeleton);
-        $startSkeleton = preg_replace('/pageedit_slug=\"(.*)\"/', 'pageedit_slug="' . $formData->getSlug() . '"', $startSkeleton);
+        $startSkeleton = preg_replace('/pageedit_slug=\"(.*)\"/', 'pageedit_slug="' . $page . '"', $startSkeleton);
 
         //Concatenate skeleton + metadata + content
         $finalContent = $startSkeleton . "\n" . $formData->getContent() . "\n\t\t" . $endSkeleton;
@@ -298,7 +411,7 @@ class PageEditController extends Controller
         }
 
         //Writes new file
-        $newFilePath = $folderPath . '/' . $formData->getSlug() . '.html.twig';
+        $newFilePath = $folderPath . '/' . $page . '.html.twig';
         $fs->dumpFile($newFilePath, $finalContent);
         $fs->chmod($newFilePath, 0770);
 

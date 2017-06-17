@@ -13,19 +13,21 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class PageEdit
 {
-
     /**
      * @Assert\NotBlank()
      */
     protected $content;
+
     /**
      * @Assert\NotBlank()
      */
     protected $title;
+
     /**
      * @Assert\NotBlank()
      */
     protected $slug;
+
     protected $action;
 
 

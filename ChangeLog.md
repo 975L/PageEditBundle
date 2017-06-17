@@ -1,5 +1,15 @@
 # Changelog
 
+v1.7
+----
+- Update of README.md (13/06/2017)
+- Corrections in translations
+- Suppression of "if" test for actual route in layout/html.twig (15/06/2017)
+- Add of dashboard link in toolbar (17/06/2017)
+- Add of help link in toolbar
+- Add of pageedit_title in skeleton.html.twig
+- Add of remove of all signs not to be used in semantic url
+
 v1.6.3
 ------
 - Correction (2) of routes in toolbar (08/06/2017)

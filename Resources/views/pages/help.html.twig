@@ -1,0 +1,8 @@
+{% extends "@c975LPageEdit/layout.html.twig" %}
+
+{% block pageedit_content %}
+    <div class="container">
+{# Help content #}
+        {{ include( ['@c975LPageEdit/pages/help-' ~ app.request.locale ~ '.html.twig', '@c975LPageEdit/pages/help-en.html.twig']) }}
+    </div>
+{% endblock %}

@@ -31,7 +31,7 @@
                 <target>Title</target>
             </trans-unit>
             <trans-unit id="8">
-                <source>label.url_slug</source>
+                <source>label.semantic_url</source>
                 <target>Semantic url</target>
             </trans-unit>
             <trans-unit id="9">
@@ -44,7 +44,23 @@
             </trans-unit>
             <trans-unit id="11">
                 <source>text.delete_page</source>
-                <target>The following page will be archived and deleted. Any future call of the page will return an HTTP error code 410 (Gone)).</target>
+                <target>The following page will be archived and deleted. Any future call of the page will return an HTTP error code 410 (Gone).</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>label.dashboard</source>
+                <target>Dashboard</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>label.help</source>
+                <target>Help</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>label.display</source>
+                <target>Display</target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source>text.list_pages</source>
+                <target>List of pages</target>
             </trans-unit>
         </body>
     </file>
