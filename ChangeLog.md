@@ -1,5 +1,9 @@
 # Changelog
 
+v1.7.1
+------
+- Add of PageEdit toolbars for New/edit/Delete page (17/06/2017)
+
 v1.7
 ----
 - Update of README.md (13/06/2017)

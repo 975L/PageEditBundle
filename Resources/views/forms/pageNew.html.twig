@@ -2,6 +2,24 @@
 
 {% block pageedit_content %}
     <div class="container">
+{# Toolbar #}
+        <div class="text-center">
+            <div class="btn-group btn-group-md" role="group">
+
+{# Brand #}
+                <span class="btn btn-success"><strong>PageEdit</strong></span>
+
+{# Dashboard #}
+                <a href="{{ path('pageedit_dashboard') }}" class="btn btn-info" title="{{ 'label.dashboard'|trans }}" role="button">
+                    <span class="glyphicon glyphicon-dashboard"></span></a>
+
+{# Help #}
+                <a href="{{ path('pageedit_help') }}" class="btn btn-info" title="{{ 'label.help'|trans }}" role="button">
+                    <span class="glyphicon glyphicon-flag"></span></a>
+            </div>
+        </div>
+
+{# Form #}
         {{ form_start(form) }}
             {{ form_widget(form) }}
 

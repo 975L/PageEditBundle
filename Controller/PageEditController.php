@@ -220,7 +220,7 @@ class PageEditController extends Controller
             return $this->render('@c975LPageEdit/forms/pageEdit.html.twig', array(
                 'form' => $form->createView(),
                 'title' => $this->get('translator')->trans('label.modify') . ' "' . $title . '"',
-                'slug' => $slug,
+                'page' => $slug,
                 ));
         }
 
@@ -289,7 +289,7 @@ class PageEditController extends Controller
             return $this->render('@c975LPageEdit/forms/pageDelete.html.twig', array(
                 'form' => $form->createView(),
                 'title' => $this->get('translator')->trans('label.delete') . ' "' . $title . '"',
-                'slug' => $slug,
+                'page' => $slug,
                 'pageContent' => $originalContent,
                 ));
         }

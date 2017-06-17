@@ -151,12 +151,12 @@ Toolbar to display modification link is displayed below the page, if allowed by 
 Link to a page, in Twig, can be done by `<a href="{{ path('pageedit_display', { 'page': 'slug' }) }}">Title of the page</a>`.
 
 The different Routes (naming self-explanatory) available are:
-* pageedit_display
-* pageedit_new
-* pageedit_edit
-* pageedit_delete
-* pageedit_dashboard
-* pageedit_help
+- pageedit_display
+- pageedit_new
+- pageedit_edit
+- pageedit_delete
+- pageedit_dashboard
+- pageedit_help
 
 Step 8 - Migrating existing files to PageEdit
 ---------------------------------------------
