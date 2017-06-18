@@ -1,13 +1,17 @@
 {% extends "@c975LPageEdit/layout.html.twig" %}
+{% trans_default_domain 'pageedit' %}
 
 {% block pageedit_content %}
     <div class="container">
 {# Toolbar #}
         <div class="text-center">
             <div class="btn-group btn-group-md" role="group">
-
 {# Brand #}
                 <span class="btn btn-success"><strong>PageEdit</strong></span>
+
+{# Display #}
+                <a href="{{ path('pageedit_display', {'page': page}) }}" class="btn btn-default" title="{{ 'label.current_version'|trans }}" role="button">
+                    <span class="glyphicon glyphicon-eye-open"></span></a>
 
 {# New #}
                 <a href="{{ path('pageedit_new') }}" class="btn btn-default" title="{{ 'label.new_page'|trans }}" role="button">
@@ -30,13 +34,13 @@
 {# Form #}
         {{ form_start(form) }}
             <p class="alert alert-warning text-center">
-                {{ 'text.special_formatting'|trans }}
+                {{ 'text.special_formatting'|trans|raw|nl2br }}
             </p>
             {{ form_widget(form) }}
 
             <div class="form-group">
                 <button type="submit" name="submit" title="{{ 'label.modify'|trans }}" class="btn btn-lg btn-primary btn-block">
-                    <span class="glyphicon glyphicon-edit"></span> {{ 'label.modify'|trans }}
+                    <span class="glyphicon glyphicon-pencil"></span> {{ 'label.modify'|trans }}
                 </button>
             </div>
         {{ form_end(form) }}
@@ -47,4 +51,21 @@
                 {{ 'label.cancel'|trans }}</a>
         </p>
     </div>
+
+{# Update semantic url #}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#page_edit_title')
+                .change(function() {
+                    var slugUrl = '{{ absolute_url(path('pageedit_slug', {'text': 'TEXT'})) }}';
+                    var slug = $.post(slugUrl.replace('TEXT', $('#page_edit_title').val()));
+                    slug.done(function(data) {
+                        if (data.a != 'false') {
+                            $('#page_edit_slug')
+                                .val(data.a);
+                        }
+                    });
+                });
+        });
+    </script>
 {% endblock %}

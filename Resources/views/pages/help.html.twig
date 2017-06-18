@@ -1,7 +1,23 @@
 {% extends "@c975LPageEdit/layout.html.twig" %}
+{% trans_default_domain 'pageedit' %}
 
 {% block pageedit_content %}
     <div class="container">
+{# Toolbar #}
+        <div class="text-center">
+            <div class="btn-group btn-group-md" role="group">
+{# Brand #}
+                <span class="btn btn-success"><strong>PageEdit</strong></span>
+
+{# New #}
+                <a href="{{ path('pageedit_new') }}" class="btn btn-default" title="{{ 'label.new_page'|trans }}" role="button">
+                    <span class="glyphicon glyphicon-plus"></span></a>
+{# Dashboard #}
+                <a href="{{ path('pageedit_dashboard') }}" class="btn btn-info" title="{{ 'label.dashboard'|trans }}" role="button">
+                    <span class="glyphicon glyphicon-dashboard"></span></a>
+            </div>
+        </div>
+
 {# Help content #}
         {{ include( ['@c975LPageEdit/pages/help-' ~ app.request.locale ~ '.html.twig', '@c975LPageEdit/pages/help-en.html.twig']) }}
     </div>

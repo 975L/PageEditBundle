@@ -1,12 +1,13 @@
+{% trans_default_domain 'pageedit' %}
+
 <div class="text-center">
     <div class="btn-group btn-group-md" role="group">
-
 {# Brand #}
         <span class="btn btn-success"><strong>PageEdit</strong></span>
 
 {# Edit #}
         <a href="{{ path('pageedit_edit', {'page': page}) }}" class="btn btn-default" title="{{ 'label.modify'|trans }}" role="button">
-            <span class="glyphicon glyphicon-edit"></span></a>
+            <span class="glyphicon glyphicon-pencil"></span></a>
 
 {# New #}
         <a href="{{ path('pageedit_new') }}" class="btn btn-default" title="{{ 'label.new_page'|trans }}" role="button">

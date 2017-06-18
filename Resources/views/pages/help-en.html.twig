@@ -1,3 +1,5 @@
+{% trans_default_domain 'pageedit' %}
+
 <p>
     The tools are accessible when the user is identified and has the necessary rights. A toolbar appears on each page. It is also possible to manage the pages from <a href="{{ path('pageedit_dashboard') }}">{{ 'label.dashboard'|trans }} (PageEdit)</a>.
 </p>
@@ -5,17 +7,19 @@
 <p>
     <strong>Create a page</strong>: use the button <span class="glyphicon glyphicon-plus class btn btn-default btn-xs"></span>
     <br />
-    <strong>Modify a page</strong>: use the button <span class="glyphicon glyphicon-edit class btn btn-default btn-xs"></span>
+    <strong>Modify a page</strong>: use the button <span class="glyphicon glyphicon-pencil class btn btn-default btn-xs"></span>
     <br />
     <strong>Delete a page</strong>: use the button <span class="glyphicon glyphicon-trash class btn btn-default btn-xs"></span>
+    <br />
+    <strong>View the current version of a page</strong>: use the button <span class="glyphicon glyphicon-eye-open class btn btn-default btn-xs"></span>
 </p>
 
 <p>
-    For each page it is requested
+    For each page it is necessary to provide
     <br />
     <strong>Title</strong>: Used to be displayed on the page and sent to the browser
     <br />
     <strong>Content</strong>: content of the page
     <br />
-    <strong>Semantic url</strong>: link used to call the page, for example: http://example.com/pages/semantic-url, only unaccented lowercase letters and '-_'
+    <strong>Semantic url</strong>: link used to call the page, for example: http://example.com/pages/<strong>semantic-url</strong>, only unaccented lowercase letters and '-'. It is set automatically according to the title.
 </p>

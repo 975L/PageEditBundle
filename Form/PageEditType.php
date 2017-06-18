@@ -38,6 +38,7 @@ class PageEditType extends AbstractType
                 'required' => true,
                 'attr' => array(
                     'placeholder' => 'text.semantic_url',
+                    'readonly' => true,
                 )))
         ;
         if ($disabled === false) {
@@ -62,6 +63,7 @@ class PageEditType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'c975L\PageEditBundle\Entity\PageEdit',
             'intention'  => 'pageEditForm',
+            'translation_domain' => 'pageedit',
         ));
     }
 

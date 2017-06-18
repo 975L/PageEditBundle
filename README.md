@@ -11,7 +11,7 @@ PageEditBundle does the following:
 
 It is, of course, still possible to modify directly those files with an editor.
 
-This Bundle relies on the use of [TinyMce](https://www.tinymce.com/).
+This Bundle relies on the use of [TinyMce](https://www.tinymce.com/), [jQuery](https://jquery.com/) and [Bootstrap](http://getbootstrap.com/).
 
 Bundle installation
 ===================
@@ -139,7 +139,7 @@ This file must extends your layout in order to display correctly, so you need to
 
 **Take care to keep `{% block pageedit_content %}` and `{% endblock %}` as they are the entry and exit points to defines content.**
 
-**Also, keep `{% block toolbar %}` to keep toolbar, `{% set pageedit_title="%title%" %}` and `{% set pageedit_slug="%slug%" %}` used for metadata.**
+**Also, keep `{% block toolbar %}` to keep toolbar and `{% set pageedit_title="%title%" %}` used for metadata.**
 
 Step 7: How to use
 ------------------

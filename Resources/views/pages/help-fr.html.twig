@@ -1,21 +1,25 @@
+{% trans_default_domain 'pageedit' %}
+
 <p>
-    Les outils sont accessibles lorsque l'utilisateur/trice est identifié et dispose des droits nécessaires. Une barre d'outils apparâit alors sur chaque page. Il est aussi possible de gérer les pages depuis le <a href="{{ path('pageedit_dashboard') }}">{{ 'label.dashboard'|trans }} (PageEdit)</a>.
+    Les outils sont accessibles lorsque l'utilisateur/trice est identifié/e et dispose des droits nécessaires. Une barre d'outils apparaît alors sur chaque page. Il est aussi possible de gérer les pages depuis le <a href="{{ path('pageedit_dashboard') }}">{{ 'label.dashboard'|trans }} (PageEdit)</a>.
 </p>
 
 <p>
     <strong>Créer une page</strong> : utiliser le bouton <span class="glyphicon glyphicon-plus class btn btn-default btn-xs"></span>
     <br />
-    <strong>Modifier une page</strong> : utiliser le bouton <span class="glyphicon glyphicon-edit class btn btn-default btn-xs"></span>
+    <strong>Modifier une page</strong> : utiliser le bouton <span class="glyphicon glyphicon-pencil class btn btn-default btn-xs"></span>
     <br />
     <strong>Supprimer une page</strong> : utiliser le bouton <span class="glyphicon glyphicon-trash class btn btn-default btn-xs"></span>
+    <br />
+    <strong>Afficher la version actuelle d'une page</strong> : utiliser le bouton <span class="glyphicon glyphicon-eye-open class btn btn-default btn-xs"></span>
 </p>
 
 <p>
-    Pour chaque page il est demandé
+    Pour chaque page il est nécessaire de fournir
     <br />
     <strong>Titre</strong> : utilisé pour être affiché sur la page et envoyé au navigateur
     <br />
     <strong>Contenu</strong> : contenu de la page
     <br />
-    <strong>Url sémantique</strong> : lien utilisé pour appeler la page, par exemple : http://example.com/pages/url-semantique, uniquement des minuscules non accentuées et '-_'
+    <strong>Url sémantique</strong> : lien utilisé pour appeler la page, par exemple : http://example.com/pages/<strong>url-semantique</strong>, uniquement des minuscules non accentuées et '-'. Il est défini automatiquement en fonction du titre.
 </p>

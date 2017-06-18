@@ -23,9 +23,6 @@ class PageEdit
      */
     protected $title;
 
-    /**
-     * @Assert\NotBlank()
-     */
     protected $slug;
 
     protected $action;

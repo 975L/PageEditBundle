@@ -1,66 +1,71 @@
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="en" target-language="en" datatype="plaintext" original="messages.en.xlf">
+    <file source-language="en" target-language="fr" datatype="plaintext" original="pageedit.en.xlf">
         <body>
             <trans-unit id="1">
                 <source>label.content</source>
-                <target>Content</target>
+                <target>Contenu</target>
             </trans-unit>
             <trans-unit id="2">
                 <source>label.modify</source>
-                <target>Modify</target>
+                <target>Modifier</target>
             </trans-unit>
             <trans-unit id="3">
                 <source>label.cancel</source>
-                <target>Cancel</target>
+                <target>Annuler</target>
             </trans-unit>
             <trans-unit id="4">
                 <source>label.new_page</source>
-                <target>New page</target>
+                <target>Nouvelle page</target>
             </trans-unit>
             <trans-unit id="5">
                 <source>label.delete</source>
-                <target>Delete</target>
+                <target>Supprimer</target>
             </trans-unit>
             <trans-unit id="6">
                 <source>label.download</source>
-                <target>Download zip of pages</target>
+                <target>Télécharger zip des pages</target>
             </trans-unit>
             <trans-unit id="7">
                 <source>label.title</source>
-                <target>Title</target>
+                <target>Titre</target>
             </trans-unit>
             <trans-unit id="8">
                 <source>label.semantic_url</source>
-                <target>Semantic url</target>
+                <target>Url sémantique</target>
             </trans-unit>
             <trans-unit id="9">
                 <source>text.semantic_url</source>
-                <target>Name of page in the url</target>
+                <target>Nom de la page dans l'url</target>
             </trans-unit>
             <trans-unit id="10">
                 <source>text.special_formatting</source>
-                <target>Important, the content between {{...}} or {% ...%} should be left as is, otherwise the page display will be altered.</target>
+               <target><![CDATA[Important, le contenu entre {{...}} ou {%...%} doit être laissé tel quel, sous peine d'altérer l'affichage de la page.
+                        <strong>Attention, tout changement sur le titre changera l'url.</strong>]]></target>
             </trans-unit>
             <trans-unit id="11">
                 <source>text.delete_page</source>
-                <target>The following page will be archived and deleted. Any future call of the page will return an HTTP error code 410 (Gone).</target>
+                <target>La page suivante sera archivée et supprimée. Tout appel futur de la page renverra un code d'erreur HTTP 410 (Gone).</target>
             </trans-unit>
             <trans-unit id="12">
                 <source>label.dashboard</source>
-                <target>Dashboard</target>
+                <target>Tableau de bord</target>
             </trans-unit>
             <trans-unit id="13">
                 <source>label.help</source>
-                <target>Help</target>
+                <target>Aide</target>
             </trans-unit>
             <trans-unit id="14">
                 <source>label.display</source>
-                <target>Display</target>
+                <target>Affichage</target>
             </trans-unit>
             <trans-unit id="15">
                 <source>text.list_pages</source>
-                <target>List of pages</target>
+                <target>Liste des pages</target>
+            </trans-unit>
+            <trans-unit id="16">
+                <source>label.current_version</source>
+                <target>Version actuelle</target>
             </trans-unit>
         </body>
     </file>

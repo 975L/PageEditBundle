@@ -1,5 +1,14 @@
 # Changelog
 
+v1.8
+----
+- Make readonly of semantic_url field and replacment by automatic slugging of title (18/06/2017)
+- Set up a redirection (302) if title (and then slug and name of file) has changed, to the new file
+- Add of references to jQuery and Bootstrap in README.md
+- Add of button in toolbars (edit/Delete) to display the page
+- Add of translation domain to avoid other texts coming from other bundle with same keyword
+- Add of id of user who mades the change of the page in the filename of archived file
+
 v1.7.1
 ------
 - Add of PageEdit toolbars for New/edit/Delete page (17/06/2017)

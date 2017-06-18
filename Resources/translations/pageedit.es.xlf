@@ -1,66 +1,71 @@
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="en" target-language="fr" datatype="plaintext" original="messages.en.xlf">
+    <file source-language="en" target-language="es" datatype="plaintext" original="pageedit.en.xlf">
         <body>
             <trans-unit id="1">
                 <source>label.content</source>
-                <target>Contenu</target>
+                <target>Contenido</target>
             </trans-unit>
             <trans-unit id="2">
                 <source>label.modify</source>
-                <target>Modifier</target>
+                <target>Modificar</target>
             </trans-unit>
             <trans-unit id="3">
                 <source>label.cancel</source>
-                <target>Annuler</target>
+                <target>Cancelar</target>
             </trans-unit>
             <trans-unit id="4">
                 <source>label.new_page</source>
-                <target>Nouvelle page</target>
+                <target>Nueva página</target>
             </trans-unit>
             <trans-unit id="5">
                 <source>label.delete</source>
-                <target>Supprimer</target>
+                <target>Suprimar</target>
             </trans-unit>
             <trans-unit id="6">
                 <source>label.download</source>
-                <target>Télécharger zip des pages</target>
+                <target>Descarga zip de las páginas</target>
             </trans-unit>
             <trans-unit id="7">
                 <source>label.title</source>
-                <target>Titre</target>
+                <target>Título</target>
             </trans-unit>
             <trans-unit id="8">
                 <source>label.semantic_url</source>
-                <target>Url sémantique</target>
+                <target>Url semántica</target>
             </trans-unit>
             <trans-unit id="9">
                 <source>text.semantic_url</source>
-                <target>Nom de la page dans l'url</target>
+                <target>Nombre de la página en la url</target>
             </trans-unit>
             <trans-unit id="10">
                 <source>text.special_formatting</source>
-                <target>Important, le contenu entre {{...}} ou {%...%} doit être laissé tel quel, sous peine d'altérer l'affichage de la page.</target>
+               <target><![CDATA[Importantes, el contenido entre {{...}} o {% ...%} deben dejarse como está, de lo contrario, la visualización de la página se alterará.
+                        <strong>Atención, cambios en el título cambiar la URL.</strong>]]></target>
             </trans-unit>
             <trans-unit id="11">
                 <source>text.delete_page</source>
-                <target>La page suivante sera archivée et supprimée. Tout appel futur de la page renverra un code d'erreur HTTP 410 (Gone).</target>
+                <target>La siguiente página se archivará y se elimina. Cualquier uso futuro de la página devuelve un código de error HTTP 410 (Gone).</target>
             </trans-unit>
             <trans-unit id="12">
                 <source>label.dashboard</source>
-                <target>Tableau de bord</target>
+                <target>Tablero</target>
             </trans-unit>
             <trans-unit id="13">
                 <source>label.help</source>
-                <target>Aide</target>
+                <target>Ayuda</target>
             </trans-unit>
             <trans-unit id="14">
                 <source>label.display</source>
-                <target>Affichage</target>
+                <target>Visualización</target>
             </trans-unit>
             <trans-unit id="15">
                 <source>text.list_pages</source>
-                <target>Liste des pages</target>
+                <target>Lista de páginas</target>
+            </trans-unit>
+            <trans-unit id="16">
+                <source>label.current_version</source>
+                <target>Versión actual</target>
             </trans-unit>
         </body>
     </file>

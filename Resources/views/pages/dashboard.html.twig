@@ -1,4 +1,5 @@
 {% extends "@c975LPageEdit/layout.html.twig" %}
+{% trans_default_domain 'pageedit' %}
 
 {% block pageedit_content %}
     <div class="container">
@@ -25,7 +26,7 @@
                     <tr>
                         <th class="text-center">{{ 'label.title'|trans }}</th>
                         <th class="text-center"><span class="glyphicon glyphicon-eye-open"></span> {{ 'label.display'|trans }}</th>
-                        <th class="text-center"><span class="glyphicon glyphicon-edit"></span> {{ 'label.modify'|trans }}</th>
+                        <th class="text-center"><span class="glyphicon glyphicon-pencil"></span> {{ 'label.modify'|trans }}</th>
                         <th class="text-center"><span class="glyphicon glyphicon-trash"></span> {{ 'label.delete'|trans }}</th>
                     </tr>
                 </thead>
