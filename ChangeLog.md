@@ -1,5 +1,12 @@
 # Changelog
 
+v1.9
+----
+- Esthetic changes in layout.html.twig (18/06/2017)
+- Correction when pages are not including skeleton yet to display on dashboard to facilitate migration (19/06/2017)
+- Remove of readonly on semantic url, to give possibility to change title without changing url and file name, and allow only one name in cas of multi languages
+- Add of possibility to set the title as translation of term using Twig code `{{ 'text.cookies_policy'|trans({}, 'commons') }}`
+
 v1.8
 ----
 - Make readonly of semantic_url field and replacment by automatic slugging of title (18/06/2017)

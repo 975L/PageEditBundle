@@ -57,7 +57,13 @@ class PageEditController extends Controller
             foreach ($finder as $file) {
                 $slug = str_replace('.html.twig', '', $file->getRelativePathname());
                 preg_match('/pageedit_title=\"(.*)\"/', $file->getContents(), $matches);
-                $pages[$slug] = $matches[1];
+                if (!empty($matches)) $pages[$slug] = $matches[1];
+                else {
+                    //Title is using Twig code to translate it
+                    preg_match('/pageedit_title=(.*)\%\}/', $file->getContents(), $matches);
+                    if (!empty($matches)) $pages[$slug] = trim($matches[1]);
+                    else $pages[$slug] = 'No Title found (' . $slug . ')';
+                }
             }
 
             //Returns the dashboard
@@ -136,8 +142,7 @@ class PageEditController extends Controller
 
             if ($form->isSubmitted() && $form->isValid()) {
                 //Gets slug
-                $slug = $this->slugify($form->getData()->getTitle());
-                $pageEdit->setSlug($slug);
+                $slug = $this->slugify($form->getData()->getSlug());
 
                 //Writes file
                 $this->writeFile($slug, null, $form->getData(), $user->getId());
@@ -197,7 +202,8 @@ class PageEditController extends Controller
 
             //Gets the metadata
             preg_match('/pageedit_title=\"(.*)\"/', $fileContent, $matches);
-            $title = $matches[1];
+            if (!empty($matches)) $title = $matches[1];
+            else $title = $page;
 
             //Defines form
             $pageEdit = new PageEdit('edit', $originalContent, $title, $page);
@@ -206,7 +212,7 @@ class PageEditController extends Controller
 
             if ($form->isSubmitted() && $form->isValid()) {
                 //Gets slug
-                $slug = $this->slugify($form->getData()->getTitle());
+                $slug = $this->slugify($form->getData()->getSlug());
 
                 //Archives and redirects the file if title (then slug) has changed
                 if ($slug != $page) {
@@ -228,7 +234,7 @@ class PageEditController extends Controller
                 'form' => $form->createView(),
                 'title' => $this->get('translator')->trans('label.modify', array(), 'pageedit') . ' "' . $title . '"',
                 'page' => $page,
-                ));
+            ));
         }
 
         //Access is denied
@@ -296,7 +302,7 @@ class PageEditController extends Controller
                 'title' => $this->get('translator')->trans('label.delete', array(), 'pageedit') . ' "' . $title . '"',
                 'page' => $page,
                 'pageContent' => $originalContent,
-                ));
+            ));
         }
 
         //Access is denied
@@ -319,7 +325,7 @@ class PageEditController extends Controller
             //Returns the help
             return $this->render('@c975LPageEdit/pages/help.html.twig', array(
                 'title' => $this->get('translator')->trans('label.help', array(), 'pageedit'),
-                ));
+            ));
         }
 
         //Access is denied
@@ -357,7 +363,7 @@ class PageEditController extends Controller
         return array (
             'startSkeleton' => trim(substr($skeleton, 0, $entryPoint)),
             'endSkeleton' => trim(substr($skeleton, $exitPoint))
-            );
+        );
     }
 
 
@@ -459,8 +465,18 @@ class PageEditController extends Controller
         //Gets the skeleton
         extract($this->getSkeleton());
 
+        //Gets title
+        $title = $formData->getTitle();
+
+        //Title is using Twig code to translate it
+        if (strpos($title, '{{') === 0)
+            $title = trim(str_replace(array('{{', '}}'), '', $title));
+        //Title is text
+        else
+            $title = '"' . $title . '"';
+
         //Updates metadata
-        $startSkeleton = preg_replace('/pageedit_title=\"(.*)\"/', 'pageedit_title="' . $formData->getTitle() . '"', $startSkeleton);
+        $startSkeleton = preg_replace('/pageedit_title=\"(.*)\"/', 'pageedit_title=' . $title, $startSkeleton);
 
         //Concatenate skeleton + metadata + content
         $finalContent = $startSkeleton . "\n" . $formData->getContent() . "\n\t\t" . $endSkeleton;

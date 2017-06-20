@@ -3,8 +3,8 @@ PageEditBundle
 
 PageEditBundle does the following:
 
-- Display pages requested,
-- Provides tool to edit content of pages, unless of doing it via a code editor,
+- Displays pages requested,
+- Provides tools to edit content of pages, unless of doing it via a code editor,
 - Integrates with your wed design,
 - Protects twig code from being formatted,
 - Archives the files before replacing them in order to be able to retrieve old versions.
@@ -72,7 +72,7 @@ c975_l_page_edit:
     roleNeeded: 'ROLE_ADMIN'
 ```
 
-**As the files are edited online, if you use Git for version control, you need to add the full path to them (defined in `folderPages`) in the `.gitignore` file to ignore them, otherwise all the content will be altered by Git.**
+** As the files are edited online, if you use Git for version control, you need to add the full path to them (defined in `folderPages`) in the `.gitignore`, otherwise all the content will be altered by Git. **
 
 Step 4: Enable the Routes
 -------------------------
@@ -146,7 +146,7 @@ Step 7: How to use
 
 The Route to display a page is `http://example.com/pages/{page}`, the one to edit is `http://example.com/pages/edit/{page}`.
 
-Toolbar to display modification link is displayed below the page, if allowed by access rule.
+A toolbar is displayed below the title if user is identified and has the acess rights.
 
 Link to a page, in Twig, can be done by `<a href="{{ path('pageedit_display', { 'page': 'slug' }) }}">Title of the page</a>`.
 
@@ -157,10 +157,22 @@ The different Routes (naming self-explanatory) available are:
 - pageedit_delete
 - pageedit_dashboard
 - pageedit_help
+- pageedit_slug
 
 Step 8 - Migrating existing files to PageEdit
 ---------------------------------------------
 
-To migrate existing files, you need to create new pages and then copy/paste all the content.
+To migrate existing files, simply move your existing template in the folder defined in `app/Resources/views/[folderPages]` (`folderPages` has been defined in Step 3 above), access to PageEdit dashboard and do the modifications. The skeleton will be added to new files and old ones will be archived.
 
-Depending on the number of pages, size and formatting of content, etc. you may do it via the TinyMce editor **OR** directly in the generated files under `app/Resources/views/[folderPages]` (`folderPages`has been defined in Step 3 above).
+You can use the command `git rm -r --cached app/Resources/views/[folderPages]` to remove it from Git if the folder was previously indexed.
+
+** Don't forget to make a copy of it if you use Git as versionning system and if you have added this folder in the `.gitignore`, otherwise your files will be deleted at next commit ! **
+
+If files have been deleted, simply use the code below:
+
+```
+git log #Gives you latest commit
+git checkout <id_commit> # indicate here the id of the commit obtained above
+#Access to your files, copy/paste them somewhere else
+git checkout HEAD #to get back to latest version
+```

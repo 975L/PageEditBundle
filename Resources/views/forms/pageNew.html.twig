@@ -37,9 +37,10 @@
         </p>
     </div>
 
-{# Update semantic url #}
+{# Javascript #}
     <script type="text/javascript">
         $(document).ready(function() {
+{# Update semantic url #}
             $('#page_edit_title')
                 .change(function() {
                     var slugUrl = '{{ absolute_url(path('pageedit_slug', {'text': 'TEXT'})) }}';

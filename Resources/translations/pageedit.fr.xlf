@@ -40,8 +40,7 @@
             </trans-unit>
             <trans-unit id="10">
                 <source>text.special_formatting</source>
-               <target><![CDATA[Important, le contenu entre {{...}} ou {%...%} doit être laissé tel quel, sous peine d'altérer l'affichage de la page.
-                        <strong>Attention, tout changement sur le titre changera l'url.</strong>]]></target>
+               <target>Important, le contenu entre {{...}} ou {%...%} doit être laissé tel quel, sous peine d'altérer l'affichage de la page.</target>
             </trans-unit>
             <trans-unit id="11">
                 <source>text.delete_page</source>

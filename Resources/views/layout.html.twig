@@ -11,6 +11,7 @@
 
 {# Css #}
             {% block css %}
+{# Bootstrap - http://getbootstrap.com #}
                 <link rel="stylesheet"
                     type="text/css"
                     href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -20,22 +21,25 @@
 
 {# Javascript #}
             {% block javascript %}
-{# jQuery - https://jquery.com/#}
+{# jQuery - https://jquery.com #}
                 <script type="text/javascript"
                     src="//code.jquery.com/jquery-3.2.1.min.js"
                     integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
                     crossorigin="anonymous">
                 </script>
 
-{# Bootstrap - http://getbootstrap.com/#}
+{# Bootstrap - http://getbootstrap.com #}
                 <script type="text/javascript"
                     src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
                     integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
                     crossorigin="anonymous">
                 </script>
 
+{# TinyMce - https://www.tinymce.com #}
+                <script type="text/javascript"
+                    src="//cloud.tinymce.com/stable/tinymce.min.js{# ?apiKey=YOUR_API_KEY #}">
+                </script>
 {# TinyMce Initialization #}
-                <script type="text/javascript" src="https://cloud.tinymce.com/stable/tinymce.min.js{# ?apiKey=YOUR_API_KEY #}"></script>
                 <script type="text/javascript">
                     tinymce.init({
                         selector: 'textarea.tinymce',

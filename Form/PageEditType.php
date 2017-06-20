@@ -38,7 +38,6 @@ class PageEditType extends AbstractType
                 'required' => true,
                 'attr' => array(
                     'placeholder' => 'text.semantic_url',
-                    'readonly' => true,
                 )))
         ;
         if ($disabled === false) {

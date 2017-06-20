@@ -51,21 +51,4 @@
                 {{ 'label.cancel'|trans }}</a>
         </p>
     </div>
-
-{# Update semantic url #}
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#page_edit_title')
-                .change(function() {
-                    var slugUrl = '{{ absolute_url(path('pageedit_slug', {'text': 'TEXT'})) }}';
-                    var slug = $.post(slugUrl.replace('TEXT', $('#page_edit_title').val()));
-                    slug.done(function(data) {
-                        if (data.a != 'false') {
-                            $('#page_edit_slug')
-                                .val(data.a);
-                        }
-                    });
-                });
-        });
-    </script>
 {% endblock %}
