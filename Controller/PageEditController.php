@@ -62,7 +62,7 @@ class PageEditController extends Controller
                     //Title is using Twig code to translate it
                     preg_match('/pageedit_title=(.*)\%\}/', $file->getContents(), $matches);
                     if (!empty($matches)) $pages[$slug] = trim($matches[1]);
-                    else $pages[$slug] = 'No Title found (' . $slug . ')';
+                    else $pages[$slug] = $this->get('translator')->trans('label.title_not_found', array(), 'pageedit') . ' (' . $slug . ')';
                 }
             }
 
@@ -82,7 +82,7 @@ class PageEditController extends Controller
      * @Route("/pages/{page}",
      *      name="pageedit_display",
      *      requirements={
-     *          "page": "^(?!dashboard|help|new)([a-z0-9\-]+)"
+     *          "page": "^(?!dashboard|help|new|upload)([a-z0-9\-]+)"
      *      })
      * @Method({"GET", "HEAD"})
      */
@@ -183,7 +183,7 @@ class PageEditController extends Controller
             //Gets the FileSystem
             $fs = new Filesystem();
 
-            //Defines paths
+            //Defines path
             $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
             $filePath = $folderPath . '/' . $page . '.html.twig';
 
@@ -203,7 +203,12 @@ class PageEditController extends Controller
             //Gets the metadata
             preg_match('/pageedit_title=\"(.*)\"/', $fileContent, $matches);
             if (!empty($matches)) $title = $matches[1];
-            else $title = $page;
+            else {
+                //Title is using Twig code to translate it
+                preg_match('/pageedit_title=(.*)\%\}/', $fileContent, $matches);
+                if (!empty($matches)) $title = '{{ ' . trim($matches[1]) . ' }}';
+                else $title = $page;
+            }
 
             //Defines form
             $pageEdit = new PageEdit('edit', $originalContent, $title, $page);
@@ -309,6 +314,54 @@ class PageEditController extends Controller
         throw $this->createAccessDeniedException();
     }
 
+//UPLOAD PICTURES
+    /**
+     * @Route("/pages/upload/{page}",
+     *      name="pageedit_upload")
+     * @Method({"POST"})
+     */
+    public function uploadAction(Request $request, $page)
+    {
+        //Gets the FileSystem
+        $fs = new Filesystem();
+
+        //Defines path
+        $folderPath = $this->getParameter('kernel.root_dir') . '/../web/images/' . $this->getParameter('c975_l_page_edit.folderPages');
+        $fs->mkdir($folderPath, 0770);
+
+        //Checks origin - https://www.tinymce.com/docs/advanced/php-upload-handler/
+        if ($request->server->get('HTTP_ORIGIN') !== null) {
+            throw $this->createAccessDeniedException();
+        }
+
+        //Checks uploaded file
+        $file = $request->files->get('file');
+        if (is_uploaded_file($file)) {
+            //Checks extension
+            $extension = strtolower($file->guessExtension());
+            if (in_array($extension, array('jpeg', 'jpg', 'png')) === true) {
+                //Moves file
+                $now = \DateTime::createFromFormat('U.u', microtime(true));
+                $filename = $page . '-' . $now->format('Ymd-His-u') . '.' . $extension;
+                move_uploaded_file($file->getRealPath(), $folderPath . '/' . $filename);
+
+                //Respond to the successful upload with JSON
+                return $this->json(array('location' => '/images/' . $this->getParameter('c975_l_page_edit.folderPages') . '/' . $filename));
+            }
+        }
+    }
+
+//SLUG
+    /**
+     * @Route("/pages/slug/{text}",
+     *      name="pageedit_slug")
+     * @Method({"POST"})
+     */
+    public function slugAction($text)
+    {
+        return $this->json(array('a' => $this->slugify($text)));
+    }
+
 //HELP
     /**
      * @Route("/pages/help",
@@ -330,18 +383,6 @@ class PageEditController extends Controller
 
         //Access is denied
         throw $this->createAccessDeniedException();
-    }
-
-
-//SLUG
-    /**
-     * @Route("/pages/slug/{text}",
-     *      name="pageedit_slug")
-     * @Method({"POST"})
-     */
-    public function slugAction($text)
-    {
-        return $this->json(array('a' => $this->slugify($text)));
     }
 
 

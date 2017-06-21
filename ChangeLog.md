@@ -1,5 +1,13 @@
 # Changelog
 
+v.1.10
+------
+- Correction for "Title not found" translation in dashboard (20/06/2017)
+- Correction "text.special_formatting" to include {# #}
+- Add in `README.md` of possibilty to use `prefix: /{_locale}` in `routing.yml` for multilingual website (21/06/2017)
+- Correction for title in edit mode when title is Twig code
+- Add of upload picture feature
+
 v1.9
 ----
 - Esthetic changes in layout.html.twig (18/06/2017)

@@ -40,7 +40,7 @@
             </trans-unit>
             <trans-unit id="10">
                 <source>text.special_formatting</source>
-               <target>Importantes, el contenido entre {{...}} o {% ...%} deben dejarse como está, de lo contrario, la visualización de la página se alterará.</target>
+               <target>Importantes, el contenido entre {{...}}, {%...%} o {#...#} deben dejarse como está, de lo contrario, la visualización de la página se alterará.</target>
             </trans-unit>
             <trans-unit id="11">
                 <source>text.delete_page</source>
@@ -65,6 +65,10 @@
             <trans-unit id="16">
                 <source>label.current_version</source>
                 <target>Versión actual</target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source>label.title_not_found</source>
+                <target>Título no encontrado</target>
             </trans-unit>
         </body>
     </file>

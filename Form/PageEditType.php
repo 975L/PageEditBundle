@@ -18,7 +18,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PageEditType extends AbstractType
 {
-
     //Builds the form
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -56,7 +55,6 @@ class PageEditType extends AbstractType
         }
     }
 
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
@@ -65,11 +63,4 @@ class PageEditType extends AbstractType
             'translation_domain' => 'pageedit',
         ));
     }
-
-
-    public function getName()
-    {
-        return 'pageEdit';
-    }
-
 }

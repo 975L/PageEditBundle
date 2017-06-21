@@ -86,6 +86,7 @@ Then, enable the routes by adding them to the `app/config/routing.yml` file of y
 c975_l_page_edit:
     resource: "@c975LPageEditBundle/Controller/"
     type:     annotation
+    #Multilingual website use: prefix: /{_locale}
     prefix:   /
 ```
 
@@ -112,21 +113,46 @@ Example of initialization (see `layout.html.twig` file).
         browser_spellcheck: true,
         contextmenu: false,
         schema: 'html5 strict',
-        image_advtab: true,
         content_css : [
             'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
         ],
+        images_upload_url: '{{ absolute_url(path('pageedit_upload')) }}',
         //language_url : 'http://example.com/js/tinymce/fr_FR.js',
         plugins: [
-            'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+            'advlist autolink lists link image imagetools charmap print preview hr anchor pagebreak',
             'searchreplace wordcount visualblocks visualchars code fullscreen',
             'insertdatetime media nonbreaking save table contextmenu directionality',
             'emoticons template paste textcolor colorpicker textpattern imagetools codesample toc help',
         ],
         toolbar: [
             'styleselect | removeformat bold italic strikethrough forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
-            'undo redo | cut copy paste | insert link image imagetools emoticons table | print preview code | fullscreen help',
+            'undo redo | cut copy paste | insert link image emoticons table | print preview code | fullscreen help',
         ],
+        image_advtab: true,
+        images_upload_url: '{{ absolute_url(path('pageedit_upload', {'page': page})) }}',
+        image_title: true,
+        automatic_uploads: true,
+        file_picker_types: 'image',
+        file_picker_callback: function(cb, value, meta) {
+            var input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            input.onchange = function() {
+                var file = this.files[0];
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function () {
+                    var name = file.name.split('.')[0];
+                    var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                    var blobInfo = blobCache.create(name, file, reader.result);
+                    blobCache.add(blobInfo);
+                    if (meta.filetype == 'image') {
+                        cb(blobInfo.blobUri(), {alt: file.name, title: name});
+                    }
+                };
+            };
+            input.click();
+        },
     });
 ```
 
@@ -157,6 +183,7 @@ The different Routes (naming self-explanatory) available are:
 - pageedit_delete
 - pageedit_dashboard
 - pageedit_help
+- pageedit_upload
 - pageedit_slug
 
 Step 8 - Migrating existing files to PageEdit
