@@ -49,6 +49,7 @@ class AppKernel extends Kernel
     {
         $bundles = [
             // ...
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new c975L\PageEditBundle\c975LPageEditBundle(),
         ];
 
@@ -66,6 +67,14 @@ Then, in the `app/config.yml` file of your project, define `folderPages` (path w
 
 ```yml
 #app/config/config.yml
+
+#https://github.com/KnpLabs/KnpPaginatorBundle
+knp_paginator:
+    default_options:
+        page_name: p
+        distinct: true
+    template:
+        pagination: 'KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig'
 
 c975_l_page_edit:
     folderPages: 'pages' #The full path to this folder has to be added to .gitignore if Git is used
