@@ -1,5 +1,9 @@
 # Changelog
 
+v1.11.1
+-------
+- Add of requirement of "cocur/slugify" in composer.json forgotten (29/06/2017)
+
 v1.11
 -----
 - Correction of 'images_upload_url' twice in layout.html.twig (29/06/2017)
