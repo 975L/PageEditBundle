@@ -72,7 +72,7 @@ c975_l_page_edit:
     roleNeeded: 'ROLE_ADMIN'
 ```
 
-** As the files are edited online, if you use Git for version control, you need to add the full path to them (defined in `folderPages`) in the `.gitignore`, otherwise all the content will be altered by Git. **
+** If you use Git for version control, you need to add the full path `app/Resources/views/[folderPages]` in the `.gitignore`, otherwise all the content will be altered by Git. You also need to add the path `/web/images/[folderPages]` as it will contain the uploaded pictures **
 
 Step 4: Enable the Routes
 -------------------------
@@ -103,57 +103,58 @@ You also need to initialize TinyMce ([language pack](https://www.tinymce.com/dow
 
 Information about options is available at [https://www.tinymce.com/docs/get-started-cloud/editor-and-features/](https://www.tinymce.com/docs/get-started-cloud/editor-and-features/).
 
-Example of initialization (see `layout.html.twig` file).
+Example of initialization (see `forms/tinymceInit.html.twig` file).
 
 ```javascript
-    tinymce.init({
-        selector: 'textarea.tinymce',
-        statusbar: true,
-        menubar: false,
-        browser_spellcheck: true,
-        contextmenu: false,
-        schema: 'html5 strict',
-        content_css : [
-            'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
-        ],
-        images_upload_url: '{{ absolute_url(path('pageedit_upload')) }}',
-        //language_url : 'http://example.com/js/tinymce/fr_FR.js',
-        plugins: [
-            'advlist autolink lists link image imagetools charmap print preview hr anchor pagebreak',
-            'searchreplace wordcount visualblocks visualchars code fullscreen',
-            'insertdatetime media nonbreaking save table contextmenu directionality',
-            'emoticons template paste textcolor colorpicker textpattern imagetools codesample toc help',
-        ],
-        toolbar: [
-            'styleselect | removeformat bold italic strikethrough forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
-            'undo redo | cut copy paste | insert link image emoticons table | print preview code | fullscreen help',
-        ],
-        image_advtab: true,
-        images_upload_url: '{{ absolute_url(path('pageedit_upload', {'page': page})) }}',
-        image_title: true,
-        automatic_uploads: true,
-        file_picker_types: 'image',
-        file_picker_callback: function(cb, value, meta) {
-            var input = document.createElement('input');
-            input.setAttribute('type', 'file');
-            input.setAttribute('accept', 'image/*');
-            input.onchange = function() {
-                var file = this.files[0];
-                var reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = function () {
-                    var name = file.name.split('.')[0];
-                    var blobCache = tinymce.activeEditor.editorUpload.blobCache;
-                    var blobInfo = blobCache.create(name, file, reader.result);
-                    blobCache.add(blobInfo);
-                    if (meta.filetype == 'image') {
-                        cb(blobInfo.blobUri(), {alt: file.name, title: name});
-                    }
+    <script type="text/javascript">
+        tinymce.init({
+            selector: 'textarea.tinymce',
+            statusbar: true,
+            menubar: false,
+            browser_spellcheck: true,
+            contextmenu: false,
+            schema: 'html5 strict',
+            content_css : [
+                'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
+            ],
+            //language_url : 'http://example.com/js/tinymce/fr_FR.js',
+            plugins: [
+                'advlist autolink lists link image imagetools charmap print preview hr anchor pagebreak',
+                'searchreplace wordcount visualblocks visualchars code fullscreen',
+                'insertdatetime media nonbreaking save table contextmenu directionality',
+                'emoticons template paste textcolor colorpicker textpattern imagetools codesample toc help',
+            ],
+            toolbar: [
+                'styleselect | removeformat bold italic strikethrough forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
+                'undo redo | cut copy paste | insert link image emoticons table | print preview code | fullscreen help',
+            ],
+            image_advtab: true,
+            images_upload_url: '{{ absolute_url(path('pageedit_upload', {'page': page})) }}',
+            image_title: true,
+            automatic_uploads: true,
+            file_picker_types: 'image',
+            file_picker_callback: function(cb, value, meta) {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+                input.onchange = function() {
+                    var file = this.files[0];
+                    var reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = function () {
+                        var name = file.name.split('.')[0];
+                        var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                        var blobInfo = blobCache.create(name, file, reader.result);
+                        blobCache.add(blobInfo);
+                        if (meta.filetype == 'image') {
+                            cb(blobInfo.blobUri(), {alt: file.name, title: name});
+                        }
+                    };
                 };
-            };
-            input.click();
-        },
-    });
+                input.click();
+            },
+        });
+    </script>
 ```
 
 Step 6: Definitions of start and end of template for file saving

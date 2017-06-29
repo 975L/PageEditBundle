@@ -2,6 +2,8 @@
 {% trans_default_domain 'pageedit' %}
 
 {% block pageedit_content %}
+    {{ include('@c975LPageEdit/forms/tinymceInit.html.twig') }}
+
     <div class="container">
 {# Toolbar #}
         <div class="text-center">

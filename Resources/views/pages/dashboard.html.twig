@@ -53,6 +53,11 @@
                     {% endfor %}
                 </tbody>
             </table>
+
+{# Pagination #}
+            <div class="navigation text-center">
+                {{ knp_pagination_render(pages) }}
+            </div>
         </div>
     </div>
 {% endblock %}

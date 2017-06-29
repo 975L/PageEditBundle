@@ -1,5 +1,12 @@
 # Changelog
 
+v1.11
+-----
+- Correction of 'images_upload_url' twice in layout.html.twig (29/06/2017)
+- Move in a separate file of the initialization of Tinymce
+- Add of pagination via KnpPaginator (dashboard)
+- Remove of slugify function and replace by cocur/slugify
+
 v.1.10
 ------
 - Correction for "Title not found" translation in dashboard (20/06/2017)

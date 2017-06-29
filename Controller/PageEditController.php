@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Cocur\Slugify\Slugify;
 use c975L\PageEditBundle\Entity\PageEdit;
 use c975L\PageEditBundle\Form\PageEditType;
 
@@ -30,7 +31,7 @@ class PageEditController extends Controller
      *      name="pageedit_dashboard")
      * @Method({"GET", "HEAD"})
      */
-    public function dashboardAction()
+    public function dashboardAction(Request $request)
     {
         //Gets the user
         $user = $this->getUser();
@@ -66,9 +67,17 @@ class PageEditController extends Controller
                 }
             }
 
+            //Pagination
+            $paginator  = $this->get('knp_paginator');
+            $pagination = $paginator->paginate(
+                $pages,
+                $request->query->getInt('p', 1),
+                15
+            );
+
             //Returns the dashboard
             return $this->render('@c975LPageEdit/pages/dashboard.html.twig', array(
-                'pages' => $pages,
+                'pages' => $pagination,
                 'title' => $this->get('translator')->trans('label.dashboard', array(), 'pageedit'),
                 ));
         }
@@ -157,6 +166,7 @@ class PageEditController extends Controller
             return $this->render('@c975LPageEdit/forms/pageNew.html.twig', array(
                 'form' => $form->createView(),
                 'title' => $this->get('translator')->trans('label.new_page', array(), 'pageedit'),
+                'page' => 'new',
                 ));
         }
 
@@ -317,7 +327,10 @@ class PageEditController extends Controller
 //UPLOAD PICTURES
     /**
      * @Route("/pages/upload/{page}",
-     *      name="pageedit_upload")
+     *      name="pageedit_upload",
+     *      requirements={
+     *          "page": "^([a-z0-9\-]+)"
+     *      })
      * @Method({"POST"})
      */
     public function uploadAction(Request $request, $page)
@@ -408,19 +421,11 @@ class PageEditController extends Controller
     }
 
 
-    //Slugify function - https://gist.github.com/umidjons/9757010
+    //Slugify function - https://github.com/cocur/slugify
     public function slugify($text)
     {
-        $slug = preg_replace('/\s\s+/', ' ', trim(mb_strtolower($text)));
-        $slug = str_replace(array(',',';','.',':','·','(',')','[',']','{','}','+','\\','/','#','~','&','$','£','µ','@','=','<','>','$','^','°','|'),'', $slug);
-        $slug = str_replace(array('œ','Œ'), 'oe', $slug);
-        $slug = str_replace(array('æ','Æ'), 'ae', $slug);
-        $slug = str_replace(array(' '), '-', $slug);
-        $search =  array('ª','à','á','â','ã','ä','å','ç','è','é','ê','ë','ì','í','î','ï','ñ','º','ò','ó','ô','õ','ö','ø','ù','ú','û','ü','ŭ','µ','ý','ÿ','ß','æ','œ','_','"',"'");
-        $replace = array('a','a','a','a','a','a','a','c','e','e','e','e','i','i','i','i','n','o','o','o','o','o','o','o','u','u','u','u','u','u','y','y','s','a','o','-','-','-');
-        $slug = str_replace($search, $replace, $slug);
-        $slug = str_replace(array('--', '--', '--'), '-', $slug);
-        return $slug;
+        $slugify = new Slugify();
+        return $slugify->slugify($text);
     }
 
 
