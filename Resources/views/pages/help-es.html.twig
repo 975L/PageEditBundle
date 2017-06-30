@@ -1,9 +1,9 @@
 {% trans_default_domain 'pageedit' %}
 
+<h2>Gestión de la página</h2>
 <p>
     Las herramientas están disponibles cuando se identifica al usuario y tiene los derechos necesarios. Una barra de herramientas aparece en cada página. También es posible gestionar las páginas en el <a href="{{ path('pageedit_dashboard') }}">{{ 'label.dashboard'|trans }} (PageEdit)</a>.
 </p>
-
 <p>
     <strong>Crear una página</strong> : utilizar el botón <span class="glyphicon glyphicon-plus class btn btn-default btn-xs"></span>
     <br />
@@ -14,6 +14,7 @@
     <strong>Ver la versión actual de una página</strong> : utilizar el botón <span class="glyphicon glyphicon-eye-open class btn btn-default btn-xs"></span>
 </p>
 
+<h2>Datos necesarios</h2>
 <p>
     Para cada página es necesario proporcionar
     <br />
@@ -22,4 +23,13 @@
     <strong>Url semántica</strong> : enlace utilizado para llamar a la página, por ejemplo: http://example.com/pages/<strong>url-semantica</strong>, solamente minúsculas sin acento y '-'. Se ajusta automáticamente con el título, pero se puede cambiar.
     <br />
     <strong>Contenido</strong> : El contenido de la página
+</p>
+
+<h2>Páginas de enlace</h2>
+<p>
+    Para enlazar a una <strong>página del sitio gestionado a través de PageEdit</strong>, es recomendable utilizar el combo "Link list" disponible en el modo de edición via el botón "Insertar enlace", se establecerá un valor en el "url" va a dejar como está. Si puede copiar la url de la página.
+</p>
+
+<p class="text-center">
+    <strong><a href="https://975l.com/es/pages/pageedit-bundle">>> PageEdit (Tutoriales, capturas de pantalla, etc.) <<</a></strong>
 </p>

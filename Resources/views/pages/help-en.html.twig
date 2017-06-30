@@ -1,9 +1,9 @@
 {% trans_default_domain 'pageedit' %}
 
+<h2>Page Management</h2>
 <p>
     The tools are accessible when the user is identified and has the necessary rights. A toolbar appears on each page. It is also possible to manage the pages from <a href="{{ path('pageedit_dashboard') }}">{{ 'label.dashboard'|trans }} (PageEdit)</a>.
 </p>
-
 <p>
     <strong>Create a page</strong>: use the button <span class="glyphicon glyphicon-plus class btn btn-default btn-xs"></span>
     <br />
@@ -14,6 +14,7 @@
     <strong>View the current version of a page</strong>: use the button <span class="glyphicon glyphicon-eye-open class btn btn-default btn-xs"></span>
 </p>
 
+<h2>Data requirements</h2>
 <p>
     For each page it is necessary to provide
     <br />
@@ -22,4 +23,13 @@
     <strong>Semantic url</strong>: link used to call the page, for example: http://example.com/pages/<strong>semantic-url</strong>, only unaccented lowercase letters and '-'. It is set automatically according to the title, but it can be changed.
     <br />
     <strong>Content</strong>: content of the page
+</p>
+
+<h2>Link pages</h2>
+<p>
+    To link to a <strong>page of the site managed via PageEdit</strong>, it is advisable to use the "Link list" drop-down list accessible in the edit mode via the "Insert link" button, it will set a value in the "Url" box which must be left as is. Otherwise you can copy the url of the page.
+</p>
+
+<p class="text-center">
+    <strong><a href="https://975l.com/en/pages/pageedit-bundle">>> PageEdit (Tutorials, screenshots, etc.) <<</a></strong>
 </p>

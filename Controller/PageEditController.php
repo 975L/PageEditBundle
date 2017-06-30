@@ -91,7 +91,7 @@ class PageEditController extends Controller
      * @Route("/pages/{page}",
      *      name="pageedit_display",
      *      requirements={
-     *          "page": "^(?!dashboard|help|new|upload)([a-z0-9\-]+)"
+     *          "page": "^(?!dashboard|help|links|new|upload)([a-z0-9\-]+)"
      *      })
      * @Method({"GET", "HEAD"})
      */
@@ -318,6 +318,62 @@ class PageEditController extends Controller
                 'page' => $page,
                 'pageContent' => $originalContent,
             ));
+        }
+
+        //Access is denied
+        throw $this->createAccessDeniedException();
+    }
+
+//LIST FOR URL LINKING
+    /**
+     * @Route("/pages/links",
+     *      name="pageedit_links")
+     * @Method({"GET", "HEAD"})
+     */
+    public function linksAction(Request $request)
+    {
+        //Gets the user
+        $user = $this->getUser();
+
+        //Returns the list content
+        if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
+            //Gets the Finder
+            $finder = new Finder();
+
+            //Defines path
+            $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
+
+            //Finds pages
+            $finder
+                ->files()
+                ->in($folderPath)
+                ->depth('== 0')
+                ->name('*.html.twig')
+                ->sortByName()
+                ;
+
+            //Defines slug and title
+            $pages = array();
+            foreach ($finder as $file) {
+                $slug = str_replace('.html.twig', '', $file->getRelativePathname());
+                preg_match('/pageedit_title=\"(.*)\"/', $file->getContents(), $matches);
+                if (!empty($matches)) $title = $matches[1];
+                else {
+                    //Title is using Twig code to translate it
+                    preg_match('/pageedit_title=(.*)\%\}/', $file->getContents(), $matches);
+                    if (!empty($matches)) $title = trim($matches[1]);
+                    else $title = $this->get('translator')->trans('label.title_not_found', array(), 'pageedit') . ' (' . $slug . ')';
+                }
+
+                //Creates the array of available pages
+                $pages[] = array(
+                    'title' => $title,
+                    'value' => "{{path('pageedit_display',{'page':'" . $slug . "'})}}",
+                );
+            }
+
+            //Returns the collection in json format
+            return $this->json($pages);
         }
 
         //Access is denied

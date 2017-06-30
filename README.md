@@ -5,13 +5,15 @@ PageEditBundle does the following:
 
 - Displays pages requested,
 - Provides tools to edit content of pages, unless of doing it via a code editor,
-- Integrates with your wed design,
+- Integrates with your web design,
 - Protects twig code from being formatted,
 - Archives the files before replacing them in order to be able to retrieve old versions.
 
 It is, of course, still possible to modify directly those files with an editor.
 
 This Bundle relies on the use of [TinyMce](https://www.tinymce.com/), [jQuery](https://jquery.com/) and [Bootstrap](http://getbootstrap.com/).
+
+[Dedicated web page](https://975l.com/en/pages/pageedit-bundle).
 
 Bundle installation
 ===================
@@ -33,10 +35,10 @@ $ composer update
 
 This command requires you to have Composer installed globally, as explained in the [installation chapter](https://getcomposer.org/doc/00-intro.md) of the Composer documentation.
 
-Step 2: Enable the Bundle
--------------------------
+Step 2: Enable the Bundles
+--------------------------
 
-Then, enable the bundle by adding it to the list of registered bundles in the `app/AppKernel.php` file of your project:
+Then, enable the bundles by adding them to the list of registered bundles in the `app/AppKernel.php` file of your project:
 
 ```php
 <?php
@@ -104,15 +106,13 @@ Step 5: Link and initialization of TinyMce
 
 It is strongly recommend to use the [Override Templates from Third-Party Bundles feature](http://symfony.com/doc/current/templating/overriding.html) to integrate fully with your site.
 
-For this, simply, create the following structure `app/Resources/c975LPageEditBundle/views/` in your app and then duplicate the file `layout.html.twig` in it, to override the existing Bundle file.
+For this, simply, create the following structure `app/Resources/c975LEventsBundle/views/` in your app and then duplicate the files `layout.html.twig` `skeleton.html.twig` and `tinymceInit.html.twig` in it, to override the existing Bundle files, then aply your needed changes, such as language, etc.
 
-In the overridding file, you must add a link to the cloud version (recommended) `https://cloud.tinymce.com/stable/tinymce.min.js` of TinyMce. You will need a free API key (available from the download link) **OR** download and link to your project [https://www.tinymce.com/download/](https://www.tinymce.com/download/).
+In `layout.html.twig`, you must add a link to the cloud version (recommended) `https://cloud.tinymce.com/stable/tinymce.min.js` of TinyMce. You will need a free API key (available from the download link) **OR** download and link to your project [https://www.tinymce.com/download/](https://www.tinymce.com/download/).
 
-You also need to initialize TinyMce ([language pack](https://www.tinymce.com/download/language-packages/) via `language_url`, css used by site via `content_css`, tools, etc.).
+You also need to initialize TinyMce via `tinymceInit.html.twig` for [options](https://www.tinymce.com/docs/get-started-cloud/editor-and-features/), [language pack](https://www.tinymce.com/download/language-packages/) via `language_url`, css used by site via `content_css`, tools, etc.
 
-Information about options is available at [https://www.tinymce.com/docs/get-started-cloud/editor-and-features/](https://www.tinymce.com/docs/get-started-cloud/editor-and-features/).
-
-Example of initialization (see `forms/tinymceInit.html.twig` file).
+Example of initialization (see `tinymceInit.html.twig` file).
 
 ```javascript
     <script type="text/javascript">
@@ -126,6 +126,7 @@ Example of initialization (see `forms/tinymceInit.html.twig` file).
             content_css : [
                 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
             ],
+            //language_url : '{# absolute_url(asset('vendor/tinymce/fr_FR.js')) #}',
             //language_url : 'http://example.com/js/tinymce/fr_FR.js',
             plugins: [
                 'advlist autolink lists link image imagetools charmap print preview hr anchor pagebreak',
@@ -137,6 +138,8 @@ Example of initialization (see `forms/tinymceInit.html.twig` file).
                 'styleselect | removeformat bold italic strikethrough forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
                 'undo redo | cut copy paste | insert link image emoticons table | print preview code | fullscreen help',
             ],
+            link_context_toolbar: true,
+            link_list: '{{ absolute_url(path('pageedit_links')) }}',
             image_advtab: true,
             images_upload_url: '{{ absolute_url(path('pageedit_upload', {'page': page})) }}',
             image_title: true,
@@ -192,9 +195,10 @@ The different Routes (naming self-explanatory) available are:
 - pageedit_edit
 - pageedit_delete
 - pageedit_dashboard
-- pageedit_help
 - pageedit_upload
 - pageedit_slug
+- pageedit_links
+- pageedit_help
 
 Step 8 - Migrating existing files to PageEdit
 ---------------------------------------------

@@ -70,6 +70,10 @@
                 <source>label.title_not_found</source>
                 <target>Title not found</target>
             </trans-unit>
+            <trans-unit id="18">
+                <source>label.validate</source>
+                <target>Validate</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

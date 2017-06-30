@@ -1,9 +1,9 @@
 {% trans_default_domain 'pageedit' %}
 
+<h2>Gestion de la page</h2>
 <p>
     Les outils sont accessibles lorsque l'utilisateur/trice est identifié/e et dispose des droits nécessaires. Une barre d'outils apparaît alors sur chaque page. Il est aussi possible de gérer les pages depuis le <a href="{{ path('pageedit_dashboard') }}">{{ 'label.dashboard'|trans }} (PageEdit)</a>.
 </p>
-
 <p>
     <strong>Créer une page</strong> : utiliser le bouton <span class="glyphicon glyphicon-plus class btn btn-default btn-xs"></span>
     <br />
@@ -14,6 +14,7 @@
     <strong>Afficher la version actuelle d'une page</strong> : utiliser le bouton <span class="glyphicon glyphicon-eye-open class btn btn-default btn-xs"></span>
 </p>
 
+<h2>Données nécessaires</h2>
 <p>
     Pour chaque page il est nécessaire de fournir
     <br />
@@ -22,4 +23,13 @@
     <strong>Url sémantique</strong> : lien utilisé pour appeler la page, par exemple : http://example.com/pages/<strong>url-semantique</strong>, uniquement des minuscules non accentuées et '-'. Il est défini automatiquement en fonction du titre, mais il peut être modifié.
     <br />
     <strong>Contenu</strong> : contenu de la page
+</p>
+
+<h2>Lier les pages</h2>
+<p>
+    Pour faire un lien sur une <strong>page du site gérée via PageEdit</strong>, il est conseillé d'utiliser la liste déroulante "Link list" accessible dans le mode d'édition via le bouton "Insérer un lien", cela mettra en place une valeur dans la case "Url" qu'il faudra laisser telle quelle. Sinon vous pouvez copier l'url de la page.
+</p>
+
+<p class="text-center">
+    <strong><a href="https://975l.com/fr/pages/pageedit-bundle">>> PageEdit (Tutoriels, copies d'écran, etc.) <<</a></strong>
 </p>

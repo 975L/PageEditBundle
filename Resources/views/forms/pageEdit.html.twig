@@ -2,7 +2,7 @@
 {% trans_default_domain 'pageedit' %}
 
 {% block pageedit_content %}
-    {{ include('@c975LPageEdit/forms/tinymceInit.html.twig') }}
+    {{ include('@c975LPageEdit/tinymceInit.html.twig') }}
 
     <div class="container">
 {# Toolbar #}
@@ -42,7 +42,7 @@
 
             <div class="form-group">
                 <button type="submit" name="submit" title="{{ 'label.modify'|trans }}" class="btn btn-lg btn-primary btn-block">
-                    <span class="glyphicon glyphicon-pencil"></span> {{ 'label.modify'|trans }}
+                    {{ 'label.validate'|trans }}
                 </button>
             </div>
         {{ form_end(form) }}

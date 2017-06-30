@@ -11,6 +11,7 @@
         content_css : [
             'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
         ],
+        //language_url : '{# absolute_url(asset('vendor/tinymce/fr_FR.js')) #}',
         //language_url : 'http://example.com/js/tinymce/fr_FR.js',
         plugins: [
             'advlist autolink lists link image imagetools charmap print preview hr anchor pagebreak',
@@ -22,6 +23,8 @@
             'styleselect | removeformat bold italic strikethrough forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
             'undo redo | cut copy paste | insert link image emoticons table | print preview code | fullscreen help',
         ],
+        link_context_toolbar: true,
+        link_list: '{{ absolute_url(path('pageedit_links')) }}',
         image_advtab: true,
         images_upload_url: '{{ absolute_url(path('pageedit_upload', {'page': page})) }}',
         image_title: true,
