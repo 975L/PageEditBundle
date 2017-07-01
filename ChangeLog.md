@@ -1,5 +1,9 @@
 # Changelog
 
+v1.13
+-----
+- Add a Console Command to create sitemap of managed files (01/07/2017)
+
 v1.12
 -----
 - Change wording for validate button (30/06/2017)

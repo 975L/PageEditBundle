@@ -7,13 +7,14 @@ PageEditBundle does the following:
 - Provides tools to edit content of pages, unless of doing it via a code editor,
 - Integrates with your web design,
 - Protects twig code from being formatted,
-- Archives the files before replacing them in order to be able to retrieve old versions.
+- Archives the files before replacing them in order to be able to retrieve old versions,
+- Gives the possibility to create a `sitemap.xml̀` of managed files.
 
 It is, of course, still possible to modify directly those files with an editor.
 
 This Bundle relies on the use of [TinyMce](https://www.tinymce.com/), [jQuery](https://jquery.com/) and [Bootstrap](http://getbootstrap.com/).
 
-[Dedicated web page](https://975l.com/en/pages/pageedit-bundle).
+[PageEdit Bundle dedicated web page](https://975l.com/en/pages/pageedit-bundle).
 
 Bundle installation
 ===================
@@ -65,7 +66,7 @@ class AppKernel extends Kernel
 Step 3: Configure the Bundle
 ----------------------------
 
-Then, in the `app/config.yml` file of your project, define `folderPages` (path where the files will be stored) and `roleNeeded` (The user's role needed to enable access to the edition of page).
+Then, in the `app/config.yml` file of your project, define the needed values explained below.
 
 ```yml
 #app/config/config.yml
@@ -79,11 +80,16 @@ knp_paginator:
         pagination: 'KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig'
 
 c975_l_page_edit:
-    folderPages: 'pages' #The full path to this folder has to be added to .gitignore if Git is used
+
+    #Path where the files will be stored. The full path ('app/resources/views/[folderPages]') has to be added to .gitignore if Git is used
+    folderPages: 'pages'
+    #User's role needed to enable access to the edition of page
     roleNeeded: 'ROLE_ADMIN'
+    #Base url for sitemap creation without leading slash
+    sitemapBaseUrl: 'http://example.com'
 ```
 
-** If you use Git for version control, you need to add the full path `app/Resources/views/[folderPages]` in the `.gitignore`, otherwise all the content will be altered by Git. You also need to add the path `/web/images/[folderPages]` as it will contain the uploaded pictures **
+**If you use Git for version control, you need to add the full path `app/Resources/views/[folderPages]` in the `.gitignore`, otherwise all the content will be altered by Git. You also need to add the path `/web/images/[folderPages]` as it will contain the uploaded pictures**
 
 Step 4: Enable the Routes
 -------------------------
@@ -180,8 +186,9 @@ This file must extends your layout in order to display correctly, so you need to
 
 **Also, keep `{% block toolbar %}` to keep toolbar and `{% set pageedit_title="%title%" %}` used for metadata.**
 
-Step 7: How to use
-------------------
+
+How to use
+----------
 
 The Route to display a page is `http://example.com/pages/{page}`, the one to edit is `http://example.com/pages/edit/{page}`.
 
@@ -200,14 +207,14 @@ The different Routes (naming self-explanatory) available are:
 - pageedit_links
 - pageedit_help
 
-Step 8 - Migrating existing files to PageEdit
----------------------------------------------
+Migrating existing files to PageEdit
+------------------------------------
 
 To migrate existing files, simply move your existing template in the folder defined in `app/Resources/views/[folderPages]` (`folderPages` has been defined in Step 3 above), access to PageEdit dashboard and do the modifications. The skeleton will be added to new files and old ones will be archived.
 
 You can use the command `git rm -r --cached app/Resources/views/[folderPages]` to remove it from Git if the folder was previously indexed.
 
-** Don't forget to make a copy of it if you use Git as versionning system and if you have added this folder in the `.gitignore`, otherwise your files will be deleted at next commit ! **
+**Don't forget to make a copy of it if you use Git as versionning system and if you have added this folder in the `.gitignore`, otherwise your files will be deleted at next commit !**
 
 If files have been deleted, simply use the code below:
 
@@ -217,3 +224,9 @@ git checkout <id_commit> # indicate here the id of the commit obtained above
 #Access to your files, copy/paste them somewhere else
 git checkout HEAD #to get back to latest version
 ```
+
+Create Sitemap
+--------------
+
+In a console use `php bin/console pageedit:createSitemap` to create a `sitemap-[folderPages].xml` in the `web` folder of your project. You can use a crontab to generate it every day.
+You can add this file in a `sitemap-index.xml`that groups all your sitemaps or directly use it if you have only one.

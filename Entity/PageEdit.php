@@ -24,16 +24,19 @@ class PageEdit
     protected $title;
 
     protected $slug;
-
+    protected $changeFrequency;
+    protected $priority;
     protected $action;
 
 
-    public function __construct($action = null, $content = null, $title = null, $slug = null)
+    public function __construct($action = null, $content = null, $title = null, $slug = null, $changeFrequency = null, $priority = null)
     {
         $this->setAction($action);
         $this->setContent($content);
         $this->setTitle($title);
         $this->setSlug($slug);
+        $this->setChangeFrequency($changeFrequency);
+        $this->setPriority($priority);
     }
 
 
@@ -123,5 +126,49 @@ class PageEdit
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    /**
+     * Set changeFrequency
+     *
+     * @return PageEdit
+     */
+    public function setChangeFrequency($changeFrequency)
+    {
+        $this->changeFrequency = $changeFrequency;
+
+        return $this;
+    }
+
+    /**
+     * Get changeFrequency
+     *
+     * @return string
+     */
+    public function getChangeFrequency()
+    {
+        return $this->changeFrequency;
+    }
+
+    /**
+     * Set priority
+     *
+     * @return PageEdit
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * Get priority
+     *
+     * @return string
+     */
+    public function getPriority()
+    {
+        return $this->priority;
     }
 }

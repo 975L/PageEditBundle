@@ -11,7 +11,9 @@ namespace c975L\PageEditBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -41,6 +43,27 @@ class PageEditType extends AbstractType
         ;
         if ($disabled === false) {
             $builder
+                ->add('changeFrequency', ChoiceType::class, array(
+                    'label' => 'label.change_frequency',
+                    'disabled' => $disabled,
+                    'required' => true,
+                    'choices'  => array(
+                        'label.never' => 'never',
+                        'label.yearly' => 'yearly',
+                        'label.monthly' => 'monthly',
+                        'label.weekly' => 'weekly',
+                        'label.daily' => 'daily',
+                        'label.hourly' => 'hourly',
+                        'label.always' => 'always',
+                    )))
+                ->add('priority', RangeType::class, array(
+                    'label' => 'label.significance',
+                    'disabled' => $disabled,
+                    'required' => true,
+                    'attr' => array(
+                        'min' => 0,
+                        'max' => 10
+                    )))
                 ->add('content', TextareaType::class, array(
                     'label' => 'label.content',
                     'disabled' => $disabled,

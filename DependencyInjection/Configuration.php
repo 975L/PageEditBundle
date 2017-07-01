@@ -27,6 +27,8 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('roleNeeded')
                     ->defaultValue('ROLE_ADMIN')
                 ->end()
+                ->scalarNode('sitemapBaseUrl')
+                ->end()
             ->end()
         ;
 

@@ -44,7 +44,7 @@ class PageEditController extends Controller
             //Defines path
             $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
 
-            //Finds pages
+            //Gets pages
             $finder
                 ->files()
                 ->in($folderPath)
@@ -210,7 +210,7 @@ class PageEditController extends Controller
                 $originalContent = trim(substr($fileContent, $entryPoint, $exitPoint - $entryPoint));
             }
 
-            //Gets the metadata
+            //Gets title
             preg_match('/pageedit_title=\"(.*)\"/', $fileContent, $matches);
             if (!empty($matches)) $title = $matches[1];
             else {
@@ -220,8 +220,18 @@ class PageEditController extends Controller
                 else $title = $page;
             }
 
+            //Gets changeFrequency
+            preg_match('/pageedit_changeFrequency=\"(.*)\"/', $fileContent, $matches);
+            if (!empty($matches)) $changeFrequency = $matches[1];
+            else $changeFrequency = 'weekly';
+
+            //Gets priority
+            preg_match('/pageedit_priority=\"(.*)\"/', $fileContent, $matches);
+            if (!empty($matches)) $priority = $matches[1];
+            else $priority = '8';
+
             //Defines form
-            $pageEdit = new PageEdit('edit', $originalContent, $title, $page);
+            $pageEdit = new PageEdit('edit', $originalContent, $title, $page, $changeFrequency, $priority);
             $form = $this->createForm(PageEditType::class, $pageEdit);
             $form->handleRequest($request);
 
@@ -579,6 +589,8 @@ class PageEditController extends Controller
 
         //Updates metadata
         $startSkeleton = preg_replace('/pageedit_title=\"(.*)\"/', 'pageedit_title=' . $title, $startSkeleton);
+        $startSkeleton = preg_replace('/pageedit_changeFrequency=\"(.*)\"/', 'pageedit_changeFrequency="' . $formData->getChangeFrequency() . '"', $startSkeleton);
+        $startSkeleton = preg_replace('/pageedit_priority=\"(.*)\"/', 'pageedit_priority="' . $formData->getPriority() . '"', $startSkeleton);
 
         //Concatenate skeleton + metadata + content
         $finalContent = $startSkeleton . "\n" . $formData->getContent() . "\n\t\t" . $endSkeleton;

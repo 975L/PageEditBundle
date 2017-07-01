@@ -74,6 +74,42 @@
                 <source>label.validate</source>
                 <target>Validate</target>
             </trans-unit>
+            <trans-unit id="19">
+                <source>label.change_frequency</source>
+                <target>Change Frequency</target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source>label.significance</source>
+                <target>Page significance</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>label.never</source>
+                <target>Never</target>
+            </trans-unit>
+            <trans-unit id="22">
+                <source>label.yearly</source>
+                <target>Yearly</target>
+            </trans-unit>
+            <trans-unit id="23">
+                <source>label.monthly</source>
+                <target>Montly</target>
+            </trans-unit>
+            <trans-unit id="24">
+                <source>label.weekly</source>
+                <target>Weekly</target>
+            </trans-unit>
+            <trans-unit id="25">
+                <source>label.daily</source>
+                <target>Daily</target>
+            </trans-unit>
+            <trans-unit id="26">
+                <source>label.hourly</source>
+                <target>Hourly</target>
+            </trans-unit>
+            <trans-unit id="27">
+                <source>label.always</source>
+                <target>Always</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
