@@ -28,5 +28,6 @@ class c975LPageEditExtension extends Extension
         $container->setParameter('c975_l_page_edit.folderPages', $processedConfig['folderPages']);
         $container->setParameter('c975_l_page_edit.roleNeeded', $processedConfig['roleNeeded']);
         $container->setParameter('c975_l_page_edit.sitemapBaseUrl', $processedConfig['sitemapBaseUrl']);
+        $container->setParameter('c975_l_page_edit.sitemapLanguages', $processedConfig['sitemapLanguages']);
     }
 }

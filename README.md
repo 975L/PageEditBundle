@@ -87,6 +87,8 @@ c975_l_page_edit:
     roleNeeded: 'ROLE_ADMIN'
     #Base url for sitemap creation without leading slash
     sitemapBaseUrl: 'http://example.com'
+    #(Optional) Array of available languages of the website
+    sitemapLanguages: ['en', 'fr', 'es']
 ```
 
 **If you use Git for version control, you need to add the full path `app/Resources/views/[folderPages]` in the `.gitignore`, otherwise all the content will be altered by Git. You also need to add the path `/web/images/[folderPages]` as it will contain the uploaded pictures**

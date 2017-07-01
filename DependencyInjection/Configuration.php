@@ -29,6 +29,10 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('sitemapBaseUrl')
                 ->end()
+                ->arrayNode('sitemapLanguages')
+                    ->prototype('scalar')->end()
+                    ->defaultValue(array())
+                ->end()
             ->end()
         ;
 

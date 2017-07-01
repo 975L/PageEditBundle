@@ -1,5 +1,9 @@
 # Changelog
 
+v1.13.1
+-------
+- Modification of SitemapCreateCommand to allow multilingual (01/07/2017)
+
 v1.13
 -----
 - Add a Console Command to create sitemap of managed files (01/07/2017)

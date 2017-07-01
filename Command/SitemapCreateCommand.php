@@ -38,6 +38,8 @@ class SitemapCreateCommand extends ContainerAwareCommand
 
         //Defines data related to pages
         $pages = array();
+        $languages = $container->getParameter('c975_l_page_edit.sitemapLanguages');
+
         foreach ($finder as $file) {
             //Gets changeFrequency
             preg_match('/pageedit_changeFrequency=\"(.*)\"/', $file->getContents(), $matches);
@@ -50,12 +52,29 @@ class SitemapCreateCommand extends ContainerAwareCommand
             else $priority = '0.8';
 
             //Defines data
-            $pages[]= array(
-                'url' => $container->getParameter('c975_l_page_edit.sitemapBaseUrl') . '/pages/' . str_replace('.html.twig', '', $file->getRelativePathname()),
-                'lastModified' => date('Y-m-d', $file->getMTime()),
-                'changeFrequency' => $changeFrequency,
-                'priority' => $priority,
-            );
+            if (!empty($languages)) {
+                foreach($languages as $language) {
+                    $url = $container->getParameter('c975_l_page_edit.sitemapBaseUrl');
+                    $url .= $language != '' ? '/' . $language : '';
+                    $url .= '/pages/' . str_replace('.html.twig', '', $file->getRelativePathname());
+                    $pages[]= array(
+                        'url' => $url,
+                        'lastModified' => date('Y-m-d', $file->getMTime()),
+                        'changeFrequency' => $changeFrequency,
+                        'priority' => $priority,
+                    );
+                }
+            }
+            else {
+                $url = $container->getParameter('c975_l_page_edit.sitemapBaseUrl');
+                $url .= '/pages/' . str_replace('.html.twig', '', $file->getRelativePathname());
+                $pages[]= array(
+                    'url' => $url,
+                    'lastModified' => date('Y-m-d', $file->getMTime()),
+                    'changeFrequency' => $changeFrequency,
+                    'priority' => $priority,
+                );
+            }
         }
 
         //Writes file
