@@ -1,5 +1,9 @@
 # Changelog
 
+v1.14.1
+-------
+- Forgotten use for FileSystem in SitemapCreateCommand (03/07/2017)
+
 v1.14
 -----
 - Remove of "<div class="container">" in templates as it extends `layout.html.twig` and this kind of data has to be set site by site (03/07/2017)

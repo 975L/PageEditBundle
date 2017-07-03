@@ -78,7 +78,6 @@ knp_paginator:
         pagination: 'KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig'
 
 c975_l_page_edit:
-
     #Path where the files will be stored. The full path ('app/resources/views/[folderPages]') has to be added to .gitignore if Git is used
     folderPages: 'pages'
     #User's role needed to enable access to the edition of page

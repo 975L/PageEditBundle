@@ -4,6 +4,7 @@ namespace c975L\PageEditBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
 class SitemapCreateCommand extends ContainerAwareCommand
@@ -41,7 +42,7 @@ class SitemapCreateCommand extends ContainerAwareCommand
             ->depth('== 0')
             ->name('*.html.twig')
             ->sortByName()
-            ;
+        ;
 
         //Defines data related to pages
         $pages = array();
@@ -62,7 +63,7 @@ class SitemapCreateCommand extends ContainerAwareCommand
             if (!empty($languages)) {
                 foreach($languages as $language) {
                     $url = $container->getParameter('c975_l_page_edit.sitemapBaseUrl');
-                    $url .= $language != '' ? '/' . $language : '';
+                    $url .= '/' . $language;
                     $url .= '/pages/' . str_replace('.html.twig', '', $file->getRelativePathname());
                     $pages[]= array(
                         'url' => $url,
