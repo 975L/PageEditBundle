@@ -24,13 +24,20 @@ class SitemapCreateCommand extends ContainerAwareCommand
         //Gets the Finder
         $finder = new Finder();
 
-        //Defines path
+        //Defines paths
         $folderPath = $container->getParameter('kernel.root_dir') . '/Resources/views/' . $container->getParameter('c975_l_page_edit.folderPages');
+        $protectedFolderPath = $container->getParameter('kernel.root_dir') . '/Resources/views/' . $container->getParameter('c975_l_page_edit.folderPages') . '/protected';
+
+        //Creates structure in case it not exists
+        $fs = new Filesystem();
+        $fs->mkdir($folderPath, 0770);
+        $fs->mkdir($protectedFolderPath, 0770);
 
         //Gets pages
         $finder
             ->files()
             ->in($folderPath)
+            ->in($protectedFolderPath)
             ->depth('== 0')
             ->name('*.html.twig')
             ->sortByName()

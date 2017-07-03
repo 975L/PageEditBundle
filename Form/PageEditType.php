@@ -67,7 +67,7 @@ class PageEditType extends AbstractType
                 ->add('content', TextareaType::class, array(
                     'label' => 'label.content',
                     'disabled' => $disabled,
-                    'required' => true,
+                    'required' => false,
                     'attr' => array(
                         'class' => 'tinymce',
                         'cols' => 100,

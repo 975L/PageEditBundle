@@ -40,7 +40,7 @@
             </trans-unit>
             <trans-unit id="10">
                 <source>text.special_formatting</source>
-               <target>Important, le contenu entre {{...}}, {%...%} ou {#...#}doit être laissé tel quel, sous peine d'altérer l'affichage de la page.</target>
+               <target>Important, le contenu entre {{...}}, {%...%} ou {#...#} doit être laissé tel quel, sous peine d'altérer l'affichage de la page.</target>
             </trans-unit>
             <trans-unit id="11">
                 <source>text.delete_page</source>
@@ -109,6 +109,10 @@
             <trans-unit id="27">
                 <source>label.always</source>
                 <target>Tout le temps</target>
+            </trans-unit>
+            <trans-unit id="28">
+                <source>label.protected</source>
+                <target>Protégée</target>
             </trans-unit>
         </body>
     </file>

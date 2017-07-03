@@ -3,30 +3,47 @@
 <div class="text-center">
     <div class="btn-group btn-group-md" role="group">
 {# Brand #}
-        <span class="btn btn-success"><strong>PageEdit</strong></span>
+        {% if type != 'dashboard' %}
+            <a href="{{ path('pageedit_dashboard') }}" class="btn btn-success" title="PageEdit ({{ 'label.dashboard'|trans }})" role="button">
+                <strong>PageEdit</strong></a>
+        {% else %}
+            <span class="btn btn-success"><strong>PageEdit</strong></span></a>
+        {% endif %}
+
+{# Display #}
+        {% if type != 'dashboard' and type != 'display' and type != 'help' and type != 'new' and type != 'protected' %}
+            <a href="{{ path('pageedit_display', {'page': page}) }}" class="btn btn-default" title="{{ 'label.current_version'|trans }}" role="button">
+                <span class="glyphicon glyphicon-eye-open"></span></a>
+        {% endif %}
 
 {# Edit #}
-        <a href="{{ path('pageedit_edit', {'page': page}) }}" class="btn btn-default" title="{{ 'label.modify'|trans }}" role="button">
-            <span class="glyphicon glyphicon-pencil"></span></a>
+        {% if type != 'dashboard' and type != 'edit' and type != 'help' and type != 'new' and type != 'protected' %}
+            <a href="{{ path('pageedit_edit', {'page': page}) }}" class="btn btn-default" title="{{ 'label.modify'|trans }}" role="button">
+                <span class="glyphicon glyphicon-pencil"></span></a>
+        {% endif %}
 
 {# New #}
-        <a href="{{ path('pageedit_new') }}" class="btn btn-default" title="{{ 'label.new_page'|trans }}" role="button">
-            <span class="glyphicon glyphicon-plus"></span></a>
+        {% if type != 'new' %}
+            <a href="{{ path('pageedit_new') }}" class="btn btn-default" title="{{ 'label.new_page'|trans }}" role="button">
+                <span class="glyphicon glyphicon-plus"></span></a>
+        {% endif %}
 
 {# Delete #}
-        <a href="{{ path('pageedit_delete', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
-            <span class="glyphicon glyphicon-trash"></span></a>
+        {% if type != 'dashboard' and type != 'delete' and type != 'help' and type != 'new' and type != 'protected' %}
+            <a href="{{ path('pageedit_delete', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
+                <span class="glyphicon glyphicon-trash"></span></a>
+        {% endif %}
 
 {# Download zip of files #}
-{#        <a href="{{ path('pageedit_zip', {'page': page}) }}" class="btn btn-default" title="{{ 'label.download'|trans }}" role="button">
-            <span class="glyphicon glyphicon-compressed"></span></a> #}
-
-{# Dashboard #}
-        <a href="{{ path('pageedit_dashboard') }}" class="btn btn-info" title="{{ 'label.dashboard'|trans }}" role="button">
-            <span class="glyphicon glyphicon-dashboard"></span></a>
+        {% if type != 'delete' %}
+            {# <a href="{{ path('pageedit_zip') }}" class="btn btn-default" title="{{ 'label.download'|trans }}" role="button">
+                <span class="glyphicon glyphicon-compressed"></span></a> #}
+        {% endif %}
 
 {# Help #}
-        <a href="{{ path('pageedit_help') }}" class="btn btn-info" title="{{ 'label.help'|trans }}" role="button">
-            <span class="glyphicon glyphicon-flag"></span></a>
+        {% if type != 'help' %}
+            <a href="{{ path('pageedit_help') }}" class="btn btn-info" title="{{ 'label.help'|trans }}" role="button">
+                <span class="glyphicon glyphicon-flag"></span></a>
+        {% endif %}
     </div>
 </div>

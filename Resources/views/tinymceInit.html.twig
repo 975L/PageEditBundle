@@ -1,5 +1,8 @@
+{# TinyMceCloud - https://www.tinymce.com #}
+<script type="text/javascript" src="//cloud.tinymce.com/stable/tinymce.min.js{# ?apiKey=YOUR_API_KEY #}"></script>
+
 {# TinyMce Initialization #}
-{% spaceless %}
+{# For options, see: https://www.tinymce.com/docs/get-started-cloud/editor-and-features/ #}
 <script type="text/javascript">
     tinymce.init({
         selector: 'textarea.tinymce',
@@ -25,9 +28,16 @@
         ],
         link_context_toolbar: true,
         link_list: '{{ absolute_url(path('pageedit_links')) }}',
+        relative_urls : false,
+        remove_script_host : false,
+        convert_urls : true,
         image_advtab: true,
         images_upload_url: '{{ absolute_url(path('pageedit_upload', {'page': page})) }}',
         image_title: true,
+        image_dimensions: false,
+        image_class_list: [
+            {title: 'Responsive', value: 'img-responsive'}
+        ],
         automatic_uploads: true,
         file_picker_types: 'image',
         file_picker_callback: function(cb, value, meta) {
@@ -52,4 +62,3 @@
         },
     });
 </script>
-{% endspaceless %}

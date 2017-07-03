@@ -110,6 +110,10 @@
                 <source>label.always</source>
                 <target>Siempre</target>
             </trans-unit>
+            <trans-unit id="28">
+                <source>label.protected</source>
+                <target>Protegida</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

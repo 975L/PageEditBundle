@@ -2,62 +2,35 @@
 {% trans_default_domain 'pageedit' %}
 
 {% block pageedit_content %}
-    <div class="container">
 {# Toolbar #}
-        <div class="text-center">
-            <div class="btn-group btn-group-md" role="group">
-{# Brand #}
-                <span class="btn btn-success"><strong>PageEdit</strong></span>
-
-{# Display #}
-                <a href="{{ path('pageedit_display', {'page': page}) }}" class="btn btn-default" title="{{ 'label.current_version'|trans }}" role="button">
-                    <span class="glyphicon glyphicon-eye-open"></span></a>
-
-{# Edit #}
-                <a href="{{ path('pageedit_edit', {'page': page}) }}" class="btn btn-default" title="{{ 'label.modify'|trans }}" role="button">
-                    <span class="glyphicon glyphicon-pencil"></span></a>
-
-{# New #}
-                <a href="{{ path('pageedit_new') }}" class="btn btn-default" title="{{ 'label.new_page'|trans }}" role="button">
-                    <span class="glyphicon glyphicon-plus"></span></a>
-
-{# Dashboard #}
-                <a href="{{ path('pageedit_dashboard') }}" class="btn btn-info" title="{{ 'label.dashboard'|trans }}" role="button">
-                    <span class="glyphicon glyphicon-dashboard"></span></a>
-
-{# Help #}
-                <a href="{{ path('pageedit_help') }}" class="btn btn-info" title="{{ 'label.help'|trans }}" role="button">
-                    <span class="glyphicon glyphicon-flag"></span></a>
-            </div>
-        </div>
+    {{ toolbar|raw }}
 
 {# Form #}
-        {{ form_start(form) }}
-            <p class="alert alert-danger text-center">
-                {{ 'text.delete_page'|trans }}
-            </p>
-            {{ form_widget(form) }}
+    {{ form_start(form) }}
+        <p class="alert alert-danger text-center">
+            {{ 'text.delete_page'|trans }}
+        </p>
+        {{ form_widget(form) }}
 
 {# Page content #}
-            <div class="form-group">
-                <label class="control-label required">
-                    {{ 'label.content'|trans }}
-                </label>
-                <br />
-                {{ pageContent|raw }}
-            </div>
+        <div class="form-group">
+            <label class="control-label required">
+                {{ 'label.content'|trans }}
+            </label>
+            <br />
+            {{ pageContent|raw }}
+        </div>
 
-            <div class="form-group">
-                <button type="submit" name="submit" title="{{ 'label.delete'|trans }}" class="btn btn-lg btn-danger btn-block">
-                    <span class="glyphicon glyphicon-trash"></span> {{ 'label.delete'|trans }}
-                </button>
-            </div>
-        {{ form_end(form) }}
+        <div class="form-group">
+            <button type="submit" name="submit" title="{{ 'label.delete'|trans }}" class="btn btn-lg btn-danger btn-block">
+                <span class="glyphicon glyphicon-trash"></span> {{ 'label.delete'|trans }}
+            </button>
+        </div>
+    {{ form_end(form) }}
 
 {# Cancel #}
-        <p class="text-center">
-            <a href="javascript:history.back()">
-                {{ 'label.cancel'|trans }}</a>
-        </p>
-    </div>
+    <p class="text-center">
+        <a href="javascript:history.back()">
+            {{ 'label.cancel'|trans }}</a>
+    </p>
 {% endblock %}

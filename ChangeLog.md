@@ -1,5 +1,18 @@
 # Changelog
 
+v1.14
+-----
+- Remove of "<div class="container">" in templates as it extends `layout.html.twig` and this kind of data has to be set site by site (03/07/2017)
+- Add of class "img-responsive" for images and remove of dimensions
+- Add of a "protected" folder to store the templates for which the content MUST NOT be modified via Tinymce, but still displayed with PageEdit
+- Move the call of `tinymce.js` to `tinymceInit.html.twig` instead of `layout.html.twig` to avoid calling it for pages that don't need it.
+- Group toolbars in one file
+- Add of semantic url value in dashboard
+- Add of link to dashboard on PageEdit label in toolbar and remove of dashboard button
+- Update return location for uploaded images to absolute url + set absolute in tinymceInit
+- Group in one function the creation of folders needed by the Bundle
+- Remove of "required" on textarea.tinymce as it won't submit for a new page, a refresh has to be done - https://github.com/tinymce/tinymce/issues/2584
+
 v1.13.1
 -------
 - Modification of SitemapCreateCommand to allow multilingual (01/07/2017)

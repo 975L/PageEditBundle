@@ -38,34 +38,47 @@ class PageEditController extends Controller
 
         //Returns the dashboard content
         if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
+            //Creates structure in case it not exists
+            $this->createFolders();
+
             //Gets the Finder
             $finder = new Finder();
 
-            //Defines path
+            //Defines paths
             $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
+            $protectedFolderPath = $folderPath . '/protected';
 
             //Gets pages
             $finder
                 ->files()
                 ->in($folderPath)
+                ->in($protectedFolderPath)
                 ->depth('== 0')
                 ->name('*.html.twig')
                 ->sortByName()
-                ;
+            ;
 
             //Defines slug and title
             $pages = array();
             foreach ($finder as $file) {
                 $slug = str_replace('.html.twig', '', $file->getRelativePathname());
                 preg_match('/pageedit_title=\"(.*)\"/', $file->getContents(), $matches);
-                if (!empty($matches)) $pages[$slug] = $matches[1];
+                if (!empty($matches)) $title = $matches[1];
                 else {
                     //Title is using Twig code to translate it
                     preg_match('/pageedit_title=(.*)\%\}/', $file->getContents(), $matches);
-                    if (!empty($matches)) $pages[$slug] = trim($matches[1]);
-                    else $pages[$slug] = $this->get('translator')->trans('label.title_not_found', array(), 'pageedit') . ' (' . $slug . ')';
+                    if (!empty($matches)) $title = trim($matches[1]);
+                    else $title = $this->get('translator')->trans('label.title_not_found', array(), 'pageedit') . ' (' . $slug . ')';
                 }
+
+                //Adds page to array
+                $pages[] = array(
+                    'slug' => $slug,
+                    'title' => $title,
+                    'protected' => strpos($file->getPath(), 'protected') !== false ? true : false,
+                );
             }
+            sort($pages);
 
             //Pagination
             $paginator  = $this->get('knp_paginator');
@@ -79,6 +92,7 @@ class PageEditController extends Controller
             return $this->render('@c975LPageEdit/pages/dashboard.html.twig', array(
                 'pages' => $pagination,
                 'title' => $this->get('translator')->trans('label.dashboard', array(), 'pageedit'),
+                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array('type' => 'dashboard')),
                 ));
         }
 
@@ -100,12 +114,19 @@ class PageEditController extends Controller
         $filePath = $this->getParameter('c975_l_page_edit.folderPages') . '/' . $page . '.html.twig';
         $fileRedirectedPath = $this->getParameter('c975_l_page_edit.folderPages') . '/redirected/' . $page . '.html.twig';
         $fileDeletedPath = $this->getParameter('c975_l_page_edit.folderPages') . '/deleted/' . $page . '.html.twig';
+        $fileProtectedPath = $this->getParameter('c975_l_page_edit.folderPages') . '/protected/' . $page . '.html.twig';
 
         //Redirected page
         if ($this->get('templating')->exists($fileRedirectedPath)) {
             $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/';
             return $this->redirectToRoute('pageedit_display', array(
                 'page' => file_get_contents($folderPath . $fileRedirectedPath),
+            ));
+        }
+        //Protected page
+        elseif ($this->get('templating')->exists($fileProtectedPath)) {
+            return $this->render($fileProtectedPath, array(
+                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array('type' => 'protected')),
             ));
         }
         //Deleted page
@@ -123,7 +144,7 @@ class PageEditController extends Controller
         //Adds toolbar if rights are ok
         $toolbar = null;
         if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
-            $toolbar = $this->renderView('@c975LPageEdit/toolbar.html.twig', array('page' => $page));
+            $toolbar = $this->renderView('@c975LPageEdit/toolbar.html.twig', array('type' => 'display', 'page' => $page));
         }
 
         return $this->render($filePath, array(
@@ -167,6 +188,7 @@ class PageEditController extends Controller
                 'form' => $form->createView(),
                 'title' => $this->get('translator')->trans('label.new_page', array(), 'pageedit'),
                 'page' => 'new',
+                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array('type' => 'new')),
                 ));
         }
 
@@ -259,6 +281,7 @@ class PageEditController extends Controller
                 'form' => $form->createView(),
                 'title' => $this->get('translator')->trans('label.modify', array(), 'pageedit') . ' "' . $title . '"',
                 'page' => $page,
+                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array('type' => 'edit', 'page' => $page)),
             ));
         }
 
@@ -302,9 +325,15 @@ class PageEditController extends Controller
                 $originalContent = trim(substr($fileContent, $entryPoint, $exitPoint - $entryPoint));
             }
 
-            //Gets the metadata
+            //Gets title
             preg_match('/pageedit_title=\"(.*)\"/', $fileContent, $matches);
-            $title = $matches[1];
+            if (!empty($matches)) $title = $matches[1];
+            else {
+                //Title is using Twig code to translate it
+                preg_match('/pageedit_title=(.*)\%\}/', $fileContent, $matches);
+                if (!empty($matches)) $title = '{{ ' . trim($matches[1]) . ' }}';
+                else $title = $page;
+            }
 
             //Defines form
             $pageEdit = new PageEdit('delete', $originalContent, $title, $page);
@@ -327,6 +356,7 @@ class PageEditController extends Controller
                 'title' => $this->get('translator')->trans('label.delete', array(), 'pageedit') . ' "' . $title . '"',
                 'page' => $page,
                 'pageContent' => $originalContent,
+                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array('type' => 'delete', 'page' => $page)),
             ));
         }
 
@@ -347,16 +377,21 @@ class PageEditController extends Controller
 
         //Returns the list content
         if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
+            //Creates structure in case it not exists
+            $this->createFolders();
+
             //Gets the Finder
             $finder = new Finder();
 
-            //Defines path
+            //Defines paths
             $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
+            $protectedFolderPath = $folderPath . '/protected';
 
             //Finds pages
             $finder
                 ->files()
                 ->in($folderPath)
+                ->in($protectedFolderPath)
                 ->depth('== 0')
                 ->name('*.html.twig')
                 ->sortByName()
@@ -401,12 +436,11 @@ class PageEditController extends Controller
      */
     public function uploadAction(Request $request, $page)
     {
-        //Gets the FileSystem
-        $fs = new Filesystem();
+        //Creates structure in case it not exists
+        $this->createFolders();
 
         //Defines path
         $folderPath = $this->getParameter('kernel.root_dir') . '/../web/images/' . $this->getParameter('c975_l_page_edit.folderPages');
-        $fs->mkdir($folderPath, 0770);
 
         //Checks origin - https://www.tinymce.com/docs/advanced/php-upload-handler/
         if ($request->server->get('HTTP_ORIGIN') !== null) {
@@ -425,7 +459,8 @@ class PageEditController extends Controller
                 move_uploaded_file($file->getRealPath(), $folderPath . '/' . $filename);
 
                 //Respond to the successful upload with JSON
-                return $this->json(array('location' => '/images/' . $this->getParameter('c975_l_page_edit.folderPages') . '/' . $filename));
+                $location = str_replace('/app_dev.php', '', $request->getUriForPath('/images/' . $this->getParameter('c975_l_page_edit.folderPages') . '/' . $filename));
+                return $this->json(array('location' => $location));
             }
         }
     }
@@ -457,6 +492,7 @@ class PageEditController extends Controller
             //Returns the help
             return $this->render('@c975LPageEdit/pages/help.html.twig', array(
                 'title' => $this->get('translator')->trans('label.help', array(), 'pageedit'),
+                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array('type' => 'help')),
             ));
         }
 
@@ -466,6 +502,28 @@ class PageEditController extends Controller
 
 
 //FUNCTIONS
+    //Creates the folders needed by the Bundle
+    public function createFolders()
+    {
+        //Gets the FileSystem
+        $fs = new Filesystem();
+
+        //Defines paths
+        $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
+        $archivedFolder = $folderPath . '/archived';
+        $deletedFolder = $folderPath . '/deleted';
+        $protectedFolderPath = $folderPath . '/protected';
+        $redirectedFolder = $folderPath . '/redirected';
+        $imageFolderPath = $this->getParameter('kernel.root_dir') . '/../web/images/' . $this->getParameter('c975_l_page_edit.folderPages');
+
+        //Creates folders
+        $fs->mkdir($archivedFolder, 0770);
+        $fs->mkdir($deletedFolder, 0770);
+        $fs->mkdir($protectedFolderPath, 0770);
+        $fs->mkdir($redirectedFolder, 0770);
+        $fs->mkdir($imageFolderPath, 0770);
+    }
+
     //Gets the start and end of the skeleton
     public function getSkeleton()
     {
@@ -498,16 +556,16 @@ class PageEditController extends Controller
     //Archives file
     public function archiveFile($page, $userId)
     {
+        //Creates structure in case it not exists
+        $this->createFolders();
+
         //Gets the FileSystem
         $fs = new Filesystem();
 
-        //Defines path
+        //Defines paths
         $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
-        $filePath = $folderPath . '/' . $page . '.html.twig';
-
-        //Creates folder
         $archivedFolder = $folderPath . '/archived';
-        $fs->mkdir($archivedFolder, 0770);
+        $filePath = $folderPath . '/' . $page . '.html.twig';
 
         //Archives file
         if ($fs->exists($filePath)) {
@@ -519,15 +577,15 @@ class PageEditController extends Controller
     //Creates the redirection file
     public function redirectFile($page, $slug)
     {
+        //Creates structure in case it not exists
+        $this->createFolders();
+
         //Gets the FileSystem
         $fs = new Filesystem();
 
         //Defines path
         $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
-
-        //Creates folder
         $redirectedFolder = $folderPath . '/redirected';
-        $fs->mkdir($redirectedFolder, 0770);
 
         //Sets the redirection
         $redirectedFilePath = $redirectedFolder . '/' . $page . '.html.twig';
@@ -538,18 +596,17 @@ class PageEditController extends Controller
     //Moves to deleted/redirected folder the requested file
     public function deleteFile($page, $redirect, $slug = null)
     {
+        //Creates structure in case it not exists
+        $this->createFolders();
+
         //Gets the FileSystem
         $fs = new Filesystem();
 
         //Defines path
         $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
         $filePath = $folderPath . '/' . $page . '.html.twig';
-
-        //Creates folders
         $deletedFolder = $folderPath . '/deleted';
-        $fs->mkdir($deletedFolder, 0770);
         $redirectedFolder = $folderPath . '/redirected';
-        $fs->mkdir($redirectedFolder, 0770);
 
         //Sets the redirection
         if ($redirect === true) {
@@ -567,6 +624,9 @@ class PageEditController extends Controller
     //Archives old file and writes new one
     public function writeFile($page, $originalContent, $formData, $userId)
     {
+        //Creates structure in case it not exists
+        $this->createFolders();
+
         //Gets the FileSystem
         $fs = new Filesystem();
 

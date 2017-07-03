@@ -40,7 +40,7 @@
             </trans-unit>
             <trans-unit id="10">
                 <source>text.special_formatting</source>
-               <target>Important, the content between {{...}}, {%...%} or {#...#} should be left as is, otherwise the page display will be altered.</target>
+               <target>Important, the content between {{...}}, {%...%} or {#...#} must be left as is, otherwise the page display will be altered.</target>
             </trans-unit>
             <trans-unit id="11">
                 <source>text.delete_page</source>
@@ -109,6 +109,10 @@
             <trans-unit id="27">
                 <source>label.always</source>
                 <target>Always</target>
+            </trans-unit>
+            <trans-unit id="28">
+                <source>label.protected</source>
+                <target>Protected</target>
             </trans-unit>
         </body>
     </file>
