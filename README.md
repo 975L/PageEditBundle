@@ -24,7 +24,6 @@ Step 1: Download the Bundle
 Add the following to your `composer.json > require section`
 ```
 "require": {
-    ...
     "c975L/pageedit-bundle": "1.*"
 },
 ```
@@ -42,23 +41,15 @@ Then, enable the bundles by adding them to the list of registered bundles in the
 
 ```php
 <?php
-// app/AppKernel.php
-
-// ...
 class AppKernel extends Kernel
 {
     public function registerBundles()
     {
         $bundles = [
-            // ...
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new c975L\PageEditBundle\c975LPageEditBundle(),
         ];
-
-        // ...
     }
-
-    // ...
 }
 ```
 
@@ -67,8 +58,6 @@ Step 3: Configure the Bundle
 Then, in the `app/config.yml` file of your project, define the needed values explained below.
 
 ```yml
-#app/config/config.yml
-
 #https://github.com/KnpLabs/KnpPaginatorBundle
 knp_paginator:
     default_options:
@@ -95,9 +84,6 @@ Step 4: Enable the Routes
 Then, enable the routes by adding them to the `app/config/routing.yml` file of your project:
 
 ```yml
-#app/config/routing.yml
-
-...
 c975_l_page_edit:
     resource: "@c975LPageEditBundle/Controller/"
     type:     annotation
@@ -107,79 +93,79 @@ c975_l_page_edit:
 
 Step 5: Link and initialization of TinyMce
 ------------------------------------------
-It is strongly recommend to use the [Override Templates from Third-Party Bundles feature](http://symfony.com/doc/current/templating/overriding.html) to integrate fully with your site.
+It is strongly recommended to use the [Override Templates from Third-Party Bundles feature](http://symfony.com/doc/current/templating/overriding.html) to integrate fully with your site.
 
-For this, simply, create the following structure `app/Resources/c975LPageEditBundle/views/` in your app and then duplicate the files `layout.html.twig`, `skeleton.html.twig` and `tinymceInit.html.twig` in it, to override the existing Bundle files, then aply your needed changes, such as language, etc.
+For this, simply, create the following structure `app/Resources/c975LPageEditBundle/views/` in your app and then duplicate the files `layout.html.twig`, `skeleton.html.twig` and `tinymceInit.html.twig` in it, to override the existing Bundle files, then apply your needed changes, such as language, etc.
 
 In `tinymceInit.html.twig`, you must add a link to the cloud version (recommended) `https://cloud.tinymce.com/stable/tinymce.min.js` of TinyMce. You will need a free API key (available from the download link) **OR** download and link to your project [https://www.tinymce.com/download/](https://www.tinymce.com/download/). You also need to initialize TinyMce for specific tools and options ([language_url pack](https://www.tinymce.com/download/language-packages/), `content_css`, etc.).
 
 Example of initialization (see `tinymceInit.html.twig` file).
 
 ```javascript
-    {# TinyMceCloud - https://www.tinymce.com #}
-    <script type="text/javascript" src="//cloud.tinymce.com/stable/tinymce.min.js{# ?apiKey=YOUR_API_KEY #}"></script>
+{# TinyMceCloud - https://www.tinymce.com #}
+<script type="text/javascript" src="//cloud.tinymce.com/stable/tinymce.min.js{# ?apiKey=YOUR_API_KEY #}"></script>
 
-    {# TinyMce Initialization #}
-    {# For options, see: https://www.tinymce.com/docs/get-started-cloud/editor-and-features/ #}
-    <script type="text/javascript">
-        tinymce.init({
-            selector: 'textarea.tinymce',
-            statusbar: true,
-            menubar: false,
-            browser_spellcheck: true,
-            contextmenu: false,
-            schema: 'html5 strict',
-            content_css : [
-                'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
-            ],
-            //language_url : '{# absolute_url(asset('vendor/tinymce/fr_FR.js')) #}',
-            //language_url : 'http://example.com/js/tinymce/fr_FR.js',
-            plugins: [
-                'advlist autolink lists link image imagetools charmap print preview hr anchor pagebreak',
-                'searchreplace wordcount visualblocks visualchars code fullscreen',
-                'insertdatetime media nonbreaking save table contextmenu directionality',
-                'emoticons template paste textcolor colorpicker textpattern imagetools codesample toc help',
-            ],
-            toolbar: [
-                'styleselect | removeformat bold italic strikethrough forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
-                'undo redo | cut copy paste | insert link image emoticons table | print preview code | fullscreen help',
-            ],
-            link_context_toolbar: true,
-            link_list: '{{ absolute_url(path('pageedit_links')) }}',
-            relative_urls : false,
-            remove_script_host : false,
-            convert_urls : true,
-            image_advtab: true,
-            images_upload_url: '{{ absolute_url(path('pageedit_upload', {'page': page})) }}',
-            image_title: true,
-            image_dimensions: false,
-            image_class_list: [
-                {title: 'Responsive', value: 'img-responsive'}
-            ],
-            automatic_uploads: true,
-            file_picker_types: 'image',
-            file_picker_callback: function(cb, value, meta) {
-                var input = document.createElement('input');
-                input.setAttribute('type', 'file');
-                input.setAttribute('accept', 'image/*');
-                input.onchange = function() {
-                    var file = this.files[0];
-                    var reader = new FileReader();
-                    reader.readAsDataURL(file);
-                    reader.onload = function () {
-                        var name = file.name.split('.')[0];
-                        var blobCache = tinymce.activeEditor.editorUpload.blobCache;
-                        var blobInfo = blobCache.create(name, file, reader.result);
-                        blobCache.add(blobInfo);
-                        if (meta.filetype == 'image') {
-                            cb(blobInfo.blobUri(), {alt: file.name, title: name});
-                        }
-                    };
+{# TinyMce Initialization #}
+{# For options, see: https://www.tinymce.com/docs/get-started-cloud/editor-and-features/ #}
+<script type="text/javascript">
+    tinymce.init({
+        selector: 'textarea.tinymce',
+        statusbar: true,
+        menubar: false,
+        browser_spellcheck: true,
+        contextmenu: false,
+        schema: 'html5 strict',
+        content_css : [
+            'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
+        ],
+        //language_url : '{# absolute_url(asset('vendor/tinymce/fr_FR.js')) #}',
+        //language_url : 'http://example.com/js/tinymce/fr_FR.js',
+        plugins: [
+            'advlist autolink lists link image imagetools charmap print preview hr anchor pagebreak',
+            'searchreplace wordcount visualblocks visualchars code fullscreen',
+            'insertdatetime media nonbreaking save table contextmenu directionality',
+            'emoticons template paste textcolor colorpicker textpattern imagetools codesample toc help',
+        ],
+        toolbar: [
+            'styleselect | removeformat bold italic strikethrough forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
+            'undo redo | cut copy paste | insert link image emoticons table | print preview code | fullscreen help',
+        ],
+        link_context_toolbar: true,
+        link_list: '{{ absolute_url(path('pageedit_links')) }}',
+        relative_urls : false,
+        remove_script_host : false,
+        convert_urls : true,
+        image_advtab: true,
+        images_upload_url: '{{ absolute_url(path('pageedit_upload', {'page': page})) }}',
+        image_title: true,
+        image_dimensions: false,
+        image_class_list: [
+            {title: 'Responsive', value: 'img-responsive'}
+        ],
+        automatic_uploads: true,
+        file_picker_types: 'image',
+        file_picker_callback: function(cb, value, meta) {
+            var input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            input.onchange = function() {
+                var file = this.files[0];
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function () {
+                    var name = file.name.split('.')[0];
+                    var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                    var blobInfo = blobCache.create(name, file, reader.result);
+                    blobCache.add(blobInfo);
+                    if (meta.filetype == 'image') {
+                        cb(blobInfo.blobUri(), {alt: file.name, title: name});
+                    }
                 };
-                input.click();
-            },
-        });
-    </script>
+            };
+            input.click();
+        },
+    });
+</script>
 ```
 
 Step 6: Definitions of start and end of template for file saving
@@ -229,9 +215,9 @@ If files have been deleted, simply use the code below:
 
 ```
 git log #Gives you latest commit
-git checkout <id_commit> # indicate here the id of the commit obtained above
+git checkout <id_commit> #Indicate here the id of the commit obtained above
 #Access to your files, copy/paste them somewhere else
-git checkout HEAD #to get back to latest version
+git checkout HEAD #Get back to latest version
 ```
 
 Create Sitemap

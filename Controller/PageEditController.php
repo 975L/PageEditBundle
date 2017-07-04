@@ -91,7 +91,6 @@ class PageEditController extends Controller
             //Returns the dashboard
             return $this->render('@c975LPageEdit/pages/dashboard.html.twig', array(
                 'pages' => $pagination,
-                'title' => $this->get('translator')->trans('label.dashboard', array(), 'pageedit'),
                 'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array('type' => 'dashboard')),
                 ));
         }
@@ -186,7 +185,6 @@ class PageEditController extends Controller
             //Returns the form to edit content
             return $this->render('@c975LPageEdit/forms/pageNew.html.twig', array(
                 'form' => $form->createView(),
-                'title' => $this->get('translator')->trans('label.new_page', array(), 'pageedit'),
                 'page' => 'new',
                 'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array('type' => 'new')),
                 ));
@@ -279,7 +277,7 @@ class PageEditController extends Controller
             //Returns the form to edit content
             return $this->render('@c975LPageEdit/forms/pageEdit.html.twig', array(
                 'form' => $form->createView(),
-                'title' => $this->get('translator')->trans('label.modify', array(), 'pageedit') . ' "' . $title . '"',
+                'pageTitle' => $title,
                 'page' => $page,
                 'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array('type' => 'edit', 'page' => $page)),
             ));
@@ -353,7 +351,7 @@ class PageEditController extends Controller
             //Returns the form to edit content
             return $this->render('@c975LPageEdit/forms/pageDelete.html.twig', array(
                 'form' => $form->createView(),
-                'title' => $this->get('translator')->trans('label.delete', array(), 'pageedit') . ' "' . $title . '"',
+                'pageTitle' => $title,
                 'page' => $page,
                 'pageContent' => $originalContent,
                 'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array('type' => 'delete', 'page' => $page)),
@@ -491,7 +489,6 @@ class PageEditController extends Controller
         if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
             //Returns the help
             return $this->render('@c975LPageEdit/pages/help.html.twig', array(
-                'title' => $this->get('translator')->trans('label.help', array(), 'pageedit'),
                 'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array('type' => 'help')),
             ));
         }

@@ -1,5 +1,6 @@
 {% extends "@c975LPageEdit/layout.html.twig" %}
 {% trans_default_domain 'pageedit' %}
+{% set title = 'label.modify'|trans ~ ' "' ~ pageTitle ~ '"' %}
 
 {% block pageedit_content %}
     {{ include('@c975LPageEdit/tinymceInit.html.twig') }}

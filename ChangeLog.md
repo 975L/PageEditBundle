@@ -1,5 +1,10 @@
 # Changelog
 
+v1.14.2
+-------
+- Update README.md (04/07/2017)
+- Move `title`value in Twig templates in place of Controller, more simple
+
 v1.14.1
 -------
 - Forgotten use for FileSystem in SitemapCreateCommand (03/07/2017)
