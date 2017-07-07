@@ -91,8 +91,12 @@ class PageEditController extends Controller
             //Returns the dashboard
             return $this->render('@c975LPageEdit/pages/dashboard.html.twig', array(
                 'pages' => $pagination,
-                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array('type' => 'dashboard')),
-                ));
+                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
+                    'type' => 'dashboard',
+                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
+                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
+                )),
+            ));
         }
 
         //Access is denied
@@ -125,7 +129,11 @@ class PageEditController extends Controller
         //Protected page
         elseif ($this->get('templating')->exists($fileProtectedPath)) {
             return $this->render($fileProtectedPath, array(
-                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array('type' => 'protected')),
+                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
+                    'type' => 'protected',
+                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
+                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
+                )),
             ));
         }
         //Deleted page
@@ -143,7 +151,12 @@ class PageEditController extends Controller
         //Adds toolbar if rights are ok
         $toolbar = null;
         if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
-            $toolbar = $this->renderView('@c975LPageEdit/toolbar.html.twig', array('type' => 'display', 'page' => $page));
+            $toolbar = $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
+                'type' => 'display',
+                'page' => $page,
+                'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
+                'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
+            ));
         }
 
         return $this->render($filePath, array(
@@ -186,7 +199,13 @@ class PageEditController extends Controller
             return $this->render('@c975LPageEdit/forms/pageNew.html.twig', array(
                 'form' => $form->createView(),
                 'page' => 'new',
-                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array('type' => 'new')),
+                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
+                    'type' => 'new',
+                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
+                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
+                )),
+                'tinymceApiKey' => $this->getParameter('c975_l_page_edit.tinymceApiKey'),
+                'tinymceLanguage' => $this->getParameter('c975_l_page_edit.tinymceLanguage'),
                 ));
         }
 
@@ -279,7 +298,14 @@ class PageEditController extends Controller
                 'form' => $form->createView(),
                 'pageTitle' => $title,
                 'page' => $page,
-                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array('type' => 'edit', 'page' => $page)),
+                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
+                    'type' => 'edit',
+                    'page' => $page,
+                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
+                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
+                )),
+                'tinymceApiKey' => $this->getParameter('c975_l_page_edit.tinymceApiKey'),
+                'tinymceLanguage' => $this->getParameter('c975_l_page_edit.tinymceLanguage'),
             ));
         }
 
@@ -343,9 +369,7 @@ class PageEditController extends Controller
                 $this->deleteFile($page, false);
 
                 //Redirects to the page which will be HTTP 410
-                return $this->redirectToRoute('pageedit_display', array(
-                    'page' => $page,
-                ));
+                return $this->redirectToRoute('pageedit_dashboard');
             }
 
             //Returns the form to edit content
@@ -354,7 +378,12 @@ class PageEditController extends Controller
                 'pageTitle' => $title,
                 'page' => $page,
                 'pageContent' => $originalContent,
-                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array('type' => 'delete', 'page' => $page)),
+                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
+                    'type' => 'delete',
+                    'page' => $page,
+                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
+                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
+                )),
             ));
         }
 
@@ -489,7 +518,11 @@ class PageEditController extends Controller
         if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
             //Returns the help
             return $this->render('@c975LPageEdit/pages/help.html.twig', array(
-                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array('type' => 'help')),
+                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
+                    'type' => 'help',
+                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
+                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
+                )),
             ));
         }
 

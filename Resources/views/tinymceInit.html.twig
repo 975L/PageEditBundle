@@ -1,5 +1,7 @@
 {# TinyMceCloud - https://www.tinymce.com #}
-<script type="text/javascript" src="//cloud.tinymce.com/stable/tinymce.min.js{# ?apiKey=YOUR_API_KEY #}"></script>
+{% if tinymceApiKey != null %}
+    <script type="text/javascript" src="//cloud.tinymce.com/stable/tinymce.min.js?apiKey={{ tinymceApiKey }}"></script>
+{% endif %}
 
 {# TinyMce Initialization #}
 {# For options, see: https://www.tinymce.com/docs/get-started-cloud/editor-and-features/ #}
@@ -14,8 +16,9 @@
         content_css : [
             'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
         ],
-        //language_url : '{# absolute_url(asset('vendor/tinymce/fr_FR.js')) #}',
-        //language_url : 'http://example.com/js/tinymce/fr_FR.js',
+        {% if tinymceLanguage != null %}
+            language_url : '{{ absolute_url(asset('vendor/tinymce/' ~ tinymceLanguage ~ '.js')) }}',
+        {% endif %}
         plugins: [
             'advlist autolink lists link image imagetools charmap print preview hr anchor pagebreak',
             'searchreplace wordcount visualblocks visualchars code fullscreen',
@@ -31,6 +34,9 @@
         relative_urls : false,
         remove_script_host : false,
         convert_urls : true,
+        table_class_list: [
+            {title: 'Responsive', value: 'table table-responsive'}
+        ],
         image_advtab: true,
         images_upload_url: '{{ absolute_url(path('pageedit_upload', {'page': page})) }}',
         image_title: true,

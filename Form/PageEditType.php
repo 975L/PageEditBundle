@@ -43,6 +43,16 @@ class PageEditType extends AbstractType
         ;
         if ($disabled === false) {
             $builder
+                ->add('content', TextareaType::class, array(
+                    'label' => 'label.content',
+                    'disabled' => $disabled,
+                    'required' => false,
+                    'attr' => array(
+                        'class' => 'tinymce',
+                        'cols' => 100,
+                        'rows' => 25,
+                        'placeholder' => 'label.content',
+                    )))
                 ->add('changeFrequency', ChoiceType::class, array(
                     'label' => 'label.change_frequency',
                     'disabled' => $disabled,
@@ -63,16 +73,6 @@ class PageEditType extends AbstractType
                     'attr' => array(
                         'min' => 0,
                         'max' => 10
-                    )))
-                ->add('content', TextareaType::class, array(
-                    'label' => 'label.content',
-                    'disabled' => $disabled,
-                    'required' => false,
-                    'attr' => array(
-                        'class' => 'tinymce',
-                        'cols' => 100,
-                        'rows' => 25,
-                        'placeholder' => 'label.content',
                     )))
             ;
         }

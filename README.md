@@ -7,7 +7,7 @@ PageEditBundle does the following:
 - Integrates with your web design,
 - Protects twig code from being formatted,
 - Archives the files before replacing them in order to be able to retrieve old versions,
-- Gives the possibility to create a `sitemap.xml̀` of managed files,
+- Gives the possibility to create a `sitemap.xml̀` of managed files, setting their change frequency and priority
 - Allows to store specific templates in a `protected` folder to display it but not being able to modify it
 
 It is, of course, still possible to modify directly those files with an editor.
@@ -53,8 +53,8 @@ class AppKernel extends Kernel
 }
 ```
 
-Step 3: Configure the Bundle
-----------------------------
+Step 3: Configure the Bundles
+-----------------------------
 Then, in the `app/config.yml` file of your project, define the needed values explained below.
 
 ```yml
@@ -75,6 +75,14 @@ c975_l_page_edit:
     sitemapBaseUrl: 'http://example.com'
     #(Optional) Array of available languages of the website
     sitemapLanguages: ['en', 'fr', 'es']
+    #(Optional) Your Tinymce Api key if you use the cloud version
+    tinymceApiKey : 'YOUR_API_KEY' #default null
+    #(Optional) Your tinymce language if you use one, MUST BE placed in 'web/vendor/tinymce/[tinymceLanguage].js'
+    tinymceLanguage: 'fr_FR' #default null
+    #(Optional) Your signout Route if you want to allow sign out from PageEdit toolbar
+    signoutRoute: 'name_of_your_signout_route' #default null
+    #(Optional) Your main dashboard route if you want to allow it from PageEdit toolbar
+    dashboardRoute: 'your_dashboard_route' #default null
 ```
 
 **If you use Git for version control, you need to add the full path `app/Resources/views/[folderPages]` in the `.gitignore`, otherwise all the content will be altered by Git. You also need to add the path `/web/images/[folderPages]` as it will contain the uploaded pictures**
@@ -95,78 +103,27 @@ Step 5: Link and initialization of TinyMce
 ------------------------------------------
 It is strongly recommended to use the [Override Templates from Third-Party Bundles feature](http://symfony.com/doc/current/templating/overriding.html) to integrate fully with your site.
 
-For this, simply, create the following structure `app/Resources/c975LPageEditBundle/views/` in your app and then duplicate the files `layout.html.twig`, `skeleton.html.twig` and `tinymceInit.html.twig` in it, to override the existing Bundle files, then apply your needed changes, such as language, etc.
+For this, simply, create the following structure `app/Resources/c975LPageEditBundle/views/` in your app and then duplicate the files `layout.html.twig`, `skeleton.html.twig` in it, to override the existing Bundle files, then apply your needed changes, such as language, etc.
 
-In `tinymceInit.html.twig`, you must add a link to the cloud version (recommended) `https://cloud.tinymce.com/stable/tinymce.min.js` of TinyMce. You will need a free API key (available from the download link) **OR** download and link to your project [https://www.tinymce.com/download/](https://www.tinymce.com/download/). You also need to initialize TinyMce for specific tools and options ([language_url pack](https://www.tinymce.com/download/language-packages/), `content_css`, etc.).
+In `layout.html.twig`, it will mainly consist to extend your layout and define specific variables, i.e. :
+```twig
+{% extends 'layout.html.twig' %}
 
-Example of initialization (see `tinymceInit.html.twig` file).
+{# Defines specific variables #}
+{% set title = 'PageEdit (' ~ title ~ ')' %}
 
-```javascript
-{# TinyMceCloud - https://www.tinymce.com #}
-<script type="text/javascript" src="//cloud.tinymce.com/stable/tinymce.min.js{# ?apiKey=YOUR_API_KEY #}"></script>
-
-{# TinyMce Initialization #}
-{# For options, see: https://www.tinymce.com/docs/get-started-cloud/editor-and-features/ #}
-<script type="text/javascript">
-    tinymce.init({
-        selector: 'textarea.tinymce',
-        statusbar: true,
-        menubar: false,
-        browser_spellcheck: true,
-        contextmenu: false,
-        schema: 'html5 strict',
-        content_css : [
-            'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
-        ],
-        //language_url : '{# absolute_url(asset('vendor/tinymce/fr_FR.js')) #}',
-        //language_url : 'http://example.com/js/tinymce/fr_FR.js',
-        plugins: [
-            'advlist autolink lists link image imagetools charmap print preview hr anchor pagebreak',
-            'searchreplace wordcount visualblocks visualchars code fullscreen',
-            'insertdatetime media nonbreaking save table contextmenu directionality',
-            'emoticons template paste textcolor colorpicker textpattern imagetools codesample toc help',
-        ],
-        toolbar: [
-            'styleselect | removeformat bold italic strikethrough forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
-            'undo redo | cut copy paste | insert link image emoticons table | print preview code | fullscreen help',
-        ],
-        link_context_toolbar: true,
-        link_list: '{{ absolute_url(path('pageedit_links')) }}',
-        relative_urls : false,
-        remove_script_host : false,
-        convert_urls : true,
-        image_advtab: true,
-        images_upload_url: '{{ absolute_url(path('pageedit_upload', {'page': page})) }}',
-        image_title: true,
-        image_dimensions: false,
-        image_class_list: [
-            {title: 'Responsive', value: 'img-responsive'}
-        ],
-        automatic_uploads: true,
-        file_picker_types: 'image',
-        file_picker_callback: function(cb, value, meta) {
-            var input = document.createElement('input');
-            input.setAttribute('type', 'file');
-            input.setAttribute('accept', 'image/*');
-            input.onchange = function() {
-                var file = this.files[0];
-                var reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = function () {
-                    var name = file.name.split('.')[0];
-                    var blobCache = tinymce.activeEditor.editorUpload.blobCache;
-                    var blobInfo = blobCache.create(name, file, reader.result);
-                    blobCache.add(blobInfo);
-                    if (meta.filetype == 'image') {
-                        cb(blobInfo.blobUri(), {alt: file.name, title: name});
-                    }
-                };
-            };
-            input.click();
-        },
-    });
-</script>
+{% block content %}
+    <div class="container">
+        {% block pageedit_content %}
+        {% endblock %}
+    </div>
+{% endblock %}
 ```
+
+It is recommended to use [Tinymce Cloud version](https://go.tinymce.com/cloud/). You will need a [free API key](https://store.ephox.com/my-account/api-key-manager/).
+**OR** you can download and link to your project [https://www.tinymce.com/download/](https://www.tinymce.com/download/).
+
+If you want to keep all the available tools and make no change to Tinymce as it is, you don't need to overwrite `tinymceInit.html.twig`. You just need to provide, in `config.yml` your `tinymceApiKey`, if you use the cloud version and the `tinymceLanguage` (+ upload the corresponding file on your server under `web/vendor/tinymce/[tinymceLanguage].js`). Or you can overwrite `tinymceInit.html.twig`.
 
 Step 6: Definitions of start and end of template for file saving
 ----------------------------------------------------------------

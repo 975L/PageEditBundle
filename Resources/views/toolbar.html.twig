@@ -34,16 +34,22 @@
                 <span class="glyphicon glyphicon-trash"></span></a>
         {% endif %}
 
-{# Download zip of files #}
-        {% if type != 'delete' %}
-            {# <a href="{{ path('pageedit_zip') }}" class="btn btn-default" title="{{ 'label.download'|trans }}" role="button">
-                <span class="glyphicon glyphicon-compressed"></span></a> #}
-        {% endif %}
-
 {# Help #}
         {% if type != 'help' %}
             <a href="{{ path('pageedit_help') }}" class="btn btn-info" title="{{ 'label.help'|trans }}" role="button">
                 <span class="glyphicon glyphicon-flag"></span></a>
+        {% endif %}
+
+{# Main dashboard #}
+        {% if dashboardRoute != null %}
+            <a href="{{ path(dashboardRoute) }}" class="btn btn-info" title="{{ 'label.dashboard'|trans }}" role="button">
+                <span class="glyphicon glyphicon-dashboard"></span></a>
+        {% endif %}
+
+{# Signout #}
+        {% if signoutRoute != null %}
+            <a href="{{ path(signoutRoute) }}" class="btn btn-info" title="{{ 'label.signout'|trans }}" role="button">
+                <span class="glyphicon glyphicon-log-out"></span></a>
         {% endif %}
     </div>
 </div>

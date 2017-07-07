@@ -1,5 +1,16 @@
 # Changelog
 
+v1.15
+-----
+- Update README.md (06/07/2017)
+- Move of translated help pages to sub-folder `langugages` (07/07/2017)
+- Add of class responsive for tables in `tinymceInit.html.twig`
+- Make `tinymceInit.html.twig` re-usable by setting config keys `tinymceApiKey` and `tinymceLanguage`
+- Redirection to dashboard in case of delete a page, in place of redirecting to the deleted page
+- Add of signout button on toolbar + config signoutRoute
+- Add of main dashboard button on toolbar + config dashboardRoute
+- Moves sitemap information below the main textarea
+
 v1.14.2
 -------
 - Update README.md (04/07/2017)
