@@ -1,5 +1,9 @@
 # Changelog
 
+v1.15.1
+-------
+- Add "Best practice" for tinymceApiKey (08/07/2017)
+
 v1.15
 -----
 - Update README.md (06/07/2017)

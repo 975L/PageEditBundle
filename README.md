@@ -76,7 +76,12 @@ c975_l_page_edit:
     #(Optional) Array of available languages of the website
     sitemapLanguages: ['en', 'fr', 'es']
     #(Optional) Your Tinymce Api key if you use the cloud version
-    tinymceApiKey : 'YOUR_API_KEY' #default null
+    #As a "Best practice", it's better to set the Api Key in parameters.yml
+    #tinymceApiKey: YOUR_API_KEY
+    #And in parameters.yml.dist
+    #tinymceApiKey:     ~
+    #And report it there
+    tinymceApiKey: '%tinymceApiKey%' #default null
     #(Optional) Your tinymce language if you use one, MUST BE placed in 'web/vendor/tinymce/[tinymceLanguage].js'
     tinymceLanguage: 'fr_FR' #default null
     #(Optional) Your signout Route if you want to allow sign out from PageEdit toolbar
