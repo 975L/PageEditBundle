@@ -25,7 +25,7 @@ use c975L\PageEditBundle\Form\PageEditType;
 
 class PageEditController extends Controller
 {
-//DASHBOARD
+    //DASHBOARD
     /**
      * @Route("/pages/dashboard",
      *      name="pageedit_dashboard")
@@ -63,12 +63,16 @@ class PageEditController extends Controller
             foreach ($finder as $file) {
                 $slug = str_replace('.html.twig', '', $file->getRelativePathname());
                 preg_match('/pageedit_title=\"(.*)\"/', $file->getContents(), $matches);
-                if (!empty($matches)) $title = $matches[1];
-                else {
+                if (!empty($matches)) {
+                    $title = $matches[1];
+                } else {
                     //Title is using Twig code to translate it
                     preg_match('/pageedit_title=(.*)\%\}/', $file->getContents(), $matches);
-                    if (!empty($matches)) $title = trim($matches[1]);
-                    else $title = $this->get('translator')->trans('label.title_not_found', array(), 'pageedit') . ' (' . $slug . ')';
+                    if (!empty($matches)) {
+                        $title = trim($matches[1]);
+                    } else {
+                        $title = $this->get('translator')->trans('label.title_not_found', array(), 'pageedit') . ' (' . $slug . ')';
+                    }
                 }
 
                 //Adds page to array
@@ -251,23 +255,33 @@ class PageEditController extends Controller
 
             //Gets title
             preg_match('/pageedit_title=\"(.*)\"/', $fileContent, $matches);
-            if (!empty($matches)) $title = $matches[1];
-            else {
+            if (!empty($matches)) {
+                $title = $matches[1];
+            } else {
                 //Title is using Twig code to translate it
                 preg_match('/pageedit_title=(.*)\%\}/', $fileContent, $matches);
-                if (!empty($matches)) $title = '{{ ' . trim($matches[1]) . ' }}';
-                else $title = $page;
+                if (!empty($matches)) {
+                    $title = '{{ ' . trim($matches[1]) . ' }}';
+                } else {
+                    $title = $page;
+                }
             }
 
             //Gets changeFrequency
             preg_match('/pageedit_changeFrequency=\"(.*)\"/', $fileContent, $matches);
-            if (!empty($matches)) $changeFrequency = $matches[1];
-            else $changeFrequency = 'weekly';
+            if (!empty($matches)) {
+                $changeFrequency = $matches[1];
+            } else {
+                $changeFrequency = 'weekly';
+            }
 
             //Gets priority
             preg_match('/pageedit_priority=\"(.*)\"/', $fileContent, $matches);
-            if (!empty($matches)) $priority = $matches[1];
-            else $priority = '8';
+            if (!empty($matches)) {
+                $priority = $matches[1];
+            } else {
+                $priority = '8';
+            }
 
             //Defines form
             $pageEdit = new PageEdit('edit', $originalContent, $title, $page, $changeFrequency, $priority);
@@ -351,12 +365,16 @@ class PageEditController extends Controller
 
             //Gets title
             preg_match('/pageedit_title=\"(.*)\"/', $fileContent, $matches);
-            if (!empty($matches)) $title = $matches[1];
-            else {
+            if (!empty($matches)) {
+                $title = $matches[1];
+            } else {
                 //Title is using Twig code to translate it
                 preg_match('/pageedit_title=(.*)\%\}/', $fileContent, $matches);
-                if (!empty($matches)) $title = '{{ ' . trim($matches[1]) . ' }}';
-                else $title = $page;
+                if (!empty($matches)) {
+                    $title = '{{ ' . trim($matches[1]) . ' }}';
+                } else {
+                    $title = $page;
+                }
             }
 
             //Defines form
@@ -429,12 +447,16 @@ class PageEditController extends Controller
             foreach ($finder as $file) {
                 $slug = str_replace('.html.twig', '', $file->getRelativePathname());
                 preg_match('/pageedit_title=\"(.*)\"/', $file->getContents(), $matches);
-                if (!empty($matches)) $title = $matches[1];
-                else {
+                if (!empty($matches)) {
+                    $title = $matches[1];
+                } else {
                     //Title is using Twig code to translate it
                     preg_match('/pageedit_title=(.*)\%\}/', $file->getContents(), $matches);
-                    if (!empty($matches)) $title = trim($matches[1]);
-                    else $title = $this->get('translator')->trans('label.title_not_found', array(), 'pageedit') . ' (' . $slug . ')';
+                    if (!empty($matches)) {
+                        $title = trim($matches[1]);
+                    } else {
+                        $title = $this->get('translator')->trans('label.title_not_found', array(), 'pageedit') . ' (' . $slug . ')';
+                    }
                 }
 
                 //Creates the array of available pages
@@ -568,7 +590,7 @@ class PageEditController extends Controller
         $entryPoint = strpos($skeleton, $startBlock) + strlen($startBlock);
         $exitPoint = strpos($skeleton, $endBlock, $entryPoint);
 
-        return array (
+        return array(
             'startSkeleton' => trim(substr($skeleton, 0, $entryPoint)),
             'endSkeleton' => trim(substr($skeleton, $exitPoint))
         );
@@ -671,11 +693,13 @@ class PageEditController extends Controller
         $title = $formData->getTitle();
 
         //Title is using Twig code to translate it
-        if (strpos($title, '{{') === 0)
+        if (strpos($title, '{{') === 0) {
             $title = trim(str_replace(array('{{', '}}'), '', $title));
+        }
         //Title is text
-        else
+        else {
             $title = '"' . $title . '"';
+        }
 
         //Updates metadata
         $startSkeleton = preg_replace('/pageedit_title=\"(.*)\"/', 'pageedit_title=' . $title, $startSkeleton);

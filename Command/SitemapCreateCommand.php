@@ -51,17 +51,23 @@ class SitemapCreateCommand extends ContainerAwareCommand
         foreach ($finder as $file) {
             //Gets changeFrequency
             preg_match('/pageedit_changeFrequency=\"(.*)\"/', $file->getContents(), $matches);
-            if (!empty($matches)) $changeFrequency = $matches[1];
-            else $changeFrequency = 'weekly';
+            if (!empty($matches)) {
+                $changeFrequency = $matches[1];
+            } else {
+                $changeFrequency = 'weekly';
+            }
 
             //Gets priority
             preg_match('/pageedit_priority=\"(.*)\"/', $file->getContents(), $matches);
-            if (!empty($matches)) $priority = $matches[1] / 10;
-            else $priority = '0.8';
+            if (!empty($matches)) {
+                $priority = $matches[1] / 10;
+            } else {
+                $priority = '0.8';
+            }
 
             //Defines data
             if (!empty($languages)) {
-                foreach($languages as $language) {
+                foreach ($languages as $language) {
                     $url = $container->getParameter('c975_l_page_edit.sitemapBaseUrl');
                     $url .= '/' . $language;
                     $url .= '/pages/' . str_replace('.html.twig', '', $file->getRelativePathname());
@@ -72,8 +78,7 @@ class SitemapCreateCommand extends ContainerAwareCommand
                         'priority' => $priority,
                     );
                 }
-            }
-            else {
+            } else {
                 $url = $container->getParameter('c975_l_page_edit.sitemapBaseUrl');
                 $url .= '/pages/' . str_replace('.html.twig', '', $file->getRelativePathname());
                 $pages[]= array(
