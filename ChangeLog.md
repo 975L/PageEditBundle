@@ -1,5 +1,10 @@
 # Changelog
 
+v1.16
+-----
+- Add of escaping for " in titles (20/07/2017)
+- Set functions in Controller as service
+
 v1.15.2
 -------
 - Run PHP CS-Fixer (18/07/2017)
