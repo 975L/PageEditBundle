@@ -312,7 +312,7 @@ class PageEditController extends Controller
             //Returns the form to edit content
             return $this->render('@c975LPageEdit/forms/pageEdit.html.twig', array(
                 'form' => $form->createView(),
-                'pageTitle' => $title,
+                'pageTitle' => str_replace('\"', '"', $title),
                 'page' => $page,
                 'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
                     'type' => 'edit',

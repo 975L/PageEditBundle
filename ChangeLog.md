@@ -1,5 +1,7 @@
 # Changelog
 
+- Add of missing replacement of \" (20/07/2017)
+
 v1.16
 -----
 - Add of escaping for " in titles (20/07/2017)
