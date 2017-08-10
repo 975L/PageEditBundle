@@ -62,23 +62,13 @@ class PageEditController extends Controller
             $pages = array();
             foreach ($finder as $file) {
                 $slug = str_replace('.html.twig', '', $file->getRelativePathname());
-                preg_match('/pageedit_title=\"(.*)\"/', $file->getContents(), $matches);
-                if (!empty($matches)) {
-                    $title = str_replace('\"', '"', $matches[1]);
-                } else {
-                    //Title is using Twig code to translate it
-                    preg_match('/pageedit_title=(.*)\%\}/', $file->getContents(), $matches);
-                    if (!empty($matches)) {
-                        $title = trim($matches[1]);
-                    } else {
-                        $title = $this->get('translator')->trans('label.title_not_found', array(), 'pageedit') . ' (' . $slug . ')';
-                    }
-                }
+                $title = $pageEditService->getTitle($file->getContents(), $slug);
+                $titleTranslated = $pageEditService->getTitleTranslated($title);
 
                 //Adds page to array
                 $pages[] = array(
                     'slug' => $slug,
-                    'title' => $title,
+                    'title' => $titleTranslated,
                     'protected' => strpos($file->getPath(), 'protected') !== false ? true : false,
                 );
             }
@@ -255,34 +245,15 @@ class PageEditController extends Controller
             }
 
             //Gets title
-            preg_match('/pageedit_title=\"(.*)\"/', $fileContent, $matches);
-            if (!empty($matches)) {
-                $title = $matches[1];
-            } else {
-                //Title is using Twig code to translate it
-                preg_match('/pageedit_title=(.*)\%\}/', $fileContent, $matches);
-                if (!empty($matches)) {
-                    $title = '{{ ' . trim($matches[1]) . ' }}';
-                } else {
-                    $title = $page;
-                }
-            }
+            $pageEditService = $this->get(PageEditService::class);
+            $title = $pageEditService->getTitle($fileContent, $page);
+            $titleTranslated = $pageEditService->getTitleTranslated($title);
 
             //Gets changeFrequency
-            preg_match('/pageedit_changeFrequency=\"(.*)\"/', $fileContent, $matches);
-            if (!empty($matches)) {
-                $changeFrequency = $matches[1];
-            } else {
-                $changeFrequency = 'weekly';
-            }
+            $changeFrequency = $pageEditService->getChangeFrequency($fileContent);
 
             //Gets priority
-            preg_match('/pageedit_priority=\"(.*)\"/', $fileContent, $matches);
-            if (!empty($matches)) {
-                $priority = $matches[1];
-            } else {
-                $priority = '8';
-            }
+            $priority = $pageEditService->getPriority($fileContent);
 
             //Defines form
             $pageEdit = new PageEdit('edit', $originalContent, $title, $page, $changeFrequency, $priority);
@@ -312,7 +283,7 @@ class PageEditController extends Controller
             //Returns the form to edit content
             return $this->render('@c975LPageEdit/forms/pageEdit.html.twig', array(
                 'form' => $form->createView(),
-                'pageTitle' => str_replace('\"', '"', $title),
+                'pageTitle' => str_replace('\"', '"', $titleTranslated),
                 'page' => $page,
                 'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
                     'type' => 'edit',
@@ -366,18 +337,9 @@ class PageEditController extends Controller
             }
 
             //Gets title
-            preg_match('/pageedit_title=\"(.*)\"/', $fileContent, $matches);
-            if (!empty($matches)) {
-                $title = $matches[1];
-            } else {
-                //Title is using Twig code to translate it
-                preg_match('/pageedit_title=(.*)\%\}/', $fileContent, $matches);
-                if (!empty($matches)) {
-                    $title = '{{ ' . trim($matches[1]) . ' }}';
-                } else {
-                    $title = $page;
-                }
-            }
+            $pageEditService = $this->get(PageEditService::class);
+            $title = $pageEditService->getTitle($fileContent, $page);
+            $titleTranslated = $pageEditService->getTitleTranslated($title);
 
             //Defines form
             $pageEdit = new PageEdit('delete', $originalContent, $title, $page);
@@ -386,7 +348,6 @@ class PageEditController extends Controller
 
             if ($form->isSubmitted() && $form->isValid()) {
                 //Deletes file
-                $pageEditService = $this->get(PageEditService::class);
                 $pageEditService->deleteFile($page, false);
 
                 //Redirects to the page which will be HTTP 410
@@ -396,7 +357,7 @@ class PageEditController extends Controller
             //Returns the form to edit content
             return $this->render('@c975LPageEdit/forms/pageDelete.html.twig', array(
                 'form' => $form->createView(),
-                'pageTitle' => $title,
+                'pageTitle' => $titleTranslated,
                 'page' => $page,
                 'pageContent' => $originalContent,
                 'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
@@ -450,22 +411,12 @@ class PageEditController extends Controller
             $pages = array();
             foreach ($finder as $file) {
                 $slug = str_replace('.html.twig', '', $file->getRelativePathname());
-                preg_match('/pageedit_title=\"(.*)\"/', $file->getContents(), $matches);
-                if (!empty($matches)) {
-                    $title = $matches[1];
-                } else {
-                    //Title is using Twig code to translate it
-                    preg_match('/pageedit_title=(.*)\%\}/', $file->getContents(), $matches);
-                    if (!empty($matches)) {
-                        $title = trim($matches[1]);
-                    } else {
-                        $title = $this->get('translator')->trans('label.title_not_found', array(), 'pageedit') . ' (' . $slug . ')';
-                    }
-                }
+                $title = $pageEditService->getTitle($file->getContents(), $slug);
+                $titleTranslated = $pageEditService->getTitleTranslated($title);
 
                 //Creates the array of available pages
                 $pages[] = array(
-                    'title' => $title,
+                    'title' => $titleTranslated,
                     'value' => "{{path('pageedit_display',{'page':'" . $slug . "'})}}",
                 );
             }

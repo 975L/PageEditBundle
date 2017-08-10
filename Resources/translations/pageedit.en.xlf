@@ -80,7 +80,7 @@
             </trans-unit>
             <trans-unit id="20">
                 <source>label.significance</source>
-                <target>Page significance</target>
+                <target>Significance (0-10)</target>
             </trans-unit>
             <trans-unit id="21">
                 <source>label.never</source>

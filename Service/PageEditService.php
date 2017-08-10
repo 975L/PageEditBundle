@@ -47,6 +47,32 @@ class PageEditService
         $fs->mkdir($imageFolderPath, 0770);
     }
 
+    //Gets the change frequency of the page
+    public function getChangeFrequency($fileContent)
+    {
+        $changeFrequency = 'weekly';
+
+        preg_match('/pageedit_changeFrequency=\"(.*)\"/', $fileContent, $matches);
+        if (!empty($matches)) {
+            $changeFrequency = $matches[1];
+        }
+
+        return $changeFrequency;
+    }
+
+    //Gets the priority of the page
+    public function getPriority($fileContent)
+    {
+        $priority = '8';
+
+        preg_match('/pageedit_priority=\"(.*)\"/', $fileContent, $matches);
+        if (!empty($matches)) {
+            $priority = $matches[1];
+        }
+
+        return $priority;
+    }
+
     //Gets the start and end of the skeleton
     public function getSkeleton()
     {
@@ -62,6 +88,43 @@ class PageEditService
             'startSkeleton' => trim(substr($skeleton, 0, $entryPoint)),
             'endSkeleton' => trim(substr($skeleton, $exitPoint))
         );
+    }
+
+    //Gets the title of the page
+    public function getTitle($fileContent, $slug)
+    {
+        $title = $this->container->get('translator')->trans('label.title_not_found', array(), 'pageedit') . ' (' . $slug . ')';
+
+        preg_match('/pageedit_title=\"(.*)\"/', $fileContent, $matches);
+        if (!empty($matches)) {
+            $title = str_replace('\"', '"', $matches[1]);
+        } else {
+            //Title is using Twig code to translate it
+            preg_match('/pageedit_title=(.*)\%\}/', $fileContent, $matches);
+            if (!empty($matches)) {
+                $title = trim($matches[1]);
+            }
+        }
+
+        return $title;
+    }
+
+    //Gets the translation of title of the page
+    public function getTitleTranslated($title)
+    {
+        $titleTranslated = $title;
+
+        if (strpos($title, '|trans') !== false) {
+            $translateLabel = trim(substr($title, 0, strpos($title, '|trans')), "'");
+            $translateDomain = 'messages';
+            if (strpos($title, '|trans(') !== false) {
+                $translateDomain = trim(trim(substr($title, strpos($title, '}') + 2)), "'");
+                $translateDomain = substr($translateDomain, 0, strlen($translateDomain) - 2);
+            }
+            $titleTranslated = $this->container->get('translator')->trans($translateLabel, array(), $translateDomain);
+        }
+
+        return $titleTranslated;
     }
 
     //Slugify function - https://github.com/cocur/slugify

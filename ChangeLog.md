@@ -1,6 +1,13 @@
 # Changelog
 
+v1.17
+-----
 - Add of missing replacement of \" (20/07/2017)
+- Add of service getTitle() and remove of duplicates uses (10/08/2017)
+- Add of service getPriority()
+- Add of service getChangeFrequency()
+- Add of translation, where relevant, of title using Twig calls to translator, such as `'title_to_be_translated'|trans({}, 'domain')`
+- Change of translation for priority
 
 v1.16
 -----
