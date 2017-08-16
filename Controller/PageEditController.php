@@ -199,7 +199,7 @@ class PageEditController extends Controller
                     'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
                     'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
                 )),
-                'tinymceApiKey' => $this->getParameter('c975_l_page_edit.tinymceApiKey'),
+                'tinymceApiKey' => $this->container->hasParameter('tinymceApiKey') ? $this->getParameter('tinymceApiKey') : null,
                 'tinymceLanguage' => $this->getParameter('c975_l_page_edit.tinymceLanguage'),
                 ));
         }
@@ -291,7 +291,7 @@ class PageEditController extends Controller
                     'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
                     'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
                 )),
-                'tinymceApiKey' => $this->getParameter('c975_l_page_edit.tinymceApiKey'),
+                'tinymceApiKey' => $this->container->hasParameter('tinymceApiKey') ? $this->getParameter('tinymceApiKey') : null,
                 'tinymceLanguage' => $this->getParameter('c975_l_page_edit.tinymceLanguage'),
             ));
         }

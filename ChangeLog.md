@@ -1,5 +1,11 @@
 # Changelog
 
+v1.17.1
+-------
+- Separation of information about parameters.yml in `README.md` (16/08/2017)
+- Direct call of Tinymce API key instead of repeating it in `config.yml`
+- Changes in `README.md` (16/08/2017)
+
 v1.17
 -----
 - Add of missing replacement of \" (20/07/2017)
