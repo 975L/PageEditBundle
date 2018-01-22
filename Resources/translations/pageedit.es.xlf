@@ -44,7 +44,7 @@
             </trans-unit>
             <trans-unit id="11">
                 <source>text.delete_page</source>
-                <target>La siguiente página se archivará y se elimina. Cualquier uso futuro de la página devuelve un código de error HTTP 410 (Gone).</target>
+                <target>La siguiente página será archivada y eliminada. Cualquier uso futuro de la página devuelve un código de error HTTP 410 (Gone).</target>
             </trans-unit>
             <trans-unit id="12">
                 <source>label.dashboard</source>
@@ -117,6 +117,62 @@
             <trans-unit id="29">
                 <source>label.signout</source>
                 <target>Desconectar</target>
+            </trans-unit>
+            <trans-unit id="30">
+                <source>label.view_current_pages</source>
+                <target>Ver las páginas actuales</target>
+            </trans-unit>
+            <trans-unit id="31">
+                <source>label.view_deleted_pages</source>
+                <target>Ver las páginas eliminadas</target>
+            </trans-unit>
+            <trans-unit id="32">
+                <source>label.view_redirected_pages</source>
+                <target>Ver las páginas redirigidas</target>
+            </trans-unit>
+            <trans-unit id="33">
+                <source>label.view_archived_pages</source>
+                <target>Ver las páginas archivadas</target>
+            </trans-unit>
+            <trans-unit id="34">
+                <source>label.current</source>
+                <target>Actuales</target>
+            </trans-unit>
+            <trans-unit id="35">
+                <source>label.deleted</source>
+                <target>Eliminadas</target>
+            </trans-unit>
+            <trans-unit id="36">
+                <source>label.redirected</source>
+                <target>Redirigidas</target>
+            </trans-unit>
+            <trans-unit id="37">
+                <source>label.archived</source>
+                <target>Archivadas</target>
+            </trans-unit>
+            <trans-unit id="38">
+                <source>label.page_archived</source>
+                <target>Esta página ha sido archivada en</target>
+            </trans-unit>
+            <trans-unit id="39">
+                <source>text.delete_archived_page</source>
+                <target>La siguiente página será definitivamente eliminada.</target>
+            </trans-unit>
+            <trans-unit id="40">
+                <source>label.page_deleted</source>
+                <target>Esta página ha sido eliminida en</target>
+            </trans-unit>
+            <trans-unit id="41">
+                <source>label.redirect</source>
+                <target>Redirección</target>
+            </trans-unit>
+            <trans-unit id="42">
+                <source>text.redirected_page</source>
+                <target>Esta página es una redirección automática a</target>
+            </trans-unit>
+            <trans-unit id="43">
+                <source>text.delete_redirected_page</source>
+                <target>La redirección se perderá, lo que puede causar una pérdida de SEO en los motores de búsqueda.</target>
             </trans-unit>
         </body>
     </file>

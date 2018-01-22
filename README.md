@@ -165,6 +165,10 @@ The different Routes (naming self-explanatory) available are:
 - pageedit_links
 - pageedit_help
 
+Integrate sub-pages
+-------------------
+To add sub-pages in sub-folders, simply use a "/" as separator in the Url semantic field.
+
 Protect specific templates
 --------------------------
 If you need to protect specific templates (containing lot of Twig tag, Twig variable setting, etc. or if you don't want your final user to be able to modify them, to not break the website), simply put those templates in `app/Resources/views/[folderPages]/protected`, they will be displayed as other, and included in the sitemap, but not available for modifications.

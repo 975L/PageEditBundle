@@ -118,6 +118,62 @@
                 <source>label.signout</source>
                 <target>Me déconnecter</target>
             </trans-unit>
+            <trans-unit id="30">
+                <source>label.view_current_pages</source>
+                <target>Voir les pages courantes</target>
+            </trans-unit>
+            <trans-unit id="31">
+                <source>label.view_deleted_pages</source>
+                <target>Voir les pages supprimées</target>
+            </trans-unit>
+            <trans-unit id="32">
+                <source>label.view_redirected_pages</source>
+                <target>Voir les pages redirigées</target>
+            </trans-unit>
+            <trans-unit id="33">
+                <source>label.view_archived_pages</source>
+                <target>Voir les pages archivées</target>
+            </trans-unit>
+            <trans-unit id="34">
+                <source>label.current</source>
+                <target>Courantes</target>
+            </trans-unit>
+            <trans-unit id="35">
+                <source>label.deleted</source>
+                <target>Supprimées</target>
+            </trans-unit>
+            <trans-unit id="36">
+                <source>label.redirected</source>
+                <target>Redirigées</target>
+            </trans-unit>
+            <trans-unit id="37">
+                <source>label.archived</source>
+                <target>Archivées</target>
+            </trans-unit>
+            <trans-unit id="38">
+                <source>label.page_archived</source>
+                <target>Cette page a été archivée le</target>
+            </trans-unit>
+            <trans-unit id="39">
+                <source>text.delete_archived_page</source>
+                <target>La page suivante sera définitivement supprimée.</target>
+            </trans-unit>
+            <trans-unit id="40">
+                <source>label.page_deleted</source>
+                <target>Cette page a été supprimée le</target>
+            </trans-unit>
+            <trans-unit id="41">
+                <source>label.redirect</source>
+                <target>Redirection</target>
+            </trans-unit>
+            <trans-unit id="42">
+                <source>text.redirected_page</source>
+                <target>Cette page est une redirection automatique vers</target>
+            </trans-unit>
+            <trans-unit id="43">
+                <source>text.delete_redirected_page</source>
+                <target>La redirection sera perdue, ce qui peut causer une perte de référencement (SEO) sur les moteurs de recherche.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

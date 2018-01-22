@@ -5,19 +5,60 @@
 {% block pageedit_content %}
 {# Toolbar #}
     {{ toolbar|raw }}
-
-{# List of pages and actions #}
+{# Title #}
     <div class="text-center">
         <h2>
             {{ 'text.list_pages'|trans }}
+            {% if app.request.query.get('v') == null %}
+                ({{ 'label.current'|trans }})
+            {% elseif app.request.query.get('v') == 'archived' %}
+                ({{ 'label.archived'|trans }})
+            {% elseif app.request.query.get('v') == 'deleted' %}
+                ({{ 'label.deleted'|trans }})
+            {% elseif app.request.query.get('v') == 'redirected' %}
+                ({{ 'label.redirected'|trans }})
+            {% endif %}
         </h2>
+{# Links to different kind of pages #}
+        <p>
+{# Current pages #}
+            {% if app.request.query.get('v') == null %}
+                <strong>{{ 'label.view_current_pages'|trans }}</strong>
+            {% else %}
+                <a href="?v=">{{ 'label.view_current_pages'|trans }}</a>
+            {% endif %}
+            &nbsp;-&nbsp;
+{# Archived #}
+            {% if app.request.query.get('v') == 'archived' %}
+                <strong>{{ 'label.view_archived_pages'|trans }}</strong>
+            {% else %}
+                <a href="?v=archived">{{ 'label.view_archived_pages'|trans }}</a>
+            {% endif %}
+            &nbsp;-&nbsp;
+{# Deleted #}
+            {% if app.request.query.get('v') == 'deleted' %}
+                <strong>{{ 'label.view_deleted_pages'|trans }}</strong>
+            {% else %}
+                <a href="?v=deleted">{{ 'label.view_deleted_pages'|trans }}</a>
+            {% endif %}
+            &nbsp;-&nbsp;
+{# Redirected #}
+            {% if app.request.query.get('v') == 'redirected' %}
+                <strong>{{ 'label.view_redirected_pages'|trans }}</strong>
+            {% else %}
+                <a href="?v=redirected">{{ 'label.view_redirected_pages'|trans }}</a>
+            {% endif %}
+        </p>
+{# List of pages and actions #}
         <table class="table table-hover table-condensed table-responsive">
             <thead>
                 <tr>
                     <th class="text-center">{{ 'label.title'|trans }}</th>
                     <th class="text-center">{{ 'label.semantic_url'|trans }}</th>
                     <th class="text-center"><span class="glyphicon glyphicon-eye-open"></span> {{ 'label.display'|trans }}</th>
-                    <th class="text-center"><span class="glyphicon glyphicon-pencil"></span> {{ 'label.modify'|trans }}</th>
+                    {% if app.request.query.get('v') == null %}
+                        <th class="text-center"><span class="glyphicon glyphicon-pencil"></span> {{ 'label.modify'|trans }}</th>
+                    {% endif %}
                     <th class="text-center"><span class="glyphicon glyphicon-trash"></span> {{ 'label.delete'|trans }}</th>
                 </tr>
             </thead>
@@ -30,33 +71,46 @@
                         </td>
 {# Slug #}
                         <td class="text-center">
-                            {{ page.slug }}
+                            {% if '/' in page.slug %}
+                                <strong>{{ page.slug|replace({(page.slug|split('/')|last): ''}) }}</strong>{{ page.slug|split('/')|last }}
+                            {% else %}
+                                {{ page.slug }}
+                            {% endif %}
                         </td>
 {# Display #}
                         <td class="text-center">
-                            <a href="{{ path('pageedit_display', {'page': page.slug}) }}" title="{{ 'label.display'|trans }}">{{ 'label.display'|trans }}</a>
-                        </td>
-{# Edit #}
-                        <td class="text-center">
-                            {% if page.protected == false %}
-                                <a href="{{ path('pageedit_edit', {'page': page.slug}) }}" title="{{ 'label.modify'|trans }}">{{ 'label.modify'|trans }}</a>
+                            {% if page.status == 'archived' %}
+                                <a href="{{ path('pageedit_display_archived', {'page': page.slug}) }}" title="{{ 'label.display'|trans }}">{{ 'label.display'|trans }}</a>
+                            {% elseif page.status == 'deleted' %}
+                                <a href="{{ path('pageedit_display_deleted', {'page': page.slug}) }}" title="{{ 'label.display'|trans }}">{{ 'label.display'|trans }}</a>
+                            {% elseif page.status == 'redirected' %}
+                                <a href="{{ path('pageedit_display_redirected', {'page': page.slug}) }}" title="{{ 'label.display'|trans }}">{{ 'label.display'|trans }}</a>
                             {% else %}
-                                {{ 'label.protected'|trans }}
+                                <a href="{{ path('pageedit_display', {'page': page.slug}) }}" title="{{ 'label.display'|trans }}">{{ 'label.display'|trans }}</a>
                             {% endif %}
                         </td>
+{# Edit #}
+                        {% if page.status == 'current' %}
+                            <td class="text-center">
+                                <a href="{{ path('pageedit_edit', {'page': page.slug}) }}" title="{{ 'label.modify'|trans }}">{{ 'label.modify'|trans }}</a>
+                            </td>
+                        {% endif %}
 {# Delete #}
                         <td class="text-center">
-                            {% if page.protected == false %}
-                                <a href="{{ path('pageedit_delete', {'page': page.slug}) }}" title="{{ 'label.delete'|trans }}" class="text-danger">{{ 'label.delete'|trans }}</a>
+                            {% if page.status == 'archived' %}
+                                <a href="{{ path('pageedit_delete_archived', {'page': page.slug}) }}" title="{{ 'label.delete'|trans }}" class="text-danger">{{ 'label.delete'|trans }}</a>
+                            {% elseif page.status == 'deleted' %}
+                                <a href="{{ path('pageedit_delete_deleted', {'page': page.slug}) }}" title="{{ 'label.delete'|trans }}" class="text-danger">{{ 'label.delete'|trans }}</a>
+                            {% elseif page.status == 'redirected' %}
+                                <a href="{{ path('pageedit_delete_redirected', {'page': page.slug}) }}" title="{{ 'label.delete'|trans }}" class="text-danger">{{ 'label.delete'|trans }}</a>
                             {% else %}
-                                {{ 'label.protected'|trans }}
+                                <a href="{{ path('pageedit_delete', {'page': page.slug}) }}" title="{{ 'label.delete'|trans }}" class="text-danger">{{ 'label.delete'|trans }}</a>
                             {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
-
 {# Pagination #}
         <div class="navigation text-center">
             {{ knp_pagination_render(pages) }}

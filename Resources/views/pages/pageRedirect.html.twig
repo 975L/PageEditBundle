@@ -1,0 +1,15 @@
+{% extends "@c975LPageEdit/layout.html.twig" %}
+{% trans_default_domain 'pageedit' %}
+{% set title = 'label.redirect'|trans %}
+
+{% block pageedit_content %}
+{# Toolbar #}
+    {{ toolbar|raw }}
+
+{# Form #}
+    <p class="alert alert-warning text-center">
+        {{ 'text.redirected_page'|trans }}
+        <br />
+        <a href="{{ absolute_url(path('pageedit_display', {'page': redirection})) }}">{{ absolute_url(path('pageedit_display', {'page': redirection})) }}</a>
+    </p>
+{% endblock %}

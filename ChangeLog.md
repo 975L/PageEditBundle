@@ -1,5 +1,12 @@
 # Changelog
 
+v1.18
+-----
+- Add of advice about changing semantic url (16/01/2018)
+- Add of possibility to have hierarchical url, i.e. `domain.com/folder/sub-folder/file` (18/01/2018)
+- Add of possibility to list and display archived, deleted and redirected files (18/01/2018)
+- Suppress of "set redirection part" in deleteFile Service as it's not used (22/01/2018)
+
 v1.17.1
 -------
 - Separation of information about parameters.yml in `README.md` (16/08/2017)

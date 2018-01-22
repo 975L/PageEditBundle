@@ -128,10 +128,15 @@ class PageEditService
     }
 
     //Slugify function - https://github.com/cocur/slugify
-    public function slugify($text)
+    public function slugify($text, $keepSlashes = false)
     {
         $slugify = new Slugify();
-        return $slugify->slugify($text);
+        if ($keepSlashes === true) {
+            $slugify->addRule('/', '-thereisaslash-');
+        }
+        $slugifyText = $slugify->slugify($text);
+
+        return str_replace('-thereisaslash-', '/', $slugifyText);
     }
 
     //Archives file
@@ -150,6 +155,11 @@ class PageEditService
 
         //Archives file
         if ($fs->exists($filePath)) {
+            //Create sub-folders
+            if (strpos($page, '/') !== false) {
+                $subfolder = substr($page, 0, strrpos($page, '/'));
+                $fs->mkdir($archivedFolder . '/' . $subfolder, 0770);
+            }
             $fs->rename($filePath, $archivedFolder . '/' . $page . '-' . date('Ymd-His-') . $userId . '.html.twig');
         }
     }
@@ -173,7 +183,7 @@ class PageEditService
     }
 
     //Moves to deleted/redirected folder the requested file
-    public function deleteFile($page, $redirect, $slug = null)
+    public function deleteFile($page, $archive)
     {
         //Creates structure in case it not exists
         $this->createFolders();
@@ -185,17 +195,19 @@ class PageEditService
         $folderPath = $this->container->getParameter('kernel.root_dir') . '/Resources/views/' . $this->container->getParameter('c975_l_page_edit.folderPages');
         $filePath = $folderPath . '/' . $page . '.html.twig';
         $deletedFolder = $folderPath . '/deleted';
-        $redirectedFolder = $folderPath . '/redirected';
-
-        //Sets the redirection
-        if ($redirect === true) {
-            $redirectedFilePath = $redirectedFolder . '/' . $page . '.html.twig';
-            $fs->dumpFile($redirectedFilePath, $slug);
-        }
 
         //Deletes file
         if ($fs->exists($filePath)) {
-            $fs->rename($filePath, $deletedFolder . '/' . $page . '.html.twig');
+            if ($archive === true) {
+                //Create sub-folders
+                if (strpos($page, '/') !== false) {
+                    $subfolder = substr($page, 0, strrpos($page, '/'));
+                    $fs->mkdir($deletedFolder . '/' . $subfolder, 0770);
+                }
+                $fs->rename($filePath, $deletedFolder . '/' . $page . '.html.twig');
+            } else {
+                $fs->remove($filePath);
+            }
         }
     }
 
@@ -238,6 +250,12 @@ class PageEditService
         //Archives old file if content or metadata are different
         if ($fs->exists($filePath) && file_get_contents($filePath) !== $finalContent) {
             $this->archiveFile($page, $userId);
+        }
+
+        //Create sub-folders
+        if (strpos($page, '/') !== false) {
+            $subfolder = substr($page, 0, strrpos($page, '/'));
+            $fs->mkdir($folderPath . '/' . $subfolder, 0770);
         }
 
         //Writes new file

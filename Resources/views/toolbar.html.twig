@@ -9,43 +9,53 @@
         {% else %}
             <span class="btn btn-success"><strong>PageEdit</strong></span></a>
         {% endif %}
-
 {# Display #}
-        {% if type != 'dashboard' and type != 'display' and type != 'help' and type != 'new' and type != 'protected' %}
-            <a href="{{ path('pageedit_display', {'page': page}) }}" class="btn btn-default" title="{{ 'label.current_version'|trans }}" role="button">
-                <span class="glyphicon glyphicon-eye-open"></span></a>
+{{ type }}
+        {% if type == 'edit' or type == 'delete' or type == 'delete-archived' or type == 'delete-deleted' or type == 'delete-redirected' %}
+            {% if type == 'delete-archived' %}
+                <a href="{{ path('pageedit_display_archived', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
+            {% elseif type == 'delete-deleted' %}
+                <a href="{{ path('pageedit_display_deleted', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
+            {% elseif type == 'delete-redirected' %}
+                <a href="{{ path('pageedit_display_redirected', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
+            {% else %}
+                <a href="{{ path('pageedit_display', {'page': page}) }}" class="btn btn-default" title="{{ 'label.current_version'|trans }}" role="button">
+            {% endif %}
+            <span class="glyphicon glyphicon-eye-open"></span></a>
         {% endif %}
-
 {# Edit #}
-        {% if type != 'dashboard' and type != 'edit' and type != 'help' and type != 'new' and type != 'protected' %}
+        {% if type == 'display' or type == 'delete' %}
             <a href="{{ path('pageedit_edit', {'page': page}) }}" class="btn btn-default" title="{{ 'label.modify'|trans }}" role="button">
                 <span class="glyphicon glyphicon-pencil"></span></a>
         {% endif %}
-
 {# New #}
         {% if type != 'new' %}
             <a href="{{ path('pageedit_new') }}" class="btn btn-default" title="{{ 'label.new_page'|trans }}" role="button">
                 <span class="glyphicon glyphicon-plus"></span></a>
         {% endif %}
-
 {# Delete #}
-        {% if type != 'dashboard' and type != 'delete' and type != 'help' and type != 'new' and type != 'protected' %}
-            <a href="{{ path('pageedit_delete', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
-                <span class="glyphicon glyphicon-trash"></span></a>
+        {% if type == 'display' or type == 'edit' or type == 'archived' or type == 'deleted' or type == 'redirected' %}
+            {% if type == 'archived' %}
+                <a href="{{ path('pageedit_delete_archived', {'page': page}) }}" class="btn btn-danger" title="{{ 'label.delete'|trans }}" role="button">
+            {% elseif type == 'deleted' %}
+                <a href="{{ path('pageedit_delete_deleted', {'page': page}) }}" class="btn btn-danger" title="{{ 'label.delete'|trans }}" role="button">
+            {% elseif type == 'redirected' %}
+                <a href="{{ path('pageedit_delete_redirected', {'page': page}) }}" class="btn btn-danger" title="{{ 'label.delete'|trans }}" role="button">
+            {% else %}
+                <a href="{{ path('pageedit_delete', {'page': page}) }}" class="btn btn-danger" title="{{ 'label.delete'|trans }}" role="button">
+            {% endif %}
+            <span class="glyphicon glyphicon-trash"></span></a>
         {% endif %}
-
 {# Help #}
         {% if type != 'help' %}
             <a href="{{ path('pageedit_help') }}" class="btn btn-info" title="{{ 'label.help'|trans }}" role="button">
                 <span class="glyphicon glyphicon-flag"></span></a>
         {% endif %}
-
 {# Main dashboard #}
         {% if dashboardRoute != null %}
             <a href="{{ path(dashboardRoute) }}" class="btn btn-info" title="{{ 'label.dashboard'|trans }}" role="button">
                 <span class="glyphicon glyphicon-dashboard"></span></a>
         {% endif %}
-
 {# Signout #}
         {% if signoutRoute != null %}
             <a href="{{ path(signoutRoute) }}" class="btn btn-info" title="{{ 'label.signout'|trans }}" role="button">
@@ -53,3 +63,13 @@
         {% endif %}
     </div>
 </div>
+{# Warning message for specific cases #}
+{% if type == 'archived' or type == 'delete-archived' %}
+    <div class="alert alert-danger text-center">
+        <span class="glyphicon glyphicon-exclamation-sign"></span> {{ 'label.page_archived'|trans }} <strong>{{ datetime|localizeddate('medium', 'medium') }} ({{ username }})</strong>
+    </div>
+{% elseif type == 'deleted' or type == 'delete-deleted' %}
+    <div class="alert alert-danger text-center">
+        <span class="glyphicon glyphicon-exclamation-sign"></span> {{ 'label.page_deleted'|trans }} <strong>{{ datetime|localizeddate('medium', 'medium') }}</strong>
+    </div>
+{% endif %}

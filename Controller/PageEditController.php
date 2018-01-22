@@ -46,38 +46,71 @@ class PageEditController extends Controller
 
             //Defines paths
             $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
-            $protectedFolderPath = $folderPath . '/protected';
+
+            //Adjust path is specific folder is requested
+            $view = $request->get('v');
+            if ($view !== '' && in_array($view, array('archived', 'deleted', 'redirected'))) {
+                $folderPath .= '/' . $view;
+            }
 
             //Gets pages
-            $finder
-                ->files()
-                ->in($folderPath)
-                ->in($protectedFolderPath)
-                ->depth('== 0')
-                ->name('*.html.twig')
-                ->sortByName()
-            ;
+            if ($view == '') {
+                $finder
+                    ->files()
+                    ->in($folderPath)
+                    ->exclude('archived')
+                    ->exclude('deleted')
+                    ->exclude('redirected')
+                    ->name('*.html.twig')
+                    ->sortByType()
+                ;
+            } else {
+                $finder
+                    ->files()
+                    ->in($folderPath)
+                    ->name('*.html.twig')
+                    ->sortByType()
+                ;
+            }
 
             //Defines slug and title
             $pages = array();
+            $subpages = array();
             foreach ($finder as $file) {
                 $slug = str_replace('.html.twig', '', $file->getRelativePathname());
                 $title = $pageEditService->getTitle($file->getContents(), $slug);
                 $titleTranslated = $pageEditService->getTitleTranslated($title);
 
+                //Defines status of page
+                if (strpos($file->getPath(), 'protected') !== false) {
+                    $status = 'protected';
+                } elseif ($view == '') {
+                    $status = 'current';
+                } else {
+                    $status = $view;
+                }
                 //Adds page to array
-                $pages[] = array(
-                    'slug' => $slug,
-                    'title' => $titleTranslated,
-                    'protected' => strpos($file->getPath(), 'protected') !== false ? true : false,
-                );
+                if (strpos($slug, '/') === false) {
+                    $pages[] = array(
+                        'slug' => $slug,
+                        'title' => $titleTranslated,
+                        'status' => $status,
+                    );
+                //Adds subpage
+                } else {
+                    $subpages[] = array(
+                        'slug' => $slug,
+                        'title' => $titleTranslated,
+                        'status' => $status,
+                    );
+
+                }
             }
-            sort($pages);
 
             //Pagination
             $paginator  = $this->get('knp_paginator');
             $pagination = $paginator->paginate(
-                $pages,
+                array_merge($pages, $subpages),
                 $request->query->getInt('p', 1),
                 15
             );
@@ -102,7 +135,7 @@ class PageEditController extends Controller
      * @Route("/pages/{page}",
      *      name="pageedit_display",
      *      requirements={
-     *          "page": "^(?!dashboard|help|links|new|upload)([a-z0-9\-]+)"
+     *          "page": "^(?!archived|dashboard|delete|deleted|edit|help|links|new|redirected|slug|upload)([a-z0-9\-\/]+)"
      *      })
      * @Method({"GET", "HEAD"})
      */
@@ -158,6 +191,152 @@ class PageEditController extends Controller
         ));
     }
 
+//DISPLAY ARCHIVED
+    /**
+     * @Route("/pages/archived/{page}",
+     *      name="pageedit_display_archived",
+     *      requirements={
+     *          "page": "^([a-z0-9\-\/]+)"
+     *      })
+     * @Method({"GET", "HEAD"})
+     */
+    public function displayArchivedAction($page)
+    {
+        //Gets the user
+        $user = $this->getUser();
+
+        if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
+            $filePath = $this->getParameter('c975_l_page_edit.folderPages') . '/archived/' . $page . '.html.twig';
+
+            //Not existing page
+            if (!$this->get('templating')->exists($filePath)) {
+                throw $this->createNotFoundException();
+            }
+
+            //Gets data for archived
+            $lastHyphen = strrpos($page, '-') + 1;
+            $userId = substr($page, $lastHyphen);
+            $userManager = $this->container->get('fos_user.user_manager');
+            $userArchived = $userManager->findUserBy(array('id' => $userId));
+            if ($userArchived !== null) {
+                $username = $userArchived->getFirstname() . ' ' . $userArchived->getLastname();
+            } else {
+                $username = $userId;
+            }
+            $datetime = \DateTime::createFromFormat('Ymd-His', substr($page, $lastHyphen - strlen($userId) - 15, 15));
+
+            //Adds toolbar
+            $toolbar = $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
+                'type' => 'archived',
+                'page' => $page,
+                'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
+                'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
+                'datetime' => $datetime,
+                'username' => $username,
+            ));
+
+            return $this->render($filePath, array(
+                'toolbar' => $toolbar,
+            ));
+        }
+
+        //Access is denied
+        throw $this->createAccessDeniedException();
+    }
+
+//DISPLAY DELETED
+    /**
+     * @Route("/pages/deleted/{page}",
+     *      name="pageedit_display_deleted",
+     *      requirements={
+     *          "page": "^([a-z0-9\-\/]+)"
+     *      })
+     * @Method({"GET", "HEAD"})
+     */
+    public function displayDeletedAction($page)
+    {
+        //Gets the user
+        $user = $this->getUser();
+
+        if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
+            $filePath = $this->getParameter('c975_l_page_edit.folderPages') . '/deleted/' . $page . '.html.twig';
+
+            //Not existing page
+            if (!$this->get('templating')->exists($filePath)) {
+                throw $this->createNotFoundException();
+            }
+
+            //Gets data for deleted
+            $folderPath = $this->container->getParameter('kernel.root_dir') . '/Resources/views/';
+            $datetime = \DateTime::createFromFormat('Ymd-His', date('Ymd-His', filemtime($folderPath . $filePath)));
+
+            //Adds toolbar
+            $toolbar = $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
+                'type' => 'deleted',
+                'page' => $page,
+                'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
+                'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
+                'datetime' => $datetime,
+            ));
+
+            return $this->render($filePath, array(
+                'toolbar' => $toolbar,
+            ));
+        }
+
+        //Access is denied
+        throw $this->createAccessDeniedException();
+    }
+
+//DISPLAY REDIRECTED
+    /**
+     * @Route("/pages/redirected/{page}",
+     *      name="pageedit_display_redirected",
+     *      requirements={
+     *          "page": "^([a-z0-9\-\/]+)"
+     *      })
+     * @Method({"GET", "HEAD"})
+     */
+    public function displayRedirectedAction($page)
+    {
+        //Gets the user
+        $user = $this->getUser();
+
+        if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
+            $filePath = $this->getParameter('c975_l_page_edit.folderPages') . '/redirected/' . $page . '.html.twig';
+
+            //Not existing page
+            if (!$this->get('templating')->exists($filePath)) {
+                throw $this->createNotFoundException();
+            }
+
+            //Gets data for redirected
+            $folderPath = $this->container->getParameter('kernel.root_dir') . '/Resources/views/';
+            $datetime = \DateTime::createFromFormat('Ymd-His', date('Ymd-His', filemtime($folderPath . $filePath)));
+            $redirection = file_get_contents($folderPath . $filePath);
+
+            //Returns the page
+            return $this->render('@c975LPageEdit/pages/pageRedirect.html.twig', array(
+                'page' => $page,
+                'redirection' => $redirection,
+                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
+                    'type' => 'redirected',
+                    'page' => $page,
+                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
+                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
+                    'datetime' => $datetime,
+                )),
+            ));
+
+            return $this->render($filePath, array(
+                'toolbar' => $toolbar,
+            ));
+        }
+
+        //Access is denied
+        throw $this->createAccessDeniedException();
+    }
+
 //NEW
     /**
      * @Route("/pages/new",
@@ -179,7 +358,7 @@ class PageEditController extends Controller
             if ($form->isSubmitted() && $form->isValid()) {
                 //Gets slug
                 $pageEditService = $this->get(PageEditService::class);
-                $slug = $pageEditService->slugify($form->getData()->getSlug());
+                $slug = $pageEditService->slugify($form->getData()->getSlug(), true);
 
                 //Writes file
                 $pageEditService->writeFile($slug, null, $form->getData(), $user->getId());
@@ -213,7 +392,7 @@ class PageEditController extends Controller
      * @Route("/pages/edit/{page}",
      *      name="pageedit_edit",
      *      requirements={
-     *          "page": "^([a-z0-9\-]+)"
+     *          "page": "^([a-z0-9\-\/]+)"
      *      })
      * )
      */
@@ -305,7 +484,7 @@ class PageEditController extends Controller
      * @Route("/pages/delete/{page}",
      *      name="pageedit_delete",
      *      requirements={
-     *          "page": "^([a-z0-9\-]+)"
+     *          "page": "^(?!archived|deleted|redirected)([a-z0-9\-\/]+)"
      *      })
      * )
      */
@@ -348,13 +527,13 @@ class PageEditController extends Controller
 
             if ($form->isSubmitted() && $form->isValid()) {
                 //Deletes file
-                $pageEditService->deleteFile($page, false);
+                $pageEditService->deleteFile($page, true);
 
                 //Redirects to the page which will be HTTP 410
                 return $this->redirectToRoute('pageedit_dashboard');
             }
 
-            //Returns the form to edit content
+            //Returns the form to delete page
             return $this->render('@c975LPageEdit/forms/pageDelete.html.twig', array(
                 'form' => $form->createView(),
                 'pageTitle' => $titleTranslated,
@@ -362,6 +541,214 @@ class PageEditController extends Controller
                 'pageContent' => $originalContent,
                 'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
                     'type' => 'delete',
+                    'page' => $page,
+                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
+                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
+                )),
+            ));
+        }
+
+        //Access is denied
+        throw $this->createAccessDeniedException();
+    }
+
+//DELETE ARCHIVED
+    /**
+     * @Route("/pages/delete/archived/{page}",
+     *      name="pageedit_delete_archived",
+     *      requirements={
+     *          "page": "^([a-z0-9\-\/]+)"
+     *      })
+     * )
+     */
+    public function deleteArchivedAction(Request $request, $page)
+    {
+        //Gets the user
+        $user = $this->getUser();
+
+        //Defines the form
+        if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
+            //Gets the FileSystem
+            $fs = new Filesystem();
+
+            //Defines paths
+            $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
+            $filePath = $folderPath . '/archived/' . $page . '.html.twig';
+
+            //Gets the content
+            $originalContent = null;
+            if ($fs->exists($filePath)) {
+                $fileContent = file_get_contents($filePath);
+
+                $startBlock = '{% block pageEdit %}';
+                $endBlock = '{% endblock %}';
+                $entryPoint = strpos($fileContent, $startBlock) + strlen($startBlock);
+                $exitPoint = strpos($fileContent, $endBlock, $entryPoint);
+
+                $originalContent = trim(substr($fileContent, $entryPoint, $exitPoint - $entryPoint));
+            }
+
+            //Gets title
+            $pageEditService = $this->get(PageEditService::class);
+            $title = $pageEditService->getTitle($fileContent, $page);
+            $titleTranslated = $pageEditService->getTitleTranslated($title);
+
+            //Defines form
+            $pageEdit = new PageEdit('delete', $originalContent, $title, $page);
+            $form = $this->createForm(PageEditType::class, $pageEdit);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                //Deletes file
+                $pageEditService->deleteFile('archived/' . $page, false);
+
+                //Redirects to the page which will be HTTP 410
+                return $this->redirectToRoute('pageedit_dashboard');
+            }
+
+            //Returns the form to delete the archived page
+            return $this->render('@c975LPageEdit/forms/pageDelete.html.twig', array(
+                'form' => $form->createView(),
+                'pageTitle' => $titleTranslated,
+                'page' => $page,
+                'pageContent' => $originalContent,
+                'type' => 'archived',
+                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
+                    'type' => 'delete-archived',
+                    'page' => $page,
+                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
+                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
+                    'username' => '',
+                    'datetime' => '',
+                )),
+            ));
+        }
+
+        //Access is denied
+        throw $this->createAccessDeniedException();
+    }
+
+//DELETE DELETED
+    /**
+     * @Route("/pages/delete/deleted/{page}",
+     *      name="pageedit_delete_deleted",
+     *      requirements={
+     *          "page": "^([a-z0-9\-\/]+)"
+     *      })
+     * )
+     */
+    public function deleteDeletedAction(Request $request, $page)
+    {
+        //Gets the user
+        $user = $this->getUser();
+
+        //Defines the form
+        if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
+            //Gets the FileSystem
+            $fs = new Filesystem();
+
+            //Defines paths
+            $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
+            $filePath = $folderPath . '/deleted/' . $page . '.html.twig';
+
+            //Gets the content
+            $originalContent = null;
+            if ($fs->exists($filePath)) {
+                $fileContent = file_get_contents($filePath);
+
+                $startBlock = '{% block pageEdit %}';
+                $endBlock = '{% endblock %}';
+                $entryPoint = strpos($fileContent, $startBlock) + strlen($startBlock);
+                $exitPoint = strpos($fileContent, $endBlock, $entryPoint);
+
+                $originalContent = trim(substr($fileContent, $entryPoint, $exitPoint - $entryPoint));
+            }
+
+            //Gets title
+            $pageEditService = $this->get(PageEditService::class);
+            $title = $pageEditService->getTitle($fileContent, $page);
+            $titleTranslated = $pageEditService->getTitleTranslated($title);
+
+            //Defines form
+            $pageEdit = new PageEdit('delete', $originalContent, $title, $page);
+            $form = $this->createForm(PageEditType::class, $pageEdit);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                //Deletes file
+                $pageEditService->deleteFile('deleted/' . $page, false);
+
+                //Redirects to the page which will be HTTP 410
+                return $this->redirectToRoute('pageedit_dashboard');
+            }
+
+            //Returns the form to delete the deleted page
+            return $this->render('@c975LPageEdit/forms/pageDelete.html.twig', array(
+                'form' => $form->createView(),
+                'pageTitle' => $titleTranslated,
+                'page' => $page,
+                'pageContent' => $originalContent,
+                'type' => 'deleted',
+                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
+                    'type' => 'delete-deleted',
+                    'page' => $page,
+                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
+                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
+                    'datetime' => '',
+                )),
+            ));
+        }
+
+        //Access is denied
+        throw $this->createAccessDeniedException();
+    }
+
+//DELETE REDIRECTED
+    /**
+     * @Route("/pages/delete/redirected/{page}",
+     *      name="pageedit_delete_redirected",
+     *      requirements={
+     *          "page": "^([a-z0-9\-\/]+)"
+     *      })
+     * )
+     */
+    public function deleteRedirectedAction(Request $request, $page)
+    {
+        //Gets the user
+        $user = $this->getUser();
+
+        //Defines the form
+        if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
+            //Gets the FileSystem
+            $fs = new Filesystem();
+
+            //Defines paths
+            $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
+            $filePath = $folderPath . '/redirected/' . $page . '.html.twig';
+
+            //Defines form
+            $pageEdit = new PageEdit('delete', $page, $page, $page);
+            $form = $this->createForm(PageEditType::class, $pageEdit);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                //Deletes file
+                $pageEditService = $this->get(PageEditService::class);
+                $pageEditService->deleteFile('redirected/' . $page, false);
+
+                //Redirects to the page which will be HTTP 410
+                return $this->redirectToRoute('pageedit_dashboard');
+            }
+
+            //Returns the form to delete the redirected page
+            return $this->render('@c975LPageEdit/forms/pageDelete.html.twig', array(
+                'form' => $form->createView(),
+                'pageTitle' => $page,
+                'page' => $page,
+                'pageContent' => ' --> ' . file_get_contents($filePath),
+                'type' => 'redirected',
+                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
+                    'type' => 'delete-redirected',
                     'page' => $page,
                     'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
                     'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
@@ -434,7 +821,7 @@ class PageEditController extends Controller
      * @Route("/pages/upload/{page}",
      *      name="pageedit_upload",
      *      requirements={
-     *          "page": "^([a-z0-9\-]+)"
+     *          "page": "^([a-z0-9\-\/]+)"
      *      })
      * @Method({"POST"})
      */

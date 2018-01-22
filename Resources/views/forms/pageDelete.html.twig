@@ -9,10 +9,17 @@
 {# Form #}
     {{ form_start(form) }}
         <p class="alert alert-danger text-center">
-            {{ 'text.delete_page'|trans }}
+            {% if type is defined and (type == 'archived' or type == 'deleted' or type == 'redirected') %}
+                {{ 'text.delete_archived_page'|trans }}
+                {% if type is defined and type == 'redirected' %}
+                    <br />
+                    {{ 'text.delete_redirected_page'|trans }}
+                {% endif %}
+            {% else %}
+                {{ 'text.delete_page'|trans }}
+            {% endif %}
         </p>
         {{ form_widget(form) }}
-
 {# Page content #}
         <div class="form-group">
             <label class="control-label required">
@@ -21,14 +28,13 @@
             <br />
             {{ pageContent|raw }}
         </div>
-
+{# Submit #}
         <div class="form-group">
             <button type="submit" name="submit" title="{{ 'label.delete'|trans }}" class="btn btn-lg btn-danger btn-block">
                 <span class="glyphicon glyphicon-trash"></span> {{ 'label.delete'|trans }}
             </button>
         </div>
     {{ form_end(form) }}
-
 {# Cancel #}
     <p class="text-center">
         <a href="javascript:history.back()">
