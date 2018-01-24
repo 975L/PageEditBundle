@@ -34,7 +34,7 @@ class PageEditType extends AbstractType
                     'placeholder' => 'label.title',
                 )))
             ->add('slug', TextType::class, array(
-                'label' => 'label.semantic_url',
+                'label' => 'label.semantic_url_explanation',
                 'disabled' => $disabled,
                 'required' => true,
                 'attr' => array(

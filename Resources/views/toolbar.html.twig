@@ -10,7 +10,6 @@
             <span class="btn btn-success"><strong>PageEdit</strong></span></a>
         {% endif %}
 {# Display #}
-{{ type }}
         {% if type == 'edit' or type == 'delete' or type == 'delete-archived' or type == 'delete-deleted' or type == 'delete-redirected' %}
             {% if type == 'delete-archived' %}
                 <a href="{{ path('pageedit_display_archived', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
@@ -32,6 +31,11 @@
         {% if type != 'new' %}
             <a href="{{ path('pageedit_new') }}" class="btn btn-default" title="{{ 'label.new_page'|trans }}" role="button">
                 <span class="glyphicon glyphicon-plus"></span></a>
+        {% endif %}
+{# Duplicate #}
+        {% if type == 'display' %}
+            <a href="{{ path('pageedit_duplicate', {'page': page}) }}" class="btn btn-default" title="{{ 'label.duplicate'|trans }}" role="button">
+                <span class="glyphicon glyphicon-duplicate"></span></a>
         {% endif %}
 {# Delete #}
         {% if type == 'display' or type == 'edit' or type == 'archived' or type == 'deleted' or type == 'redirected' %}

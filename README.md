@@ -158,6 +158,7 @@ The different Routes (naming self-explanatory) available are:
 - pageedit_display
 - pageedit_new
 - pageedit_edit
+- pageedit_duplicate
 - pageedit_delete
 - pageedit_dashboard
 - pageedit_upload

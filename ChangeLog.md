@@ -1,5 +1,9 @@
 # Changelog
 
+v1.19
+-----
+- Add of possibility to duplicate a page (24/01/2018)
+
 v1.18
 -----
 - Add of advice about changing semantic url (16/01/2018)

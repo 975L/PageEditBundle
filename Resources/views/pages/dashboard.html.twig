@@ -58,6 +58,7 @@
                     <th class="text-center"><span class="glyphicon glyphicon-eye-open"></span> {{ 'label.display'|trans }}</th>
                     {% if app.request.query.get('v') == null %}
                         <th class="text-center"><span class="glyphicon glyphicon-pencil"></span> {{ 'label.modify'|trans }}</th>
+                        <th class="text-center"><span class="glyphicon glyphicon-duplicate"></span> {{ 'label.duplicate'|trans }}</th>
                     {% endif %}
                     <th class="text-center"><span class="glyphicon glyphicon-trash"></span> {{ 'label.delete'|trans }}</th>
                 </tr>
@@ -93,6 +94,12 @@
                         {% if page.status == 'current' %}
                             <td class="text-center">
                                 <a href="{{ path('pageedit_edit', {'page': page.slug}) }}" title="{{ 'label.modify'|trans }}">{{ 'label.modify'|trans }}</a>
+                            </td>
+                        {% endif %}
+{# Duplicate #}
+                        {% if page.status == 'current' %}
+                            <td class="text-center">
+                                <a href="{{ path('pageedit_duplicate', {'page': page.slug}) }}" title="{{ 'label.duplicate'|trans }}">{{ 'label.duplicate'|trans }}</a>
                             </td>
                         {% endif %}
 {# Delete #}

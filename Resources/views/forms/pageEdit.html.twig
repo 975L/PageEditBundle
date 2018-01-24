@@ -4,10 +4,8 @@
 
 {% block pageedit_content %}
     {{ include('@c975LPageEdit/tinymceInit.html.twig') }}
-
 {# Toolbar #}
     {{ toolbar|raw }}
-
 {# Form #}
     {{ form_start(form) }}
         <p class="alert alert-warning text-center">
@@ -17,11 +15,10 @@
 
         <div class="form-group">
             <button type="submit" name="submit" title="{{ 'label.modify'|trans }}" class="btn btn-lg btn-primary btn-block">
-                {{ 'label.validate'|trans }}
+                {{ 'label.modify'|trans }}
             </button>
         </div>
     {{ form_end(form) }}
-
 {# Cancel #}
     <p class="text-center">
         <a href="javascript:history.back()">

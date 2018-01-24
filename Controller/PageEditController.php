@@ -135,7 +135,7 @@ class PageEditController extends Controller
      * @Route("/pages/{page}",
      *      name="pageedit_display",
      *      requirements={
-     *          "page": "^(?!archived|dashboard|delete|deleted|edit|help|links|new|redirected|slug|upload)([a-z0-9\-\/]+)"
+     *          "page": "^(?!archived|dashboard|delete|deleted|duplicate|edit|help|links|new|redirected|slug|upload)([a-z0-9\-\/]+)"
      *      })
      * @Method({"GET", "HEAD"})
      */
@@ -441,8 +441,7 @@ class PageEditController extends Controller
 
             if ($form->isSubmitted() && $form->isValid()) {
                 //Gets slug
-                $pageEditService = $this->get(PageEditService::class);
-                $slug = $pageEditService->slugify($form->getData()->getSlug());
+                $slug = $pageEditService->slugify($form->getData()->getSlug(), true);
 
                 //Archives and redirects the file if title (then slug) has changed
                 if ($slug != $page) {
@@ -466,6 +465,91 @@ class PageEditController extends Controller
                 'page' => $page,
                 'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
                     'type' => 'edit',
+                    'page' => $page,
+                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
+                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
+                )),
+                'tinymceApiKey' => $this->container->hasParameter('tinymceApiKey') ? $this->getParameter('tinymceApiKey') : null,
+                'tinymceLanguage' => $this->getParameter('c975_l_page_edit.tinymceLanguage'),
+            ));
+        }
+
+        //Access is denied
+        throw $this->createAccessDeniedException();
+    }
+
+//DUPLICATE
+    /**
+     * @Route("/pages/duplicate/{page}",
+     *      name="pageedit_duplicate",
+     *      requirements={
+     *          "page": "^([a-z0-9\-\/]+)"
+     *      })
+     * )
+     */
+    public function duplicateAction(Request $request, $page)
+    {
+        //Gets the user
+        $user = $this->getUser();
+
+        //Defines the form
+        if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
+            //Gets the FileSystem
+            $fs = new Filesystem();
+
+            //Defines path
+            $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
+            $filePath = $folderPath . '/' . $page . '.html.twig';
+
+            //Gets the content
+            $originalContent = null;
+            if ($fs->exists($filePath)) {
+                $fileContent = file_get_contents($filePath);
+
+                $startBlock = '{% block pageEdit %}';
+                $endBlock = '{% endblock %}';
+                $entryPoint = strpos($fileContent, $startBlock) + strlen($startBlock);
+                $exitPoint = strpos($fileContent, $endBlock, $entryPoint);
+
+                $originalContent = trim(substr($fileContent, $entryPoint, $exitPoint - $entryPoint));
+            }
+
+            //Gets title
+            $pageEditService = $this->get(PageEditService::class);
+            $title = $pageEditService->getTitle($fileContent, $page);
+            $titleTranslated = $pageEditService->getTitleTranslated($title);
+
+            //Gets changeFrequency
+            $changeFrequency = $pageEditService->getChangeFrequency($fileContent);
+
+            //Gets priority
+            $priority = $pageEditService->getPriority($fileContent);
+
+            //Defines form
+            $pageEdit = new PageEdit('duplicate', $originalContent, null, null, $changeFrequency, $priority);
+            $form = $this->createForm(PageEditType::class, $pageEdit);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                //Gets slug
+                $slug = $pageEditService->slugify($form->getData()->getSlug(), true);
+
+                //Writes file
+                $pageEditService->writeFile($slug, $originalContent, $form->getData(), $user->getId());
+
+                //Redirects to the page
+                return $this->redirectToRoute('pageedit_display', array(
+                    'page' => $slug,
+                ));
+            }
+
+            //Returns the form to duplicate content
+            return $this->render('@c975LPageEdit/forms/pageDuplicate.html.twig', array(
+                'form' => $form->createView(),
+                'pageTitle' => str_replace('\"', '"', $titleTranslated),
+                'page' => $page,
+                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
+                    'type' => 'duplicate',
                     'page' => $page,
                     'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
                     'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
