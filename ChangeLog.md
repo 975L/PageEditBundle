@@ -1,5 +1,7 @@
 # Changelog
 
+- Changed default value for sitemap priority in skeleton (24/01/2018)
+
 v1.19
 -----
 - Add of possibility to duplicate a page (24/01/2018)
