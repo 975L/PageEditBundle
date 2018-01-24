@@ -175,6 +175,23 @@ Protect specific templates
 If you need to protect specific templates (containing lot of Twig tag, Twig variable setting, etc. or if you don't want your final user to be able to modify them, to not break the website), simply put those templates in `app/Resources/views/[folderPages]/protected`, they will be displayed as other, and included in the sitemap, but not available for modifications.
 **You just need to encapsulate the content of the template within the `skeleton.html.twig`.**
 
+Use the Twig Extension to automate building menus
+-------------------------------------------------
+You can use the provided Twig Extension to easily build menus based on the content of a specific folder, for this use the following code:
+```html
+{% set files = folder_content('specific_folder') %}
+<ul class="nav navbar-nav">
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Title <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            {% for file, title in files %}
+                <li><a href="{{ path('pageedit_display', { 'page': file }) }}">{{ title }}</a></li>
+            {% endfor %}
+        </ul>
+    </li>
+</ul>
+```
+
 Migrating existing files to PageEdit
 ------------------------------------
 To migrate existing files, simply move your existing template in the folder defined in `app/Resources/views/[folderPages]` (`folderPages` has been defined in Step 3 above), access to PageEdit dashboard and do the modifications. The skeleton will be added to new files and old ones will be archived.

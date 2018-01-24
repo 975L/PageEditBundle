@@ -6,3 +6,6 @@ services:
 
     c975L\PageEditBundle\Service\:
         resource: '../../Service/*'
+
+    c975L\PageEditBundle\Twig\:
+        resource: '../../Twig/*'

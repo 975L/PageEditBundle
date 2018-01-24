@@ -1,4 +1,8 @@
-# Changelog
+# ChangeLog
+
+v1.21
+-----
+- Added the possibility to list a folder and return an arrayr of file + title (24/01/2018)
 
 v1.20
 -----
