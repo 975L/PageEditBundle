@@ -931,6 +931,9 @@ class PageEditController extends Controller
             if (in_array($extension, array('jpeg', 'jpg', 'png')) === true) {
                 //Moves file
                 $now = \DateTime::createFromFormat('U.u', microtime(true));
+                if (strpos($page, '/') !== false) {
+                    $page = substr($page, strrpos($page, '/') + 1);
+                }
                 $filename = $page . '-' . $now->format('Ymd-His-u') . '.' . $extension;
                 move_uploaded_file($file->getRealPath(), $folderPath . '/' . $filename);
 
