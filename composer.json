@@ -18,16 +18,22 @@
         }
     ],
     "require": {
-        "php": ">=7",
-        "symfony/framework-bundle": "3.*",
-        "sensio/framework-extra-bundle": "3.*",
-        "symfony/assetic-bundle": "2.*",
-        "knplabs/knp-paginator-bundle": "2.*",
-        "cocur/slugify": "2.*"
+        "php": ">=5.5.9",
+        "symfony/framework-bundle": "^3",
+        "sensio/framework-extra-bundle": "^3",
+        "symfony/assetic-bundle": "^2",
+        "knplabs/knp-paginator-bundle": "^2",
+        "cocur/slugify": "^2",
+        "c975l/toolbar-bundle": "^1"
     },
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": { "c975L\\PageEditBundle\\": ""
         }
+    },
+    "support": {
+        "email": "contact@975l.com",
+        "source": "https://github.com/975L/PageEditBundle",
+        "issues": "https://github.com/975L/PageEditBundle/issues"
     }
 }

@@ -21,19 +21,10 @@ Bundle installation
 
 Step 1: Download the Bundle
 ---------------------------
-Add the following to your `composer.json > require section`
-```
-"require": {
-    "c975L/pageedit-bundle": "1.*"
-},
-```
-Then open a command console, enter your project directory and update composer, by executing the following command, to download the latest stable version of this bundle:
-
+Use [Composer](https://getcomposer.org) to install the library
 ```bash
-$ composer update
+    composer require c975l/pageedit-bundle
 ```
-
-This command requires you to have Composer installed globally, as explained in the [installation chapter](https://getcomposer.org/doc/00-intro.md) of the Composer documentation.
 
 Step 2: Enable the Bundles
 --------------------------

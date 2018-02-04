@@ -1,5 +1,11 @@
 # ChangeLog
 
+v1.22
+-----
+- Change about composer download in `README.md` (04/02/2018)
+- Add support in `composer.json`+ use of ^ for versions request (04/02/2018)
+- Replace toolbar by use of c975L/ToolbarBundle (04/02/2018)
+
 v1.21
 -----
 - Added the possibility to list a folder and return an arrayr of file + title (24/01/2018)

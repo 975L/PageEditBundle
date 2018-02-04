@@ -36,12 +36,6 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('tinymceLanguage')
                     ->defaultNull()
                 ->end()
-                ->scalarNode('signoutRoute')
-                    ->defaultNull()
-                ->end()
-                ->scalarNode('dashboardRoute')
-                    ->defaultNull()
-                ->end()
             ->end()
         ;
 

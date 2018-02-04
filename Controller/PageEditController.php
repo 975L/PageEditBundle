@@ -115,14 +115,19 @@ class PageEditController extends Controller
                 15
             );
 
+            //Defines toolbar
+            $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
+                'type' => 'dashboard',
+            ));
+            $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
+                'tools'  => $tools,
+                'product'  => 'pageedit',
+            ))->getContent();
+
             //Returns the dashboard
             return $this->render('@c975LPageEdit/pages/dashboard.html.twig', array(
                 'pages' => $pagination,
-                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
-                    'type' => 'dashboard',
-                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
-                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
-                )),
+                'toolbar' => $toolbar,
             ));
         }
 
@@ -155,12 +160,18 @@ class PageEditController extends Controller
         }
         //Protected page
         elseif ($this->get('templating')->exists($fileProtectedPath)) {
+            //Defines toolbar
+            $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
+                'type' => 'protected',
+                'page' => $page,
+            ));
+            $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
+                'tools'  => $tools,
+                'product'  => 'pageedit',
+            ))->getContent();
+
             return $this->render($fileProtectedPath, array(
-                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
-                    'type' => 'protected',
-                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
-                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
-                )),
+                'toolbar' => $toolbar,
             ));
         }
         //Deleted page
@@ -175,15 +186,17 @@ class PageEditController extends Controller
         //Gets the user
         $user = $this->getUser();
 
-        //Adds toolbar if rights are ok
-        $toolbar = null;
+        //Defines toolbar
+        $toolbar = '';
         if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
-            $toolbar = $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
+            $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
                 'type' => 'display',
                 'page' => $page,
-                'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
-                'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
             ));
+            $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
+                'tools'  => $tools,
+                'product'  => 'pageedit',
+            ))->getContent();
         }
 
         return $this->render($filePath, array(
@@ -225,15 +238,17 @@ class PageEditController extends Controller
             }
             $datetime = \DateTime::createFromFormat('Ymd-His', substr($page, $lastHyphen - strlen($userId) - 15, 15));
 
-            //Adds toolbar
-            $toolbar = $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
+            //Defines toolbar
+            $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
                 'type' => 'archived',
                 'page' => $page,
-                'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
-                'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
                 'datetime' => $datetime,
                 'username' => $username,
             ));
+            $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
+                'tools'  => $tools,
+                'product'  => 'pageedit',
+            ))->getContent();
 
             return $this->render($filePath, array(
                 'toolbar' => $toolbar,
@@ -270,14 +285,16 @@ class PageEditController extends Controller
             $folderPath = $this->container->getParameter('kernel.root_dir') . '/Resources/views/';
             $datetime = \DateTime::createFromFormat('Ymd-His', date('Ymd-His', filemtime($folderPath . $filePath)));
 
-            //Adds toolbar
-            $toolbar = $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
+            //Defines toolbar
+            $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
                 'type' => 'deleted',
                 'page' => $page,
-                'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
-                'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
                 'datetime' => $datetime,
             ));
+            $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
+                'tools'  => $tools,
+                'product'  => 'pageedit',
+            ))->getContent();
 
             return $this->render($filePath, array(
                 'toolbar' => $toolbar,
@@ -315,21 +332,22 @@ class PageEditController extends Controller
             $datetime = \DateTime::createFromFormat('Ymd-His', date('Ymd-His', filemtime($folderPath . $filePath)));
             $redirection = file_get_contents($folderPath . $filePath);
 
+            //Defines toolbar
+            $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
+                'type' => 'redirected',
+                'page' => $page,
+                'datetime' => $datetime,
+            ));
+            $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
+                'tools'  => $tools,
+                'product'  => 'pageedit',
+            ))->getContent();
+
             //Returns the page
             return $this->render('@c975LPageEdit/pages/pageRedirect.html.twig', array(
                 'page' => $page,
                 'redirection' => $redirection,
-                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
-                    'type' => 'redirected',
-                    'page' => $page,
-                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
-                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
-                    'datetime' => $datetime,
-                )),
-            ));
-
-            return $this->render($filePath, array(
-                'toolbar' => $toolbar,
+                'toolbar' => $toolbar
             ));
         }
 
@@ -369,15 +387,20 @@ class PageEditController extends Controller
                 ));
             }
 
+            //Defines toolbar
+            $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
+                'type' => 'new',
+            ));
+            $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
+                'tools'  => $tools,
+                'product'  => 'pageedit',
+            ))->getContent();
+
             //Returns the form to edit content
             return $this->render('@c975LPageEdit/forms/pageNew.html.twig', array(
                 'form' => $form->createView(),
                 'page' => 'new',
-                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
-                    'type' => 'new',
-                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
-                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
-                )),
+                'toolbar' => $toolbar,
                 'tinymceApiKey' => $this->container->hasParameter('tinymceApiKey') ? $this->getParameter('tinymceApiKey') : null,
                 'tinymceLanguage' => $this->getParameter('c975_l_page_edit.tinymceLanguage'),
                 ));
@@ -458,17 +481,22 @@ class PageEditController extends Controller
                 ));
             }
 
+            //Defines toolbar
+            $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
+                'type' => 'edit',
+                'page' => $page,
+            ));
+            $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
+                'tools'  => $tools,
+                'product'  => 'pageedit',
+            ))->getContent();
+
             //Returns the form to edit content
             return $this->render('@c975LPageEdit/forms/pageEdit.html.twig', array(
                 'form' => $form->createView(),
                 'pageTitle' => str_replace('\"', '"', $titleTranslated),
                 'page' => $page,
-                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
-                    'type' => 'edit',
-                    'page' => $page,
-                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
-                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
-                )),
+                'toolbar' => $toolbar,
                 'tinymceApiKey' => $this->container->hasParameter('tinymceApiKey') ? $this->getParameter('tinymceApiKey') : null,
                 'tinymceLanguage' => $this->getParameter('c975_l_page_edit.tinymceLanguage'),
             ));
@@ -543,17 +571,22 @@ class PageEditController extends Controller
                 ));
             }
 
+            //Defines toolbar
+            $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
+                'type' => 'duplicate',
+                'page' => $page,
+            ));
+            $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
+                'tools'  => $tools,
+                'product'  => 'pageedit',
+            ))->getContent();
+
             //Returns the form to duplicate content
             return $this->render('@c975LPageEdit/forms/pageDuplicate.html.twig', array(
                 'form' => $form->createView(),
                 'pageTitle' => str_replace('\"', '"', $titleTranslated),
                 'page' => $page,
-                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
-                    'type' => 'duplicate',
-                    'page' => $page,
-                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
-                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
-                )),
+                'toolbar' => $toolbar,
                 'tinymceApiKey' => $this->container->hasParameter('tinymceApiKey') ? $this->getParameter('tinymceApiKey') : null,
                 'tinymceLanguage' => $this->getParameter('c975_l_page_edit.tinymceLanguage'),
             ));
@@ -617,18 +650,24 @@ class PageEditController extends Controller
                 return $this->redirectToRoute('pageedit_dashboard');
             }
 
+            //Defines toolbar
+            $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
+                'type' => 'delete',
+                'page' => $page,
+            ));
+            $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
+                'tools'  => $tools,
+                'product'  => 'pageedit',
+            ))->getContent();
+
             //Returns the form to delete page
             return $this->render('@c975LPageEdit/forms/pageDelete.html.twig', array(
                 'form' => $form->createView(),
                 'pageTitle' => $titleTranslated,
                 'page' => $page,
                 'pageContent' => $originalContent,
-                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
-                    'type' => 'delete',
-                    'page' => $page,
-                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
-                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
-                )),
+                'toolbar' => $toolbar,
+                'type' => 'delete',
             ));
         }
 
@@ -690,6 +729,28 @@ class PageEditController extends Controller
                 return $this->redirectToRoute('pageedit_dashboard');
             }
 
+            //Gets data for archived
+            $lastHyphen = strrpos($page, '-') + 1;
+            $userId = substr($page, $lastHyphen);
+            $userManager = $this->container->get('fos_user.user_manager');
+            $userArchived = $userManager->findUserBy(array('id' => $userId));
+            if ($userArchived !== null) {
+                $username = $userArchived->getFirstname() . ' ' . $userArchived->getLastname();
+            } else {
+                $username = $userId;
+            }
+            $datetime = \DateTime::createFromFormat('Ymd-His', substr($page, $lastHyphen - strlen($userId) - 15, 15));
+
+            //Defines toolbar
+            $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
+                'type' => 'delete-archived',
+                'page' => $page,
+            ));
+            $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
+                'tools'  => $tools,
+                'product'  => 'pageedit',
+            ))->getContent();
+
             //Returns the form to delete the archived page
             return $this->render('@c975LPageEdit/forms/pageDelete.html.twig', array(
                 'form' => $form->createView(),
@@ -697,14 +758,9 @@ class PageEditController extends Controller
                 'page' => $page,
                 'pageContent' => $originalContent,
                 'type' => 'archived',
-                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
-                    'type' => 'delete-archived',
-                    'page' => $page,
-                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
-                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
-                    'username' => '',
-                    'datetime' => '',
-                )),
+                'toolbar' => $toolbar,
+                'username' => $username,
+                'datetime' => $datetime,
             ));
         }
 
@@ -766,6 +822,19 @@ class PageEditController extends Controller
                 return $this->redirectToRoute('pageedit_dashboard');
             }
 
+            //Defines data
+            $datetime = \DateTime::createFromFormat('Ymd-His', date('Ymd-His', filemtime($filePath)));
+
+            //Defines toolbar
+            $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
+                'type' => 'delete-deleted',
+                'page' => $page,
+            ));
+            $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
+                'tools'  => $tools,
+                'product'  => 'pageedit',
+            ))->getContent();
+
             //Returns the form to delete the deleted page
             return $this->render('@c975LPageEdit/forms/pageDelete.html.twig', array(
                 'form' => $form->createView(),
@@ -773,13 +842,8 @@ class PageEditController extends Controller
                 'page' => $page,
                 'pageContent' => $originalContent,
                 'type' => 'deleted',
-                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
-                    'type' => 'delete-deleted',
-                    'page' => $page,
-                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
-                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
-                    'datetime' => '',
-                )),
+                'toolbar' => $toolbar,
+                'datetime' => $datetime,
             ));
         }
 
@@ -824,6 +888,19 @@ class PageEditController extends Controller
                 return $this->redirectToRoute('pageedit_dashboard');
             }
 
+            //Defines data
+            $datetime = \DateTime::createFromFormat('Ymd-His', date('Ymd-His', filemtime($filePath)));
+
+            //Defines toolbar
+            $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
+                'type' => 'delete-redirected',
+                'page' => $page,
+            ));
+            $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
+                'tools'  => $tools,
+                'product'  => 'pageedit',
+            ))->getContent();
+
             //Returns the form to delete the redirected page
             return $this->render('@c975LPageEdit/forms/pageDelete.html.twig', array(
                 'form' => $form->createView(),
@@ -831,12 +908,8 @@ class PageEditController extends Controller
                 'page' => $page,
                 'pageContent' => ' --> ' . file_get_contents($filePath),
                 'type' => 'redirected',
-                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
-                    'type' => 'delete-redirected',
-                    'page' => $page,
-                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
-                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
-                )),
+                'toolbar' => $toolbar,
+                'datetime' => $datetime,
             ));
         }
 
@@ -969,13 +1042,18 @@ class PageEditController extends Controller
 
         //Returns the dashboard content
         if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
+            //Defines toolbar
+            $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
+                'type' => 'help',
+            ));
+            $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
+                'tools'  => $tools,
+                'product'  => 'pageedit',
+            ))->getContent();
+
             //Returns the help
             return $this->render('@c975LPageEdit/pages/help.html.twig', array(
-                'toolbar' => $this->renderView('@c975LPageEdit/toolbar.html.twig', array(
-                    'type' => 'help',
-                    'dashboardRoute' => $this->getParameter('c975_l_page_edit.dashboardRoute'),
-                    'signoutRoute' => $this->getParameter('c975_l_page_edit.signoutRoute'),
-                )),
+                'toolbar' => $toolbar,
             ));
         }
 

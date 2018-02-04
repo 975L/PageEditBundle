@@ -36,7 +36,5 @@ class c975LPageEditExtension extends Extension
         $container->setParameter('c975_l_page_edit.sitemapBaseUrl', $processedConfig['sitemapBaseUrl']);
         $container->setParameter('c975_l_page_edit.sitemapLanguages', $processedConfig['sitemapLanguages']);
         $container->setParameter('c975_l_page_edit.tinymceLanguage', $processedConfig['tinymceLanguage']);
-        $container->setParameter('c975_l_page_edit.signoutRoute', $processedConfig['signoutRoute']);
-        $container->setParameter('c975_l_page_edit.dashboardRoute', $processedConfig['dashboardRoute']);
     }
 }

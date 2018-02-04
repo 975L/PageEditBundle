@@ -44,7 +44,7 @@
             </trans-unit>
             <trans-unit id="11">
                 <source>text.delete_page</source>
-                <target>La page suivante sera archivée et supprimée. Tout appel futur de la page renverra un code d'erreur HTTP 410 (Gone).</target>
+                <target>La page suivante sera supprimée. Tout appel futur de la page renverra un code d'erreur HTTP 410 (Gone).</target>
             </trans-unit>
             <trans-unit id="12">
                 <source>label.dashboard</source>
@@ -181,6 +181,10 @@
             <trans-unit id="45">
                 <source>label.semantic_url_explanation</source>
                 <target>Url sémantique (utiliser "/" pour une sous-page)</target>
+            </trans-unit>
+            <trans-unit id="46">
+                <source>label.page_redirected</source>
+                <target>Cette page a été redirigée le</target>
             </trans-unit>
         </body>
     </file>

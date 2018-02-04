@@ -1,0 +1,43 @@
+{% trans_default_domain 'toolbar' %}
+
+{# Display #}
+{% if type == 'edit' or type == 'delete' or type == 'delete-archived' or type == 'delete-deleted' or type == 'delete-redirected' %}
+    {% if type == 'delete-archived' %}
+        <a href="{{ path('pageedit_display_archived', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
+    {% elseif type == 'delete-deleted' %}
+        <a href="{{ path('pageedit_display_deleted', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
+    {% elseif type == 'delete-redirected' %}
+        <a href="{{ path('pageedit_display_redirected', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
+    {% else %}
+        <a href="{{ path('pageedit_display', {'page': page}) }}" class="btn btn-default" title="{{ 'label.current_version'|trans }}" role="button">
+    {% endif %}
+    <span class="glyphicon glyphicon-eye-open"></span></a>
+{% endif %}
+{# Edit #}
+{% if type == 'display' or type == 'delete' %}
+    <a href="{{ path('pageedit_edit', {'page': page}) }}" class="btn btn-default" title="{{ 'label.modify'|trans }}" role="button">
+        <span class="glyphicon glyphicon-pencil"></span></a>
+{% endif %}
+{# New #}
+{% if type != 'new' %}
+    <a href="{{ path('pageedit_new') }}" class="btn btn-default" title="{{ 'label.new_page'|trans }}" role="button">
+        <span class="glyphicon glyphicon-plus"></span></a>
+{% endif %}
+{# Duplicate #}
+{% if type == 'display' %}
+    <a href="{{ path('pageedit_duplicate', {'page': page}) }}" class="btn btn-default" title="{{ 'label.duplicate'|trans }}" role="button">
+        <span class="glyphicon glyphicon-duplicate"></span></a>
+{% endif %}
+{# Delete #}
+{% if type == 'display' or type == 'edit' or type == 'archived' or type == 'deleted' or type == 'redirected' %}
+    {% if type == 'archived' %}
+        <a href="{{ path('pageedit_delete_archived', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
+    {% elseif type == 'deleted' %}
+        <a href="{{ path('pageedit_delete_deleted', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
+    {% elseif type == 'redirected' %}
+        <a href="{{ path('pageedit_delete_redirected', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
+    {% else %}
+        <a href="{{ path('pageedit_delete', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
+    {% endif %}
+    <span class="glyphicon glyphicon-trash"></span></a>
+{% endif %}

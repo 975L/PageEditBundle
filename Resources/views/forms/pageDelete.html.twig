@@ -5,6 +5,20 @@
 {% block pageedit_content %}
 {# Toolbar #}
     {{ toolbar|raw }}
+{# Warning message for specific cases #}
+    {% if type == 'archived' %}
+        <div class="alert alert-danger text-center">
+            <span class="glyphicon glyphicon-exclamation-sign"></span> {{ 'label.page_archived'|trans }} <strong>{{ datetime|localizeddate('medium', 'medium') }} ({{ username }})</strong>
+        </div>
+    {% elseif type == 'deleted' %}
+        <div class="alert alert-danger text-center">
+            <span class="glyphicon glyphicon-exclamation-sign"></span> {{ 'label.page_deleted'|trans }} <strong>{{ datetime|localizeddate('medium', 'medium') }}</strong>
+        </div>
+    {% elseif type == 'redirected' %}
+        <div class="alert alert-danger text-center">
+            <span class="glyphicon glyphicon-exclamation-sign"></span> {{ 'label.page_redirected'|trans }} <strong>{{ datetime|localizeddate('medium', 'medium') }}</strong>
+        </div>
+    {% endif %}
 {# Form #}
     {{ form_start(form) }}
         <p class="alert alert-danger text-center">
