@@ -1,5 +1,9 @@
 # ChangeLog
 
+v1.22.1
+-------
+- Corrections in `README.md` (04/02/2018)
+
 v1.22
 -----
 - Change about composer download in `README.md` (04/02/2018)

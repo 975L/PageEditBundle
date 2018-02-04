@@ -46,7 +46,7 @@ class AppKernel extends Kernel
 
 Step 3: Configure the Bundles
 -----------------------------
-Setup your Tinymce API key, optional if you use the cloud version, in `parameters.yml`
+Setup your Tinymce API key if you use the cloud version, in `parameters.yml`
 ```yml
     #(Optional) Your Tinymce Api key if you use the cloud version
     #tinymceApiKey: YOUR_API_KEY
@@ -80,10 +80,6 @@ c975_l_page_edit:
     sitemapLanguages: ['en', 'fr', 'es']
     #(Optional) Your tinymce language if you use one, MUST BE placed in 'web/vendor/tinymce/[tinymceLanguage].js'
     tinymceLanguage: 'fr_FR' #default null
-    #(Optional) Your signout Route if you want to allow sign out from PageEdit toolbar
-    signoutRoute: 'name_of_your_signout_route' #default null
-    #(Optional) Your main dashboard route if you want to allow it from PageEdit toolbar
-    dashboardRoute: 'your_dashboard_route' #default null
 ```
 
 **If you use Git for version control, you need to add the full path `app/Resources/views/[folderPages]` in the `.gitignore`, otherwise all the content will be altered by Git. You also need to add the path `/web/images/[folderPages]` as it will contain the uploaded pictures**
