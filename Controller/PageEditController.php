@@ -121,7 +121,7 @@ class PageEditController extends Controller
             ));
             $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
                 'tools'  => $tools,
-                'product'  => 'pageedit',
+                'dashboard'  => 'pageedit',
             ))->getContent();
 
             //Returns the dashboard
@@ -167,7 +167,7 @@ class PageEditController extends Controller
             ));
             $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
                 'tools'  => $tools,
-                'product'  => 'pageedit',
+                'dashboard'  => 'pageedit',
             ))->getContent();
 
             return $this->render($fileProtectedPath, array(
@@ -195,7 +195,7 @@ class PageEditController extends Controller
             ));
             $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
                 'tools'  => $tools,
-                'product'  => 'pageedit',
+                'dashboard'  => 'pageedit',
             ))->getContent();
         }
 
@@ -247,7 +247,7 @@ class PageEditController extends Controller
             ));
             $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
                 'tools'  => $tools,
-                'product'  => 'pageedit',
+                'dashboard'  => 'pageedit',
             ))->getContent();
 
             return $this->render($filePath, array(
@@ -293,7 +293,7 @@ class PageEditController extends Controller
             ));
             $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
                 'tools'  => $tools,
-                'product'  => 'pageedit',
+                'dashboard'  => 'pageedit',
             ))->getContent();
 
             return $this->render($filePath, array(
@@ -340,7 +340,7 @@ class PageEditController extends Controller
             ));
             $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
                 'tools'  => $tools,
-                'product'  => 'pageedit',
+                'dashboard'  => 'pageedit',
             ))->getContent();
 
             //Returns the page
@@ -393,7 +393,7 @@ class PageEditController extends Controller
             ));
             $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
                 'tools'  => $tools,
-                'product'  => 'pageedit',
+                'dashboard'  => 'pageedit',
             ))->getContent();
 
             //Returns the form to edit content
@@ -488,7 +488,7 @@ class PageEditController extends Controller
             ));
             $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
                 'tools'  => $tools,
-                'product'  => 'pageedit',
+                'dashboard'  => 'pageedit',
             ))->getContent();
 
             //Returns the form to edit content
@@ -578,7 +578,7 @@ class PageEditController extends Controller
             ));
             $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
                 'tools'  => $tools,
-                'product'  => 'pageedit',
+                'dashboard'  => 'pageedit',
             ))->getContent();
 
             //Returns the form to duplicate content
@@ -657,7 +657,7 @@ class PageEditController extends Controller
             ));
             $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
                 'tools'  => $tools,
-                'product'  => 'pageedit',
+                'dashboard'  => 'pageedit',
             ))->getContent();
 
             //Returns the form to delete page
@@ -748,7 +748,7 @@ class PageEditController extends Controller
             ));
             $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
                 'tools'  => $tools,
-                'product'  => 'pageedit',
+                'dashboard'  => 'pageedit',
             ))->getContent();
 
             //Returns the form to delete the archived page
@@ -832,7 +832,7 @@ class PageEditController extends Controller
             ));
             $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
                 'tools'  => $tools,
-                'product'  => 'pageedit',
+                'dashboard'  => 'pageedit',
             ))->getContent();
 
             //Returns the form to delete the deleted page
@@ -898,7 +898,7 @@ class PageEditController extends Controller
             ));
             $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
                 'tools'  => $tools,
-                'product'  => 'pageedit',
+                'dashboard'  => 'pageedit',
             ))->getContent();
 
             //Returns the form to delete the redirected page
@@ -1048,7 +1048,7 @@ class PageEditController extends Controller
             ));
             $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
                 'tools'  => $tools,
-                'product'  => 'pageedit',
+                'dashboard'  => 'pageedit',
             ))->getContent();
 
             //Returns the help

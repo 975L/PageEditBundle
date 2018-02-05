@@ -12,7 +12,7 @@ namespace c975L\PageEditBundle\Twig;
 use Symfony\Component\Finder\Finder;
 use c975L\PageEditBundle\Service\PageEditService;
 
-class FolderContent extends \Twig_Extension
+class PageEditFolderContent extends \Twig_Extension
 {
     private $container;
 

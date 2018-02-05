@@ -1,5 +1,10 @@
 # ChangeLog
 
+v1.22.2
+-------
+- Renamed Twig function (05/02/2018)
+- Updated ToolbarBundle product -> dashboard (05/02/2018)
+
 v1.22.1
 -------
 - Corrections in `README.md` (04/02/2018)
