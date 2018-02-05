@@ -1,5 +1,6 @@
 {% trans_default_domain 'toolbar' %}
 
+{% spaceless %}
 {# Display #}
 {% if type == 'edit' or type == 'delete' or type == 'delete-archived' or type == 'delete-deleted' or type == 'delete-redirected' %}
     {% if type == 'delete-archived' %}
@@ -41,3 +42,4 @@
     {% endif %}
     <span class="glyphicon glyphicon-trash"></span></a>
 {% endif %}
+{% endspaceless %}

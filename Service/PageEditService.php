@@ -18,7 +18,11 @@ class PageEditService
     private $parser;
     private $locator;
 
-    public function __construct(\Symfony\Component\DependencyInjection\ContainerInterface $container, \Symfony\Bundle\FrameworkBundle\Templating\TemplateNameParser $parser, \Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator $locator)
+    public function __construct(
+        \Symfony\Component\DependencyInjection\ContainerInterface $container,
+        \Symfony\Bundle\FrameworkBundle\Templating\TemplateNameParser $parser,
+        \Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator $locator
+        )
     {
         $this->container = $container;
         $this->parser = $parser;

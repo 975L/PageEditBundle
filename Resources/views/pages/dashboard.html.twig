@@ -53,22 +53,29 @@
         <table class="table table-hover table-condensed table-responsive">
             <thead>
                 <tr>
-                    <th class="text-center">{{ 'label.title'|trans }}</th>
-                    <th class="text-center">{{ 'label.semantic_url'|trans }}</th>
-                    <th class="text-center"><span class="glyphicon glyphicon-eye-open"></span> {{ 'label.display'|trans }}</th>
+                    <th class="text-center"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;{{ knp_pagination_sortable(pages, 'label.title'|trans, '[title]') }}&nbsp;<span class="glyphicon glyphicon-sort"></span></th>
+                    <th class="text-center">{{ knp_pagination_sortable(pages, 'label.semantic_url'|trans, '[slug]') }}&nbsp;<span class="glyphicon glyphicon-sort"></span></th>
                     {% if app.request.query.get('v') == null %}
-                        <th class="text-center"><span class="glyphicon glyphicon-pencil"></span> {{ 'label.modify'|trans }}</th>
-                        <th class="text-center"><span class="glyphicon glyphicon-duplicate"></span> {{ 'label.duplicate'|trans }}</th>
+                        <th class="text-center"><span class="glyphicon glyphicon-pencil"></span>&nbsp;{{ 'label.modify'|trans }}</th>
+                        <th class="text-center"><span class="glyphicon glyphicon-duplicate"></span>&nbsp;{{ 'label.duplicate'|trans }}</th>
                     {% endif %}
-                    <th class="text-center"><span class="glyphicon glyphicon-trash"></span> {{ 'label.delete'|trans }}</th>
+                    <th class="text-center"><span class="glyphicon glyphicon-trash"></span>&nbsp;{{ 'label.delete'|trans }}</th>
                 </tr>
             </thead>
             <tbody>
                 {% for page in pages %}
                     <tr>
-{# Title #}
+{# Title & Display #}
                         <td class="text-center">
-                            {{ page.title }}
+                            {% if page.status == 'archived' %}
+                                <a href="{{ path('pageedit_display_archived', {'page': page.slug}) }}" title="{{ 'label.display'|trans }}">{{ page.title }}</a>
+                            {% elseif page.status == 'deleted' %}
+                                <a href="{{ path('pageedit_display_deleted', {'page': page.slug}) }}" title="{{ 'label.display'|trans }}">{{ page.title }}</a>
+                            {% elseif page.status == 'redirected' %}
+                                <a href="{{ path('pageedit_display_redirected', {'page': page.slug}) }}" title="{{ 'label.display'|trans }}">{{ page.title }}</a>
+                            {% else %}
+                                <a href="{{ path('pageedit_display', {'page': page.slug}) }}" title="{{ 'label.display'|trans }}">{{ page.title }}</a>
+                            {% endif %}
                         </td>
 {# Slug #}
                         <td class="text-center">
@@ -76,18 +83,6 @@
                                 <strong>{{ page.slug|replace({(page.slug|split('/')|last): ''}) }}</strong>{{ page.slug|split('/')|last }}
                             {% else %}
                                 {{ page.slug }}
-                            {% endif %}
-                        </td>
-{# Display #}
-                        <td class="text-center">
-                            {% if page.status == 'archived' %}
-                                <a href="{{ path('pageedit_display_archived', {'page': page.slug}) }}" title="{{ 'label.display'|trans }}">{{ 'label.display'|trans }}</a>
-                            {% elseif page.status == 'deleted' %}
-                                <a href="{{ path('pageedit_display_deleted', {'page': page.slug}) }}" title="{{ 'label.display'|trans }}">{{ 'label.display'|trans }}</a>
-                            {% elseif page.status == 'redirected' %}
-                                <a href="{{ path('pageedit_display_redirected', {'page': page.slug}) }}" title="{{ 'label.display'|trans }}">{{ 'label.display'|trans }}</a>
-                            {% else %}
-                                <a href="{{ path('pageedit_display', {'page': page.slug}) }}" title="{{ 'label.display'|trans }}">{{ 'label.display'|trans }}</a>
                             {% endif %}
                         </td>
 {# Edit #}
@@ -118,6 +113,12 @@
                 {% endfor %}
             </tbody>
         </table>
+{# No pages #}
+        {% if pages.getTotalItemCount == 0 %}
+            <p class="alert alert-info">
+                {{ 'label.no_pages'|trans }}
+            </p>
+        {% endif %}
 {# Pagination #}
         <div class="navigation text-center">
             {{ knp_pagination_render(pages) }}

@@ -1,5 +1,11 @@
 # ChangeLog
 
+v1.23
+-----
+- Moved link to display page under the name of the page and suppression of the link "display" in the dashboard page (05/02/2018)
+- Added posibilities to sort pages under dashboard (05/02/2018)
+- Added "No pages" information in dashboard (05/02/2018)
+
 v1.22.2
 -------
 - Renamed Twig function (05/02/2018)

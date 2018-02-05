@@ -186,6 +186,10 @@
                 <source>label.page_redirected</source>
                 <target>>Esta página ha sido redirigida en</target>
             </trans-unit>
+            <trans-unit id="47">
+                <source>label.no_pages</source>
+                <target>No páginas</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
