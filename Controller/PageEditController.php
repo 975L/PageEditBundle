@@ -344,7 +344,7 @@ class PageEditController extends Controller
             ))->getContent();
 
             //Returns the page
-            return $this->render('@c975LPageEdit/pages/pageRedirect.html.twig', array(
+            return $this->render('@c975LPageEdit/pages/redirect.html.twig', array(
                 'page' => $page,
                 'redirection' => $redirection,
                 'toolbar' => $toolbar
@@ -397,7 +397,7 @@ class PageEditController extends Controller
             ))->getContent();
 
             //Returns the form to edit content
-            return $this->render('@c975LPageEdit/forms/pageNew.html.twig', array(
+            return $this->render('@c975LPageEdit/forms/new.html.twig', array(
                 'form' => $form->createView(),
                 'page' => 'new',
                 'toolbar' => $toolbar,
@@ -410,16 +410,16 @@ class PageEditController extends Controller
         throw $this->createAccessDeniedException();
     }
 
-//EDIT
+//MODIFY
     /**
-     * @Route("/pages/edit/{page}",
-     *      name="pageedit_edit",
+     * @Route("/pages/modify/{page}",
+     *      name="pageedit_modify",
      *      requirements={
      *          "page": "^([a-z0-9\-\/]+)"
      *      })
      * )
      */
-    public function editAction(Request $request, $page)
+    public function modifyAction(Request $request, $page)
     {
         //Gets the user
         $user = $this->getUser();
@@ -458,7 +458,7 @@ class PageEditController extends Controller
             $priority = $pageEditService->getPriority($fileContent);
 
             //Defines form
-            $pageEdit = new PageEdit('edit', $originalContent, $title, $page, $changeFrequency, $priority);
+            $pageEdit = new PageEdit('modify', $originalContent, $title, $page, $changeFrequency, $priority);
             $form = $this->createForm(PageEditType::class, $pageEdit);
             $form->handleRequest($request);
 
@@ -483,7 +483,7 @@ class PageEditController extends Controller
 
             //Defines toolbar
             $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
-                'type' => 'edit',
+                'type' => 'modify',
                 'page' => $page,
             ));
             $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
@@ -492,7 +492,7 @@ class PageEditController extends Controller
             ))->getContent();
 
             //Returns the form to edit content
-            return $this->render('@c975LPageEdit/forms/pageEdit.html.twig', array(
+            return $this->render('@c975LPageEdit/forms/modify.html.twig', array(
                 'form' => $form->createView(),
                 'pageTitle' => str_replace('\"', '"', $titleTranslated),
                 'page' => $page,
@@ -582,7 +582,7 @@ class PageEditController extends Controller
             ))->getContent();
 
             //Returns the form to duplicate content
-            return $this->render('@c975LPageEdit/forms/pageDuplicate.html.twig', array(
+            return $this->render('@c975LPageEdit/forms/duplicate.html.twig', array(
                 'form' => $form->createView(),
                 'pageTitle' => str_replace('\"', '"', $titleTranslated),
                 'page' => $page,
@@ -661,7 +661,7 @@ class PageEditController extends Controller
             ))->getContent();
 
             //Returns the form to delete page
-            return $this->render('@c975LPageEdit/forms/pageDelete.html.twig', array(
+            return $this->render('@c975LPageEdit/forms/delete.html.twig', array(
                 'form' => $form->createView(),
                 'pageTitle' => $titleTranslated,
                 'page' => $page,
@@ -752,7 +752,7 @@ class PageEditController extends Controller
             ))->getContent();
 
             //Returns the form to delete the archived page
-            return $this->render('@c975LPageEdit/forms/pageDelete.html.twig', array(
+            return $this->render('@c975LPageEdit/forms/delete.html.twig', array(
                 'form' => $form->createView(),
                 'pageTitle' => $titleTranslated,
                 'page' => $page,
@@ -836,7 +836,7 @@ class PageEditController extends Controller
             ))->getContent();
 
             //Returns the form to delete the deleted page
-            return $this->render('@c975LPageEdit/forms/pageDelete.html.twig', array(
+            return $this->render('@c975LPageEdit/forms/delete.html.twig', array(
                 'form' => $form->createView(),
                 'pageTitle' => $titleTranslated,
                 'page' => $page,
@@ -902,7 +902,7 @@ class PageEditController extends Controller
             ))->getContent();
 
             //Returns the form to delete the redirected page
-            return $this->render('@c975LPageEdit/forms/pageDelete.html.twig', array(
+            return $this->render('@c975LPageEdit/forms/delete.html.twig', array(
                 'form' => $form->createView(),
                 'pageTitle' => $page,
                 'page' => $page,

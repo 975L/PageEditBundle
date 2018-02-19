@@ -1,5 +1,16 @@
 # ChangeLog
 
+v1.24
+-----
+- Put `New` button before `edit` one in toolbar (17/02/2018)
+- Renamed templates for forms (17/02/2018)
+- Added `cancel` action to toolbar and removed from bottom of forms (17/02/2018)
+- Changed wording for submit button for forms (17/02/2018)
+- Added PageEdit title in help page (18/02/2018)
+- Corrected `help-es.html.twig` for delete a page (19/02/2018)
+- Suppressed translations taken from `c975L\ToolbarBundle` (19/02/2018)
+- Renamed Route `edit` to `modify` (19/02/2018)
+
 v1.23
 -----
 - Moved link to display page under the name of the page and suppression of the link "display" in the dashboard page (05/02/2018)

@@ -1,6 +1,6 @@
 {% extends "@c975LPageEdit/layout.html.twig" %}
 {% trans_default_domain 'pageedit' %}
-{% set title = 'label.duplicate'|trans ~ ' "' ~ pageTitle ~ '"' %}
+{% set title = 'label.duplicate'|trans({}, 'toolbar') ~ ' "' ~ pageTitle ~ '"' %}
 
 {% block pageedit_content %}
     {{ include('@c975LPageEdit/tinymceInit.html.twig') }}
@@ -14,16 +14,11 @@
         {{ form_widget(form) }}
 
         <div class="form-group">
-            <button type="submit" name="submit" title="{{ 'label.validate'|trans }}" class="btn btn-lg btn-primary btn-block">
-                {{ 'label.validate'|trans }}
+            <button type="submit" name="submit" title="{{ 'label.validate'|trans({}, 'toolbar') }}" class="btn btn-lg btn-primary btn-block">
+                {{ 'label.validate'|trans({}, 'toolbar') }}
             </button>
         </div>
     {{ form_end(form) }}
-{# Cancel #}
-    <p class="text-center">
-        <a href="javascript:history.back()">
-            {{ 'label.cancel'|trans }}</a>
-    </p>
 {# Javascript #}
     <script type="text/javascript">
         $(document).ready(function() {

@@ -144,7 +144,7 @@ Link to a page, in Twig, can be done by `<a href="{{ path('pageedit_display', { 
 The different Routes (naming self-explanatory) available are:
 - pageedit_display
 - pageedit_new
-- pageedit_edit
+- pageedit_modify
 - pageedit_duplicate
 - pageedit_delete
 - pageedit_dashboard

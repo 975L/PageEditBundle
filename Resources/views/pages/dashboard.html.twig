@@ -1,6 +1,6 @@
 {% extends "@c975LPageEdit/layout.html.twig" %}
 {% trans_default_domain 'pageedit' %}
-{% set title = 'label.dashboard'|trans %}
+{% set title = 'label.dashboard'|trans({}, 'toolbar') %}
 
 {% block pageedit_content %}
 {# Toolbar #}
@@ -56,10 +56,10 @@
                     <th class="text-center"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;{{ knp_pagination_sortable(pages, 'label.title'|trans, '[title]') }}&nbsp;<span class="glyphicon glyphicon-sort"></span></th>
                     <th class="text-center">{{ knp_pagination_sortable(pages, 'label.semantic_url'|trans, '[slug]') }}&nbsp;<span class="glyphicon glyphicon-sort"></span></th>
                     {% if app.request.query.get('v') == null %}
-                        <th class="text-center"><span class="glyphicon glyphicon-pencil"></span>&nbsp;{{ 'label.modify'|trans }}</th>
-                        <th class="text-center"><span class="glyphicon glyphicon-duplicate"></span>&nbsp;{{ 'label.duplicate'|trans }}</th>
+                        <th class="text-center"><span class="glyphicon glyphicon-pencil"></span>&nbsp;{{ 'label.modify'|trans({}, 'toolbar') }}</th>
+                        <th class="text-center"><span class="glyphicon glyphicon-duplicate"></span>&nbsp;{{ 'label.duplicate'|trans({}, 'toolbar') }}</th>
                     {% endif %}
-                    <th class="text-center"><span class="glyphicon glyphicon-trash"></span>&nbsp;{{ 'label.delete'|trans }}</th>
+                    <th class="text-center"><span class="glyphicon glyphicon-trash"></span>&nbsp;{{ 'label.delete'|trans({}, 'toolbar') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -68,13 +68,13 @@
 {# Title & Display #}
                         <td class="text-center">
                             {% if page.status == 'archived' %}
-                                <a href="{{ path('pageedit_display_archived', {'page': page.slug}) }}" title="{{ 'label.display'|trans }}">{{ page.title }}</a>
+                                <a href="{{ path('pageedit_display_archived', {'page': page.slug}) }}" title="{{ 'label.display'|trans({}, 'toolbar') }}">{{ page.title }}</a>
                             {% elseif page.status == 'deleted' %}
-                                <a href="{{ path('pageedit_display_deleted', {'page': page.slug}) }}" title="{{ 'label.display'|trans }}">{{ page.title }}</a>
+                                <a href="{{ path('pageedit_display_deleted', {'page': page.slug}) }}" title="{{ 'label.display'|trans({}, 'toolbar') }}">{{ page.title }}</a>
                             {% elseif page.status == 'redirected' %}
-                                <a href="{{ path('pageedit_display_redirected', {'page': page.slug}) }}" title="{{ 'label.display'|trans }}">{{ page.title }}</a>
+                                <a href="{{ path('pageedit_display_redirected', {'page': page.slug}) }}" title="{{ 'label.display'|trans({}, 'toolbar') }}">{{ page.title }}</a>
                             {% else %}
-                                <a href="{{ path('pageedit_display', {'page': page.slug}) }}" title="{{ 'label.display'|trans }}">{{ page.title }}</a>
+                                <a href="{{ path('pageedit_display', {'page': page.slug}) }}" title="{{ 'label.display'|trans({}, 'toolbar') }}">{{ page.title }}</a>
                             {% endif %}
                         </td>
 {# Slug #}
@@ -88,25 +88,25 @@
 {# Edit #}
                         {% if page.status == 'current' %}
                             <td class="text-center">
-                                <a href="{{ path('pageedit_edit', {'page': page.slug}) }}" title="{{ 'label.modify'|trans }}">{{ 'label.modify'|trans }}</a>
+                                <a href="{{ path('pageedit_modify', {'page': page.slug}) }}" title="{{ 'label.modify'|trans({}, 'toolbar') }}">{{ 'label.modify'|trans({}, 'toolbar') }}</a>
                             </td>
                         {% endif %}
 {# Duplicate #}
                         {% if page.status == 'current' %}
                             <td class="text-center">
-                                <a href="{{ path('pageedit_duplicate', {'page': page.slug}) }}" title="{{ 'label.duplicate'|trans }}">{{ 'label.duplicate'|trans }}</a>
+                                <a href="{{ path('pageedit_duplicate', {'page': page.slug}) }}" title="{{ 'label.duplicate'|trans({}, 'toolbar') }}">{{ 'label.duplicate'|trans({}, 'toolbar') }}</a>
                             </td>
                         {% endif %}
 {# Delete #}
                         <td class="text-center">
                             {% if page.status == 'archived' %}
-                                <a href="{{ path('pageedit_delete_archived', {'page': page.slug}) }}" title="{{ 'label.delete'|trans }}" class="text-danger">{{ 'label.delete'|trans }}</a>
+                                <a href="{{ path('pageedit_delete_archived', {'page': page.slug}) }}" title="{{ 'label.delete'|trans({}, 'toolbar') }}" class="text-danger">{{ 'label.delete'|trans({}, 'toolbar') }}</a>
                             {% elseif page.status == 'deleted' %}
-                                <a href="{{ path('pageedit_delete_deleted', {'page': page.slug}) }}" title="{{ 'label.delete'|trans }}" class="text-danger">{{ 'label.delete'|trans }}</a>
+                                <a href="{{ path('pageedit_delete_deleted', {'page': page.slug}) }}" title="{{ 'label.delete'|trans({}, 'toolbar') }}" class="text-danger">{{ 'label.delete'|trans({}, 'toolbar') }}</a>
                             {% elseif page.status == 'redirected' %}
-                                <a href="{{ path('pageedit_delete_redirected', {'page': page.slug}) }}" title="{{ 'label.delete'|trans }}" class="text-danger">{{ 'label.delete'|trans }}</a>
+                                <a href="{{ path('pageedit_delete_redirected', {'page': page.slug}) }}" title="{{ 'label.delete'|trans({}, 'toolbar') }}" class="text-danger">{{ 'label.delete'|trans({}, 'toolbar') }}</a>
                             {% else %}
-                                <a href="{{ path('pageedit_delete', {'page': page.slug}) }}" title="{{ 'label.delete'|trans }}" class="text-danger">{{ 'label.delete'|trans }}</a>
+                                <a href="{{ path('pageedit_delete', {'page': page.slug}) }}" title="{{ 'label.delete'|trans({}, 'toolbar') }}" class="text-danger">{{ 'label.delete'|trans({}, 'toolbar') }}</a>
                             {% endif %}
                         </td>
                     </tr>

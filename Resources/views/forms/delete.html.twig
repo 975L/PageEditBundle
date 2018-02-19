@@ -1,6 +1,6 @@
 {% extends "@c975LPageEdit/layout.html.twig" %}
 {% trans_default_domain 'pageedit' %}
-{% set title = 'label.delete'|trans ~ ' "' ~ pageTitle ~ '"' %}
+{% set title = 'label.delete'|trans({}, 'toolbar') ~ ' "' ~ pageTitle ~ '"' %}
 
 {% block pageedit_content %}
 {# Toolbar #}
@@ -43,14 +43,9 @@
         </div>
 {# Submit #}
         <div class="form-group">
-            <button type="submit" name="submit" title="{{ 'label.delete'|trans }}" class="btn btn-lg btn-danger btn-block">
-                <span class="glyphicon glyphicon-trash"></span> {{ 'label.delete'|trans }}
+            <button type="submit" name="submit" title="{{ 'label.delete'|trans({}, 'toolbar') }}" class="btn btn-lg btn-danger btn-block">
+                <span class="glyphicon glyphicon-trash"></span> {{ 'label.delete'|trans({}, 'toolbar') }}
             </button>
         </div>
     {{ form_end(form) }}
-{# Cancel #}
-    <p class="text-center">
-        <a href="javascript:history.back()">
-            {{ 'label.cancel'|trans }}</a>
-    </p>
 {% endblock %}

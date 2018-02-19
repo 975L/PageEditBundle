@@ -6,21 +6,9 @@
                 <source>label.content</source>
                 <target>Contenido</target>
             </trans-unit>
-            <trans-unit id="2">
-                <source>label.modify</source>
-                <target>Modificar</target>
-            </trans-unit>
-            <trans-unit id="3">
-                <source>label.cancel</source>
-                <target>Cancelar</target>
-            </trans-unit>
             <trans-unit id="4">
                 <source>label.new_page</source>
                 <target>Nueva página</target>
-            </trans-unit>
-            <trans-unit id="5">
-                <source>label.delete</source>
-                <target>Suprimar</target>
             </trans-unit>
             <trans-unit id="6">
                 <source>label.download</source>
@@ -46,18 +34,6 @@
                 <source>text.delete_page</source>
                 <target>La siguiente página será eliminada. Cualquier uso futuro de la página devuelve un código de error HTTP 410 (Gone).</target>
             </trans-unit>
-            <trans-unit id="12">
-                <source>label.dashboard</source>
-                <target>Tablero</target>
-            </trans-unit>
-            <trans-unit id="13">
-                <source>label.help</source>
-                <target>Ayuda</target>
-            </trans-unit>
-            <trans-unit id="14">
-                <source>label.display</source>
-                <target>Visualización</target>
-            </trans-unit>
             <trans-unit id="15">
                 <source>text.list_pages</source>
                 <target>Lista de páginas</target>
@@ -69,10 +45,6 @@
             <trans-unit id="17">
                 <source>label.title_not_found</source>
                 <target>Título no encontrado</target>
-            </trans-unit>
-            <trans-unit id="18">
-                <source>label.validate</source>
-                <target>Validar</target>
             </trans-unit>
             <trans-unit id="19">
                 <source>label.change_frequency</source>
