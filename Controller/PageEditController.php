@@ -140,7 +140,7 @@ class PageEditController extends Controller
      * @Route("/pages/{page}",
      *      name="pageedit_display",
      *      requirements={
-     *          "page": "^(?!archived|dashboard|delete|deleted|duplicate|edit|help|links|new|redirected|slug|upload)([a-z0-9\-\/]+)"
+     *          "page": "^(?!archived|dashboard|delete|deleted|duplicate|modify|help|links|new|redirected|slug|upload)([a-z0-9\-\/]+)"
      *      })
      * @Method({"GET", "HEAD"})
      */
@@ -396,7 +396,7 @@ class PageEditController extends Controller
                 'dashboard'  => 'pageedit',
             ))->getContent();
 
-            //Returns the form to edit content
+            //Returns the form to create new page
             return $this->render('@c975LPageEdit/forms/new.html.twig', array(
                 'form' => $form->createView(),
                 'page' => 'new',
@@ -491,7 +491,7 @@ class PageEditController extends Controller
                 'dashboard'  => 'pageedit',
             ))->getContent();
 
-            //Returns the form to edit content
+            //Returns the form to modify content
             return $this->render('@c975LPageEdit/forms/modify.html.twig', array(
                 'form' => $form->createView(),
                 'pageTitle' => str_replace('\"', '"', $titleTranslated),

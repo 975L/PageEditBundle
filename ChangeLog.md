@@ -1,5 +1,9 @@
 # ChangeLog
 
+v1.24.1
+-------
+- Corrected Route `pageedit_display` due to renaming of `edit` to `modify` (19/02/2018)
+
 v1.24
 -----
 - Put `New` button before `edit` one in toolbar (17/02/2018)
