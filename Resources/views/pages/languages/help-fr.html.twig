@@ -2,18 +2,20 @@
 
 <h2>Gestion de la page</h2>
 <p>
-    Les outils sont accessibles lorsque l'utilisateur/trice est identifié/e et dispose des droits nécessaires. Une barre d'outils apparaît alors sur chaque page. Il est aussi possible de gérer les pages depuis le <a href="{{ path('pageedit_dashboard') }}">{{ 'label.dashboard'|trans({}, 'toolbar') }} (PageEdit)</a>.
+    Les outils sont accessibles lorsque l'utilisateur/trice est identifié/e et dispose des droits nécessaires. Une barre d'outils apparaît alors sur chaque page. Il est aussi possible de gérer les pages depuis le tableau de bord.
 </p>
 <p>
-    <strong>Créer une page</strong> : utiliser le bouton <span class="glyphicon glyphicon-plus class btn btn-default btn-xs"></span>
+    <strong>Créer une page</strong> : utiliser le bouton {{ toolbar_button('', 'new')|raw }}
     <br />
-    <strong>Modifier une page</strong> : utiliser le bouton <span class="glyphicon glyphicon-pencil class btn btn-default btn-xs"></span>
+    <strong>Modifier une page</strong> : utiliser le bouton {{ toolbar_button('', 'modify')|raw }}
     <br />
-    <strong>Dupliquer une page</strong> : utiliser le bouton <span class="glyphicon glyphicon-duplicate class btn btn-default btn-xs"></span>
+    <strong>Dupliquer une page</strong> : utiliser le bouton {{ toolbar_button('', 'duplicate')|raw }}
     <br />
-    <strong>Supprimer une page</strong> : utiliser le bouton <span class="glyphicon glyphicon-trash class btn btn-default btn-xs"></span>
+    <strong>Supprimer une page</strong> : utiliser le bouton {{ toolbar_button('', 'delete')|raw }}
     <br />
-    <strong>Afficher la version actuelle d'une page</strong> : utiliser le bouton <span class="glyphicon glyphicon-eye-open class btn btn-default btn-xs"></span>
+    <strong>Afficher la version actuelle d'une page</strong> : utiliser le bouton {{ toolbar_button('', 'display')|raw }}
+    <br />
+    <strong>Annuler</strong> : utiliser le bouton {{ toolbar_button('', 'cancel')|raw }}
 </p>
 
 <h2>Données nécessaires</h2>

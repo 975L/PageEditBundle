@@ -4,6 +4,12 @@ services:
         autoconfigure: true
         public: true
 
+    c975L\PageEditBundle\Command\:
+        resource: '../../Command/*'
+
+    c975L\PageEditBundle\Controller\:
+        resource: '../../Controller/*'
+
     c975L\PageEditBundle\Service\:
         resource: '../../Service/*'
 

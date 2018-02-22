@@ -8,15 +8,15 @@
 {# Warning message for specific cases #}
     {% if type == 'archived' %}
         <div class="alert alert-danger text-center">
-            <span class="glyphicon glyphicon-exclamation-sign"></span> {{ 'label.page_archived'|trans }} <strong>{{ datetime|localizeddate('medium', 'medium') }} ({{ username }})</strong>
+            <span class="fas fa-exclamation-circle"></span> {{ 'label.page_archived'|trans }} <strong>{{ datetime|localizeddate('medium', 'medium') }} ({{ username }})</strong>
         </div>
     {% elseif type == 'deleted' %}
         <div class="alert alert-danger text-center">
-            <span class="glyphicon glyphicon-exclamation-sign"></span> {{ 'label.page_deleted'|trans }} <strong>{{ datetime|localizeddate('medium', 'medium') }}</strong>
+            <span class="fas fa-exclamation-circle"></span> {{ 'label.page_deleted'|trans }} <strong>{{ datetime|localizeddate('medium', 'medium') }}</strong>
         </div>
     {% elseif type == 'redirected' %}
         <div class="alert alert-danger text-center">
-            <span class="glyphicon glyphicon-exclamation-sign"></span> {{ 'label.page_redirected'|trans }} <strong>{{ datetime|localizeddate('medium', 'medium') }}</strong>
+            <span class="fas fa-exclamation-circle"></span> {{ 'label.page_redirected'|trans }} <strong>{{ datetime|localizeddate('medium', 'medium') }}</strong>
         </div>
     {% endif %}
 {# Form #}
@@ -44,7 +44,7 @@
 {# Submit #}
         <div class="form-group">
             <button type="submit" name="submit" title="{{ 'label.delete'|trans({}, 'toolbar') }}" class="btn btn-lg btn-danger btn-block">
-                <span class="glyphicon glyphicon-trash"></span> {{ 'label.delete'|trans({}, 'toolbar') }}
+                <span class="fas fa-trash"></span> {{ 'label.delete'|trans({}, 'toolbar') }}
             </button>
         </div>
     {{ form_end(form) }}

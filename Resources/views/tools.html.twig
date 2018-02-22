@@ -4,52 +4,51 @@
 {# Display #}
 {% if type == 'modify' or type == 'delete' or type == 'delete-archived' or type == 'delete-deleted' or type == 'delete-redirected' %}
     {% if type == 'delete-archived' %}
-        <a href="{{ path('pageedit_display_archived', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
+        {{ toolbar_button(path('pageedit_display_archived', {'page': page}), 'display')|raw }}
     {% elseif type == 'delete-deleted' %}
-        <a href="{{ path('pageedit_display_deleted', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
+        {{ toolbar_button(path('pageedit_display_deleted', {'page': page}), 'display')|raw }}
     {% elseif type == 'delete-redirected' %}
-        <a href="{{ path('pageedit_display_redirected', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
+        {{ toolbar_button(path('pageedit_display_redirected', {'page': page}), 'display')|raw }}
     {% else %}
-        <a href="{{ path('pageedit_display', {'page': page}) }}" class="btn btn-default" title="{{ 'label.current_version'|trans({}, 'pageedit') }}" role="button">
+        {{ toolbar_button(path('pageedit_display', {'page': page}), 'display')|raw }}
     {% endif %}
-    <span class="glyphicon glyphicon-eye-open"></span></a>
 {% endif %}
 
 {# New #}
 {% if type != 'new' %}
-    <a href="{{ path('pageedit_new') }}" class="btn btn-default" title="{{ 'label.new_page'|trans({}, 'pageedit') }}" role="button">
-        <span class="glyphicon glyphicon-plus"></span></a>
+    {{ toolbar_button(path('pageedit_new'), 'new')|raw }}
 {% endif %}
 
 {# Edit #}
 {% if type == 'display' or type == 'delete' %}
-    <a href="{{ path('pageedit_modify', {'page': page}) }}" class="btn btn-default" title="{{ 'label.modify'|trans }}" role="button">
-        <span class="glyphicon glyphicon-pencil"></span></a>
+    {{ toolbar_button(path('pageedit_modify', {'page': page}), 'modify')|raw }}
 {% endif %}
 
 {# Duplicate #}
 {% if type == 'display' %}
-    <a href="{{ path('pageedit_duplicate', {'page': page}) }}" class="btn btn-default" title="{{ 'label.duplicate'|trans }}" role="button">
-        <span class="glyphicon glyphicon-duplicate"></span></a>
+    {{ toolbar_button(path('pageedit_duplicate', {'page': page}), 'duplicate')|raw }}
 {% endif %}
 
 {# Cancel #}
 {% if type != 'dashboard' %}
-    <a href="javascript:history.back()" class="btn btn-default" title="{{ 'label.cancel'|trans }}" role="button">
-        <span class="glyphicon glyphicon-remove-circle"></span></a>
+    {{ toolbar_button('cancel', 'cancel')|raw }}
 {% endif %}
 
 {# Delete #}
 {% if type == 'display' or type == 'modify' or type == 'archived' or type == 'deleted' or type == 'redirected' %}
     {% if type == 'archived' %}
-        <a href="{{ path('pageedit_delete_archived', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
+        {{ toolbar_button(path('pageedit_delete_archived', {'page': page}), 'delete')|raw }}
     {% elseif type == 'deleted' %}
-        <a href="{{ path('pageedit_delete_deleted', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
+        {{ toolbar_button(path('pageedit_delete_deleted', {'page': page}), 'delete')|raw }}
     {% elseif type == 'redirected' %}
-        <a href="{{ path('pageedit_delete_redirected', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
+        {{ toolbar_button(path('pageedit_delete_redirected', {'page': page}), 'delete')|raw }}
     {% else %}
-        <a href="{{ path('pageedit_delete', {'page': page}) }}" class="btn btn-default" title="{{ 'label.delete'|trans }}" role="button">
+        {{ toolbar_button(path('pageedit_delete', {'page': page}), 'delete')|raw }}
     {% endif %}
-    <span class="glyphicon glyphicon-trash"></span></a>
+{% endif %}
+
+{# Help #}
+{% if type != 'help' %}
+    {{ toolbar_button(path('pageedit_help'), 'help')|raw }}
 {% endif %}
 {% endspaceless %}

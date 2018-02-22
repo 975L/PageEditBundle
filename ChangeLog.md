@@ -1,5 +1,12 @@
 # ChangeLog
 
+v1.25
+-----
+- Added 'Command' part auto-wire to `services.yml` (20/02/2018)
+- Added 'Controller' part auto-wire to `services.yml` (20/02/2018)
+- Abandoned Glyphicon and replaced by fontawesome (22/02/2018)
+- Corrected display button in toolbar (22/02/2018)
+
 v1.24.1
 -------
 - Corrected Route `pageedit_display` due to renaming of `edit` to `modify` (19/02/2018)

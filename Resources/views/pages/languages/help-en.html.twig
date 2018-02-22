@@ -2,18 +2,20 @@
 
 <h2>Page Management</h2>
 <p>
-    The tools are accessible when the user is identified and has the necessary rights. A toolbar appears on each page. It is also possible to manage the pages from <a href="{{ path('pageedit_dashboard') }}">{{ 'label.dashboard'|trans({}, 'toolbar') }} (PageEdit)</a>.
+    The tools are accessible when the user is identified and has the necessary rights. A toolbar appears on each page. It is also possible to manage the pages from dashboard.
 </p>
 <p>
-    <strong>Create a page</strong>: use the button <span class="glyphicon glyphicon-plus class btn btn-default btn-xs"></span>
+    <strong>Create a page</strong>: use the button {{ toolbar_button('', 'new')|raw }}
     <br />
-    <strong>Modify a page</strong>: use the button <span class="glyphicon glyphicon-pencil class btn btn-default btn-xs"></span>
+    <strong>Modify a page</strong>: use the button {{ toolbar_button('', 'modify')|raw }}
     <br />
-    <strong>Duplicate a page</strong> : use the button <span class="glyphicon glyphicon-duplicate class btn btn-default btn-xs"></span>
+    <strong>Duplicate a page</strong> : use the button {{ toolbar_button('', 'duplicate')|raw }}
     <br />
-    <strong>Delete a page</strong>: use the button <span class="glyphicon glyphicon-trash class btn btn-default btn-xs"></span>
+    <strong>Delete a page</strong>: use the button {{ toolbar_button('', 'delete')|raw }}
     <br />
-    <strong>View the current version of a page</strong>: use the button <span class="glyphicon glyphicon-eye-open class btn btn-default btn-xs"></span>
+    <strong>View the current version of a page</strong>: use the button {{ toolbar_button('', 'display')|raw }}
+    <br />
+    <strong>Cancel</strong> : use the button {{ toolbar_button('', 'cancel')|raw }}
 </p>
 
 <h2>Data requirements</h2>
