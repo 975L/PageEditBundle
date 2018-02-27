@@ -1,5 +1,10 @@
 # ChangeLog
 
+v1.26
+-----
+- Added c957L/IncludeLibrary to include libraries in `layout.html.twig` (27/02/2018)
+- Changed `tinymceInit.html.twig` for include of Tinymce via c975L/IncludeLibrary (27/02/2018)
+
 v1.25
 -----
 - Added 'Command' part auto-wire to `services.yml` (20/02/2018)
