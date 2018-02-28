@@ -12,7 +12,7 @@
         contextmenu: false,
         schema: 'html5 strict',
         content_css : [
-            '{{ inc_link('bootstrap', 'css', 'stable') }}',
+            '{{ inc_link('bootstrap', 'css', '3.*') }}',
         ],
         {% if tinymceLanguage != null %}
             language_url : '{{ absolute_url(asset('vendor/tinymce/' ~ tinymceLanguage ~ '.js')) }}',
