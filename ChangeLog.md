@@ -1,5 +1,9 @@
 # ChangeLog
 
+v1.26.2.1
+---------
+- Removed the "|raw" for `toolbar_button` call as safe html is now sent (01/03/2018)
+
 v1.26.2
 -------
 - Corrected Tinymce call with apiKey (01/03/2018)

@@ -4,51 +4,51 @@
 {# Display #}
 {% if type == 'modify' or type == 'delete' or type == 'delete-archived' or type == 'delete-deleted' or type == 'delete-redirected' %}
     {% if type == 'delete-archived' %}
-        {{ toolbar_button(path('pageedit_display_archived', {'page': page}), 'display')|raw }}
+        {{ toolbar_button(path('pageedit_display_archived', {'page': page}), 'display') }}
     {% elseif type == 'delete-deleted' %}
-        {{ toolbar_button(path('pageedit_display_deleted', {'page': page}), 'display')|raw }}
+        {{ toolbar_button(path('pageedit_display_deleted', {'page': page}), 'display') }}
     {% elseif type == 'delete-redirected' %}
-        {{ toolbar_button(path('pageedit_display_redirected', {'page': page}), 'display')|raw }}
+        {{ toolbar_button(path('pageedit_display_redirected', {'page': page}), 'display') }}
     {% else %}
-        {{ toolbar_button(path('pageedit_display', {'page': page}), 'display')|raw }}
+        {{ toolbar_button(path('pageedit_display', {'page': page}), 'display') }}
     {% endif %}
 {% endif %}
 
 {# New #}
 {% if type != 'new' %}
-    {{ toolbar_button(path('pageedit_new'), 'new')|raw }}
+    {{ toolbar_button(path('pageedit_new'), 'new') }}
 {% endif %}
 
 {# Edit #}
 {% if type == 'display' or type == 'delete' %}
-    {{ toolbar_button(path('pageedit_modify', {'page': page}), 'modify')|raw }}
+    {{ toolbar_button(path('pageedit_modify', {'page': page}), 'modify') }}
 {% endif %}
 
 {# Duplicate #}
 {% if type == 'display' %}
-    {{ toolbar_button(path('pageedit_duplicate', {'page': page}), 'duplicate')|raw }}
+    {{ toolbar_button(path('pageedit_duplicate', {'page': page}), 'duplicate') }}
 {% endif %}
 
 {# Cancel #}
 {% if type != 'dashboard' %}
-    {{ toolbar_button('cancel', 'cancel')|raw }}
+    {{ toolbar_button('cancel', 'cancel') }}
 {% endif %}
 
 {# Delete #}
 {% if type == 'display' or type == 'modify' or type == 'archived' or type == 'deleted' or type == 'redirected' %}
     {% if type == 'archived' %}
-        {{ toolbar_button(path('pageedit_delete_archived', {'page': page}), 'delete')|raw }}
+        {{ toolbar_button(path('pageedit_delete_archived', {'page': page}), 'delete') }}
     {% elseif type == 'deleted' %}
-        {{ toolbar_button(path('pageedit_delete_deleted', {'page': page}), 'delete')|raw }}
+        {{ toolbar_button(path('pageedit_delete_deleted', {'page': page}), 'delete') }}
     {% elseif type == 'redirected' %}
-        {{ toolbar_button(path('pageedit_delete_redirected', {'page': page}), 'delete')|raw }}
+        {{ toolbar_button(path('pageedit_delete_redirected', {'page': page}), 'delete') }}
     {% else %}
-        {{ toolbar_button(path('pageedit_delete', {'page': page}), 'delete')|raw }}
+        {{ toolbar_button(path('pageedit_delete', {'page': page}), 'delete') }}
     {% endif %}
 {% endif %}
 
 {# Help #}
 {% if type != 'help' %}
-    {{ toolbar_button(path('pageedit_help'), 'help')|raw }}
+    {{ toolbar_button(path('pageedit_help'), 'help') }}
 {% endif %}
 {% endspaceless %}
