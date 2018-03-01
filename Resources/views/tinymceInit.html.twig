@@ -1,10 +1,7 @@
 {# For options, see: https://www.tinymce.com/docs/get-started-cloud/editor-and-features/ #}
-{{ inc_lib('tinymce', 'js', 'stable') }}
+{{ inc_lib('tinymce', 'js', 'stable', '?apiKey=' ~ tinymceApiKey) }}
 <script type="text/javascript">
     tinymce.init({
-        {% if tinymceApiKey != null %}
-            apiKey: '{{ tinymceApiKey }}',
-        {% endif %}
         selector: 'textarea.tinymce',
         statusbar: true,
         menubar: false,

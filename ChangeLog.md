@@ -1,5 +1,9 @@
 # ChangeLog
 
+v1.26.2
+-------
+- Corrected Tinymce call with apiKey (01/03/2018)
+
 v1.26.1
 -------
 - Corrected call for bootstrap in `tinymceInit.html.twig` (28/02/2018)
