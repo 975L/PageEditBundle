@@ -80,9 +80,11 @@
 {# Slug #}
                         <td class="text-center">
                             {% if '/' in page.slug %}
-                                <strong>{{ page.slug|replace({(page.slug|split('/')|last): ''}) }}</strong>{{ page.slug|split('/')|last }}
+                                <strong>/{{ page.slug|replace({(page.slug|split('/')|last): ''}) }}</strong>{{ page.slug|split('/')|last }}
+                            {% elseif page.slug != 'home' %}
+                                /{{ page.slug }}
                             {% else %}
-                                {{ page.slug }}
+                                /
                             {% endif %}
                         </td>
 {# Edit #}

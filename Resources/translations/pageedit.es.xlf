@@ -162,6 +162,10 @@
                 <source>label.no_pages</source>
                 <target>No páginas</target>
             </trans-unit>
+            <trans-unit id="48">
+                <source>label.description</source>
+                <target>Descripción (será utilizada por los motores de búsqueda y las redes sociales)</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

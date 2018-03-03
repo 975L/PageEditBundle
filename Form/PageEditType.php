@@ -24,6 +24,7 @@ class PageEditType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $disabled = $options['data']->getAction() == 'delete' ? true : false;
+        $disabledSlug = $options['data']->getSlug() == 'home' ? true : $disabled;
 
         $builder
             ->add('title', TextType::class, array(
@@ -35,7 +36,7 @@ class PageEditType extends AbstractType
                 )))
             ->add('slug', TextType::class, array(
                 'label' => 'label.semantic_url_explanation',
-                'disabled' => $disabled,
+                'disabled' => $disabledSlug,
                 'required' => true,
                 'attr' => array(
                     'placeholder' => 'text.semantic_url',
@@ -46,7 +47,7 @@ class PageEditType extends AbstractType
                 ->add('content', TextareaType::class, array(
                     'label' => 'label.content',
                     'disabled' => $disabled,
-                    'required' => false,
+                    'required' => true,
                     'attr' => array(
                         'class' => 'tinymce',
                         'cols' => 100,
@@ -73,6 +74,15 @@ class PageEditType extends AbstractType
                     'attr' => array(
                         'min' => 0,
                         'max' => 10
+                    )))
+                ->add('description', TextareaType::class, array(
+                    'label' => 'label.description',
+                    'disabled' => $disabled,
+                    'required' => false,
+                    'attr' => array(
+                        'cols' => 100,
+                        'rows' => 5,
+                        'placeholder' => 'label.description',
                     )))
             ;
         }

@@ -24,6 +24,29 @@ use c975L\PageEditBundle\Service\PageEditService;
 
 class PageEditController extends Controller
 {
+//HOME
+    /**
+     * @Route("/pages")
+     * @Method({"GET", "HEAD"})
+     */
+    public function redirectPagesAction()
+    {
+        return $this->redirectToRoute('pageedit_home');
+    }
+    /**
+     * @Route("/",
+     *      name="pageedit_home")
+     * @Method({"GET", "HEAD"})
+     */
+    public function homeAction()
+    {
+        return new Response(
+            $this->forward('c975L\PageEditBundle\Controller\PageEditController::displayAction', array(
+                'page'  => 'home',
+            ))->getContent()
+        );
+    }
+
 //DASHBOARD
     /**
      * @Route("/pages/dashboard",
@@ -146,6 +169,8 @@ class PageEditController extends Controller
      */
     public function displayAction($page)
     {
+        $page = rtrim($page, '/');
+
         $filePath = $this->getParameter('c975_l_page_edit.folderPages') . '/' . $page . '.html.twig';
         $fileRedirectedPath = $this->getParameter('c975_l_page_edit.folderPages') . '/redirected/' . $page . '.html.twig';
         $fileDeletedPath = $this->getParameter('c975_l_page_edit.folderPages') . '/deleted/' . $page . '.html.twig';
@@ -199,6 +224,7 @@ class PageEditController extends Controller
             ))->getContent();
         }
 
+        //Renders the page
         return $this->render($filePath, array(
             'toolbar' => $toolbar,
         ));
@@ -457,8 +483,11 @@ class PageEditController extends Controller
             //Gets priority
             $priority = $pageEditService->getPriority($fileContent);
 
+            //Gets description
+            $description = $pageEditService->getDescription($fileContent);
+
             //Defines form
-            $pageEdit = new PageEdit('modify', $originalContent, $title, $page, $changeFrequency, $priority);
+            $pageEdit = new PageEdit('modify', $originalContent, $title, $page, $changeFrequency, $priority, $description);
             $form = $this->createForm(PageEditType::class, $pageEdit);
             $form->handleRequest($request);
 
@@ -474,6 +503,11 @@ class PageEditController extends Controller
 
                 //Writes file
                 $pageEditService->writeFile($slug, $originalContent, $form->getData(), $user->getId());
+
+                //Redirects to the homepage
+                if ($slug == 'home') {
+                    return $this->redirectToRoute('pageedit_home');
+                }
 
                 //Redirects to the page
                 return $this->redirectToRoute('pageedit_display', array(
@@ -553,8 +587,11 @@ class PageEditController extends Controller
             //Gets priority
             $priority = $pageEditService->getPriority($fileContent);
 
+            //Gets description
+            $description = $pageEditService->getDescription($fileContent);
+
             //Defines form
-            $pageEdit = new PageEdit('duplicate', $originalContent, null, null, $changeFrequency, $priority);
+            $pageEdit = new PageEdit('duplicate', $originalContent, null, null, $changeFrequency, $priority, $description);
             $form = $this->createForm(PageEditType::class, $pageEdit);
             $form->handleRequest($request);
 

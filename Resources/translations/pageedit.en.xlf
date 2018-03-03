@@ -64,7 +64,7 @@
             </trans-unit>
             <trans-unit id="23">
                 <source>label.monthly</source>
-                <target>Montly</target>
+                <target>Monthly</target>
             </trans-unit>
             <trans-unit id="24">
                 <source>label.weekly</source>
@@ -161,6 +161,10 @@
             <trans-unit id="47">
                 <source>label.no_pages</source>
                 <target>No pages</target>
+            </trans-unit>
+            <trans-unit id="48">
+                <source>label.description</source>
+                <target>Description (will be used by search engines and social networks)</target>
             </trans-unit>
         </body>
     </file>

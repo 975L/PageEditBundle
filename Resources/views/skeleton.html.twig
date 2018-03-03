@@ -2,17 +2,19 @@
 
 {# Metadata (KEEP) #}
 {% set pageedit_title="%title%" %}
-{% set pageedit_changeFrequency="weekly" %}
-{% set pageedit_priority="8" %}
+{% set pageedit_changeFrequency="monthly" %}
+{% set pageedit_priority="0.5" %}
+{% set pageedit_description="" %}
 
 {# Your own data can go there #}
+{% set title = pageedit_title %}
+{% set description = pageedit_description %}
 
 {% block content %}
 {# Toolbar (KEEP) #}
     {% block toolbar %}
         {{ toolbar|raw }}
     {% endblock %}
-
     <div class="container">
         <h1>
             {{ pageedit_title }}

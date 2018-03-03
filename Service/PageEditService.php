@@ -54,7 +54,7 @@ class PageEditService
     //Gets the change frequency of the page
     public function getChangeFrequency($fileContent)
     {
-        $changeFrequency = 'weekly';
+        $changeFrequency = 'monthly';
 
         preg_match('/pageedit_changeFrequency=\"(.*)\"/', $fileContent, $matches);
         if (!empty($matches)) {
@@ -64,10 +64,23 @@ class PageEditService
         return $changeFrequency;
     }
 
+    //Gets the description of the page
+    public function getDescription($fileContent)
+    {
+        $description = '';
+
+        preg_match('/pageedit_description=\"(.*)\"/', $fileContent, $matches);
+        if (!empty($matches)) {
+            $description = $matches[1];
+        }
+
+        return $description;
+    }
+
     //Gets the priority of the page
     public function getPriority($fileContent)
     {
-        $priority = '8';
+        $priority = '5';
 
         preg_match('/pageedit_priority=\"(.*)\"/', $fileContent, $matches);
         if (!empty($matches)) {
@@ -237,9 +250,8 @@ class PageEditService
         //Title is using Twig code to translate it
         if (strpos($title, '{{') === 0) {
             $title = trim(str_replace(array('{{', '}}'), '', $title));
-        }
         //Title is text
-        else {
+        } elseif (strpos($title, '|trans') === false) {
             $title = '"' . str_replace('"', '\"', $formData->getTitle()) . '"';
         }
 
@@ -247,6 +259,7 @@ class PageEditService
         $startSkeleton = preg_replace('/pageedit_title=\"(.*)\"/', 'pageedit_title=' . $title, $startSkeleton);
         $startSkeleton = preg_replace('/pageedit_changeFrequency=\"(.*)\"/', 'pageedit_changeFrequency="' . $formData->getChangeFrequency() . '"', $startSkeleton);
         $startSkeleton = preg_replace('/pageedit_priority=\"(.*)\"/', 'pageedit_priority="' . $formData->getPriority() . '"', $startSkeleton);
+        $startSkeleton = preg_replace('/pageedit_description=\"(.*)\"/', 'pageedit_description="' . $formData->getDescription() . '"', $startSkeleton);
 
         //Concatenate skeleton + metadata + content
         $finalContent = $startSkeleton . "\n" . $formData->getContent() . "\n\t\t" . $endSkeleton;

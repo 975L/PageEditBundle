@@ -16,20 +16,25 @@ class PageEdit
     /**
      * @Assert\NotBlank()
      */
-    protected $content;
+    protected $title;
 
     /**
      * @Assert\NotBlank()
      */
-    protected $title;
-
     protected $slug;
+
+    /**
+     * @Assert\NotBlank()
+     */
+    protected $content;
+
     protected $changeFrequency;
     protected $priority;
+    protected $description;
     protected $action;
 
 
-    public function __construct($action = null, $content = null, $title = null, $slug = null, $changeFrequency = null, $priority = null)
+    public function __construct($action = null, $content = null, $title = null, $slug = null, $changeFrequency = null, $priority = null, $description = null)
     {
         $this->setAction($action);
         $this->setContent($content);
@@ -37,52 +42,9 @@ class PageEdit
         $this->setSlug($slug);
         $this->setChangeFrequency($changeFrequency);
         $this->setPriority($priority);
+        $this->setDescription($description);
     }
 
-
-    /**
-     * Set action
-     *
-     * @return PageEdit
-     */
-    public function setAction($action)
-    {
-        $this->action = $action;
-
-        return $this;
-    }
-
-    /**
-     * Get action
-     *
-     * @return string
-     */
-    public function getAction()
-    {
-        return $this->action;
-    }
-
-    /**
-     * Set content
-     *
-     * @return PageEdit
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-
-        return $this;
-    }
-
-    /**
-     * Get content
-     *
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
 
     /**
      * Set title
@@ -129,6 +91,28 @@ class PageEdit
     }
 
     /**
+     * Set content
+     *
+     * @return PageEdit
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * Get content
+     *
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
      * Set changeFrequency
      *
      * @return PageEdit
@@ -170,5 +154,50 @@ class PageEdit
     public function getPriority()
     {
         return $this->priority;
+    }
+
+    /**
+     * Set description
+     *
+     * @return PageEdit
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+
+    /**
+     * Set action
+     *
+     * @return PageEdit
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+
+        return $this;
+    }
+
+    /**
+     * Get action
+     *
+     * @return string
+     */
+    public function getAction()
+    {
+        return $this->action;
     }
 }

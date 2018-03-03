@@ -46,6 +46,8 @@ class AppKernel extends Kernel
 
 Step 3: Configure the Bundles
 -----------------------------
+Check [KnpPaginatorBundle](https://github.com/KnpLabs/KnpPaginatorBundle) for its specific configuration.
+
 Setup your Tinymce API key if you use the cloud version, in `parameters.yml`
 ```yml
     #(Optional) Your Tinymce Api key if you use the cloud version
@@ -61,14 +63,6 @@ And then in `parameters.yml.dist`
 Then, in the `app/config.yml` file of your project, define the following:
 
 ```yml
-#https://github.com/KnpLabs/KnpPaginatorBundle
-knp_paginator:
-    default_options:
-        page_name: p
-        distinct: true
-    template:
-        pagination: 'KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig'
-
 c975_l_page_edit:
     #Path where the files will be stored. The full path ('app/resources/views/[folderPages]') has to be added to .gitignore if Git is used
     folderPages: 'pages'
@@ -126,22 +120,20 @@ Step 6: Definitions of start and end of template for file saving
 ----------------------------------------------------------------
 When the Twig file is saved, it is concatenated with the content of `Resources/views/skeleton.html.twig` to obtain the full file.
 
-This file must extends your layout in order to display correctly, so you need to override it as explained above for `layout.html.twig`. So, duplicate the file `skeleton.html.twig` in `app/Resources/c975LPageEditBundle/views/` and set your data in it.
+This file must extends your layout in order to display correctly, so you need to override it as explained above for `layout.html.twig`. For this, duplicate the file `skeleton.html.twig` in `app/Resources/c975LPageEditBundle/views/` and set your data in it.
 
 **Take care to keep `{% block pageedit_content %}` and `{% endblock %}` as they are the entry and exit points to defines content.**
 
-**Also, keep `{% block toolbar %}` to keep toolbar and `{% set pageedit_title="%title%" %}` used for metadata.**
-
-
 How to use
 ----------
-The Route to display a page is `http://example.com/pages/{page}`, the one to edit is `http://example.com/pages/edit/{page}`.
+The Route to display a page is `http://example.com/pages/{page}`, the one to edit is `http://example.com/pages/modify/{page}`.
 
 A toolbar is displayed below the title if user is identified and has the acess rights.
 
 Link to a page, in Twig, can be done by `<a href="{{ path('pageedit_display', { 'page': 'slug' }) }}">Title of the page</a>`.
 
 The different Routes (naming self-explanatory) available are:
+- pageedit_home
 - pageedit_display
 - pageedit_new
 - pageedit_modify
@@ -157,6 +149,10 @@ Integrate sub-pages
 -------------------
 To add sub-pages in sub-folders, simply use a "/" as separator in the Url semantic field.
 
+Homepage specific
+-----------------
+The home page can be managed via PageEdit, but as it is called at the root of the website it has a specificity. it's name is "home" and cannot be changed.
+
 Protect specific templates
 --------------------------
 If you need to protect specific templates (containing lot of Twig tag, Twig variable setting, etc. or if you don't want your final user to be able to modify them, to not break the website), simply put those templates in `app/Resources/views/[folderPages]/protected`, they will be displayed as other, and included in the sitemap, but not available for modifications.
@@ -164,7 +160,7 @@ If you need to protect specific templates (containing lot of Twig tag, Twig vari
 
 Use the Twig Extension to automate building menus
 -------------------------------------------------
-You can use the provided Twig Extension to easily build menus based on the content of a specific folder, for this use the following code:
+You can use the provided Twig Extension `folder_content()` to easily build menus based on the content of a specific folder, for this use the following code:
 ```html
 {% set files = folder_content('specific_folder') %}
 <ul class="nav navbar-nav">

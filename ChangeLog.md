@@ -1,5 +1,18 @@
 # ChangeLog
 
+v1.27
+-----
+- Added the possibility to edit root page via PageEdit (03/03/2018)
+- Added Route `pageedit_home` (03/03/2018)
+- Added Route to redirect when calling "pages" without specifying {page} (03/03/2018)
+- Added removing of trailing slash when calling `pageedit_display` (03/03/2018)
+- Added a / in the semantic url column in dashboard view (03/03/2018)
+- Added possibility to provide a description for page to be displayed in `og:description` and `meta description` (03/03/2018)
+- Re-ordered Entity getters and setters (03/03/2018)
+- Added `sitemap-index.xml/twig` to be used by sites if needed (03/03/2018)
+- Corrected title using Twig trans() to display (03/03/2018)
+- Changed default priority and changeFrequency (03/03/2018)
+
 v1.26.2.1
 ---------
 - Removed the "|raw" for `toolbar_button` call as safe html is now sent (01/03/2018)
