@@ -1,5 +1,10 @@
 # ChangeLog
 
+v1.27.1
+-------
+- Added "_locale requirement" part for multilingual prefix in `routing.yml` in `README.md` (04/03/2018)
+- Added Route `remove_trailing_slash` (04/03/2018)
+
 v1.27
 -----
 - Added the possibility to edit root page via PageEdit (03/03/2018)

@@ -24,6 +24,21 @@ use c975L\PageEditBundle\Service\PageEditService;
 
 class PageEditController extends Controller
 {
+//REMOVE TRAILING SLASH
+    /**
+    * @Route("/{url}",
+    *       name="remove_trailing_slash",
+    *       requirements={"url": "^.*\/$"})
+    * @Method({"GET", "HEAD"})
+    */
+    public function removeTrailingSlashAction(Request $request)
+    {
+        $pathInfo = $request->getPathInfo();
+        $requestUri = $request->getRequestUri();
+        $url = str_replace($pathInfo, rtrim($pathInfo, ' /'), $requestUri);
+        return $this->redirect($url);
+    }
+
 //HOME
     /**
      * @Route("/pages")
