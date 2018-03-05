@@ -261,8 +261,12 @@ class PageEditService
         $startSkeleton = preg_replace('/pageedit_priority=\"(.*)\"/', 'pageedit_priority="' . $formData->getPriority() . '"', $startSkeleton);
         $startSkeleton = preg_replace('/pageedit_description=\"(.*)\"/', 'pageedit_description="' . $formData->getDescription() . '"', $startSkeleton);
 
+        //Cleans content
+        $content = str_replace('{{path', '{{ path', $formData->getContent());
+        $content = preg_replace('#href=\"(.*){{ path#', 'href="{{path', $content);
+
         //Concatenate skeleton + metadata + content
-        $finalContent = $startSkeleton . "\n" . $formData->getContent() . "\n\t\t" . $endSkeleton;
+        $finalContent = $startSkeleton . "\n" . $content . "\n\t\t" . $endSkeleton;
 
         //Archives old file if content or metadata are different
         if ($fs->exists($filePath) && file_get_contents($filePath) !== $finalContent) {

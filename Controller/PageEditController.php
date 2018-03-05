@@ -1013,7 +1013,7 @@ class PageEditController extends Controller
                 //Creates the array of available pages
                 $pages[] = array(
                     'title' => $titleTranslated,
-                    'value' => "{{path('pageedit_display',{'page':'" . $slug . "'})}}",
+                    'value' => "{{ path('pageedit_display', {'page': '" . $slug . "'}) }}",
                 );
             }
 
