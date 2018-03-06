@@ -83,12 +83,12 @@ class PageEditController extends Controller
             $finder = new Finder();
 
             //Defines paths
-            $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
+            $folderPath = $pageEditService->getPagesFolder();
 
             //Adjust path is specific folder is requested
             $view = $request->get('v');
             if ($view !== '' && in_array($view, array('archived', 'deleted', 'redirected'))) {
-                $folderPath .= '/' . $view;
+                $folderPath .= $view;
             }
 
             //Gets pages
@@ -178,7 +178,7 @@ class PageEditController extends Controller
      * @Route("/pages/{page}",
      *      name="pageedit_display",
      *      requirements={
-     *          "page": "^(?!archived|dashboard|delete|deleted|duplicate|modify|help|links|new|redirected|slug|upload)([a-z0-9\-\/]+)"
+     *          "page": "^(?!archived|dashboard|delete|deleted|duplicate|modify|help|links|new|pdf|redirected|slug|upload)([a-z0-9\-\/]+)"
      *      })
      * @Method({"GET", "HEAD"})
      */
@@ -186,16 +186,18 @@ class PageEditController extends Controller
     {
         $page = rtrim($page, '/');
 
-        $filePath = $this->getParameter('c975_l_page_edit.folderPages') . '/' . $page . '.html.twig';
-        $fileRedirectedPath = $this->getParameter('c975_l_page_edit.folderPages') . '/redirected/' . $page . '.html.twig';
-        $fileDeletedPath = $this->getParameter('c975_l_page_edit.folderPages') . '/deleted/' . $page . '.html.twig';
-        $fileProtectedPath = $this->getParameter('c975_l_page_edit.folderPages') . '/protected/' . $page . '.html.twig';
+        $pageEditService = $this->get(PageEditService::class);
+        $folderPath = $pageEditService->getPagesFolder();
+
+        $filePath = $folderPath . $page . '.html.twig';
+        $fileRedirectedPath = $folderPath . 'redirected/' . $page . '.html.twig';
+        $fileDeletedPath = $folderPath . 'deleted/' . $page . '.html.twig';
+        $fileProtectedPath = $folderPath . 'protected/' . $page . '.html.twig';
 
         //Redirected page
         if ($this->get('templating')->exists($fileRedirectedPath)) {
-            $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/';
             return $this->redirectToRoute('pageedit_display', array(
-                'page' => file_get_contents($folderPath . $fileRedirectedPath),
+                'page' => file_get_contents($fileRedirectedPath),
             ));
         }
         //Protected page
@@ -219,7 +221,7 @@ class PageEditController extends Controller
             throw new HttpException(410);
         }
         //Not existing page
-        elseif (!$this->get('templating')->exists($filePath)) {
+        elseif (!is_file($filePath)) {
             throw $this->createNotFoundException();
         }
 
@@ -242,6 +244,7 @@ class PageEditController extends Controller
         //Renders the page
         return $this->render($filePath, array(
             'toolbar' => $toolbar,
+            'display' => 'html',
         ));
     }
 
@@ -315,16 +318,17 @@ class PageEditController extends Controller
         $user = $this->getUser();
 
         if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
-            $filePath = $this->getParameter('c975_l_page_edit.folderPages') . '/deleted/' . $page . '.html.twig';
+            $pageEditService = $this->get(PageEditService::class);
+            $folderPath = $pageEditService->getPagesFolder();
+            $filePath = $folderPath . 'deleted/' . $page . '.html.twig';
 
             //Not existing page
-            if (!$this->get('templating')->exists($filePath)) {
+            if (!is_file($filePath)) {
                 throw $this->createNotFoundException();
             }
 
             //Gets data for deleted
-            $folderPath = $this->container->getParameter('kernel.root_dir') . '/Resources/views/';
-            $datetime = \DateTime::createFromFormat('Ymd-His', date('Ymd-His', filemtime($folderPath . $filePath)));
+            $datetime = \DateTime::createFromFormat('Ymd-His', date('Ymd-His', filemtime($filePath)));
 
             //Defines toolbar
             $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
@@ -361,17 +365,18 @@ class PageEditController extends Controller
         $user = $this->getUser();
 
         if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
-            $filePath = $this->getParameter('c975_l_page_edit.folderPages') . '/redirected/' . $page . '.html.twig';
+            $pageEditService = $this->get(PageEditService::class);
+            $folderPath = $pageEditService->getPagesFolder();
+            $filePath = $folderPages . 'redirected/' . $page . '.html.twig';
 
             //Not existing page
-            if (!$this->get('templating')->exists($filePath)) {
+            if (!is_file($filePath)) {
                 throw $this->createNotFoundException();
             }
 
             //Gets data for redirected
-            $folderPath = $this->container->getParameter('kernel.root_dir') . '/Resources/views/';
-            $datetime = \DateTime::createFromFormat('Ymd-His', date('Ymd-His', filemtime($folderPath . $filePath)));
-            $redirection = file_get_contents($folderPath . $filePath);
+            $datetime = \DateTime::createFromFormat('Ymd-His', date('Ymd-His', filemtime($filePath)));
+            $redirection = file_get_contents($filePath);
 
             //Defines toolbar
             $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
@@ -394,6 +399,47 @@ class PageEditController extends Controller
 
         //Access is denied
         throw $this->createAccessDeniedException();
+    }
+
+//PDF
+    /**
+     * @Route("/pages/pdf/{page}",
+     *      name="pageedit_pdf",
+     *      requirements={
+     *          "page": "^([a-z0-9\-\/]+)"
+     *      })
+     * @Method({"GET", "HEAD"})
+     */
+    public function pdfAction(Request $request, $page)
+    {
+        $page = rtrim($page, '/');
+
+        $pageEditService = $this->get(PageEditService::class);
+        $folderPath = $pageEditService->getPagesFolder();
+        $folderPdfPath = $folderPath . 'pdf/';
+
+        $filePath = $folderPath . $page . '.html.twig';
+        $filePdfPath = $folderPdfPath . $page . '-' . $request->getLocale() . '.pdf';
+
+        //Not existing page
+        if (!is_file($filePath)) {
+            throw $this->createNotFoundException();
+        }
+
+        //Creates the pdf if not existing or not up-to-date
+        if (!is_file($filePdfPath) || filemtime($filePdfPath) < filemtime($filePath)) {
+            $pageEditService->createFolders();
+
+            $html = $this->renderView($filePath, array(
+                'toolbar' => null,
+                'display' => 'pdf',
+            ));
+            $pdf = $this->get('knp_snappy.pdf')->getOutputFromHtml($html);
+            file_put_contents($filePdfPath, $pdf);
+        }
+
+        //Returns the pdf
+        return new Response(file_get_contents($filePdfPath), 200, array('Content-Type' => 'application/pdf'));
     }
 
 //NEW
@@ -467,39 +513,18 @@ class PageEditController extends Controller
 
         //Defines the form
         if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
-            //Gets the FileSystem
-            $fs = new Filesystem();
-
             //Defines path
-            $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
-            $filePath = $folderPath . '/' . $page . '.html.twig';
+            $pageEditService = $this->get(PageEditService::class);
+            $folderPath = $pageEditService->getPagesFolder();
+            $filePath = $folderPath . $page . '.html.twig';
 
-            //Gets the content
-            $originalContent = null;
-            if ($fs->exists($filePath)) {
-                $fileContent = file_get_contents($filePath);
-
-                $startBlock = '{% block pageEdit %}';
-                $endBlock = '{% endblock %}';
-                $entryPoint = strpos($fileContent, $startBlock) + strlen($startBlock);
-                $exitPoint = strpos($fileContent, $endBlock, $entryPoint);
-
-                $originalContent = trim(substr($fileContent, $entryPoint, $exitPoint - $entryPoint));
+            //Not existing page
+            if (!is_file($filePath)) {
+                throw $this->createNotFoundException();
             }
 
-            //Gets title
-            $pageEditService = $this->get(PageEditService::class);
-            $title = $pageEditService->getTitle($fileContent, $page);
-            $titleTranslated = $pageEditService->getTitleTranslated($title);
-
-            //Gets changeFrequency
-            $changeFrequency = $pageEditService->getChangeFrequency($fileContent);
-
-            //Gets priority
-            $priority = $pageEditService->getPriority($fileContent);
-
-            //Gets description
-            $description = $pageEditService->getDescription($fileContent);
+            //Gets data
+            extract($pageEditService->getData($filePath));
 
             //Defines form
             $pageEdit = new PageEdit('modify', $originalContent, $title, $page, $changeFrequency, $priority, $description);
@@ -571,39 +596,18 @@ class PageEditController extends Controller
 
         //Defines the form
         if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
-            //Gets the FileSystem
-            $fs = new Filesystem();
-
             //Defines path
-            $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
-            $filePath = $folderPath . '/' . $page . '.html.twig';
+            $pageEditService = $this->get(PageEditService::class);
+            $folderPath = $pageEditService->getPagesFolder();
+            $filePath = $folderPath . $page . '.html.twig';
 
-            //Gets the content
-            $originalContent = null;
-            if ($fs->exists($filePath)) {
-                $fileContent = file_get_contents($filePath);
-
-                $startBlock = '{% block pageEdit %}';
-                $endBlock = '{% endblock %}';
-                $entryPoint = strpos($fileContent, $startBlock) + strlen($startBlock);
-                $exitPoint = strpos($fileContent, $endBlock, $entryPoint);
-
-                $originalContent = trim(substr($fileContent, $entryPoint, $exitPoint - $entryPoint));
+            //Not existing page
+            if (!is_file($filePath)) {
+                throw $this->createNotFoundException();
             }
 
-            //Gets title
-            $pageEditService = $this->get(PageEditService::class);
-            $title = $pageEditService->getTitle($fileContent, $page);
-            $titleTranslated = $pageEditService->getTitleTranslated($title);
-
-            //Gets changeFrequency
-            $changeFrequency = $pageEditService->getChangeFrequency($fileContent);
-
-            //Gets priority
-            $priority = $pageEditService->getPriority($fileContent);
-
-            //Gets description
-            $description = $pageEditService->getDescription($fileContent);
+            //Gets data
+            extract($pageEditService->getData($filePath));
 
             //Defines form
             $pageEdit = new PageEdit('duplicate', $originalContent, null, null, $changeFrequency, $priority, $description);
@@ -664,30 +668,18 @@ class PageEditController extends Controller
 
         //Defines the form
         if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
-            //Gets the FileSystem
-            $fs = new Filesystem();
-
             //Defines paths
-            $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
-            $filePath = $folderPath . '/' . $page . '.html.twig';
+            $pageEditService = $this->get(PageEditService::class);
+            $folderPath = $pageEditService->getPagesFolder();
+            $filePath = $folderPath . $page . '.html.twig';
 
-            //Gets the content
-            $originalContent = null;
-            if ($fs->exists($filePath)) {
-                $fileContent = file_get_contents($filePath);
-
-                $startBlock = '{% block pageEdit %}';
-                $endBlock = '{% endblock %}';
-                $entryPoint = strpos($fileContent, $startBlock) + strlen($startBlock);
-                $exitPoint = strpos($fileContent, $endBlock, $entryPoint);
-
-                $originalContent = trim(substr($fileContent, $entryPoint, $exitPoint - $entryPoint));
+            //Not existing page
+            if (!is_file($filePath)) {
+                throw $this->createNotFoundException();
             }
 
-            //Gets title
-            $pageEditService = $this->get(PageEditService::class);
-            $title = $pageEditService->getTitle($fileContent, $page);
-            $titleTranslated = $pageEditService->getTitleTranslated($title);
+            //Gets data
+            extract($pageEditService->getData($filePath));
 
             //Defines form
             $pageEdit = new PageEdit('delete', $originalContent, $title, $page);
@@ -743,30 +735,18 @@ class PageEditController extends Controller
 
         //Defines the form
         if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
-            //Gets the FileSystem
-            $fs = new Filesystem();
-
             //Defines paths
-            $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
-            $filePath = $folderPath . '/archived/' . $page . '.html.twig';
+            $pageEditService = $this->get(PageEditService::class);
+            $folderPath = $pageEditService->getPagesFolder();
+            $filePath = $folderPath . 'archived/' . $page . '.html.twig';
 
-            //Gets the content
-            $originalContent = null;
-            if ($fs->exists($filePath)) {
-                $fileContent = file_get_contents($filePath);
-
-                $startBlock = '{% block pageEdit %}';
-                $endBlock = '{% endblock %}';
-                $entryPoint = strpos($fileContent, $startBlock) + strlen($startBlock);
-                $exitPoint = strpos($fileContent, $endBlock, $entryPoint);
-
-                $originalContent = trim(substr($fileContent, $entryPoint, $exitPoint - $entryPoint));
+            //Not existing page
+            if (!is_file($filePath)) {
+                throw $this->createNotFoundException();
             }
 
-            //Gets title
-            $pageEditService = $this->get(PageEditService::class);
-            $title = $pageEditService->getTitle($fileContent, $page);
-            $titleTranslated = $pageEditService->getTitleTranslated($title);
+            //Gets data
+            extract($pageEditService->getData($filePath));
 
             //Defines form
             $pageEdit = new PageEdit('delete', $originalContent, $title, $page);
@@ -836,30 +816,18 @@ class PageEditController extends Controller
 
         //Defines the form
         if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
-            //Gets the FileSystem
-            $fs = new Filesystem();
-
             //Defines paths
-            $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
-            $filePath = $folderPath . '/deleted/' . $page . '.html.twig';
+            $pageEditService = $this->get(PageEditService::class);
+            $folderPath = $pageEditService->getPagesFolder();
+            $filePath = $folderPath . 'deleted/' . $page . '.html.twig';
 
-            //Gets the content
-            $originalContent = null;
-            if ($fs->exists($filePath)) {
-                $fileContent = file_get_contents($filePath);
-
-                $startBlock = '{% block pageEdit %}';
-                $endBlock = '{% endblock %}';
-                $entryPoint = strpos($fileContent, $startBlock) + strlen($startBlock);
-                $exitPoint = strpos($fileContent, $endBlock, $entryPoint);
-
-                $originalContent = trim(substr($fileContent, $entryPoint, $exitPoint - $entryPoint));
+            //Not existing page
+            if (!is_file($filePath)) {
+                throw $this->createNotFoundException();
             }
 
-            //Gets title
-            $pageEditService = $this->get(PageEditService::class);
-            $title = $pageEditService->getTitle($fileContent, $page);
-            $titleTranslated = $pageEditService->getTitleTranslated($title);
+            //Gets data
+            extract($pageEditService->getData($filePath));
 
             //Defines form
             $pageEdit = new PageEdit('delete', $originalContent, $title, $page);
@@ -919,12 +887,15 @@ class PageEditController extends Controller
 
         //Defines the form
         if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
-            //Gets the FileSystem
-            $fs = new Filesystem();
-
             //Defines paths
-            $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
-            $filePath = $folderPath . '/redirected/' . $page . '.html.twig';
+            $pageEditService = $this->get(PageEditService::class);
+            $folderPath = $pageEditService->getPagesFolder();
+            $filePath = $folderPath . 'redirected/' . $page . '.html.twig';
+
+            //Not existing page
+            if (!is_file($filePath)) {
+                throw $this->createNotFoundException();
+            }
 
             //Defines form
             $pageEdit = new PageEdit('delete', $page, $page, $page);
@@ -933,7 +904,6 @@ class PageEditController extends Controller
 
             if ($form->isSubmitted() && $form->isValid()) {
                 //Deletes file
-                $pageEditService = $this->get(PageEditService::class);
                 $pageEditService->deleteFile('redirected/' . $page, false);
 
                 //Redirects to the page which will be HTTP 410
@@ -990,8 +960,8 @@ class PageEditController extends Controller
             $finder = new Finder();
 
             //Defines paths
-            $folderPath = $this->getParameter('kernel.root_dir') . '/Resources/views/' . $this->getParameter('c975_l_page_edit.folderPages');
-            $protectedFolderPath = $folderPath . '/protected';
+            $folderPath = $pageEditService->getPagesFolder();
+            $protectedFolderPath = $folderPath . 'protected';
 
             //Finds pages
             $finder
@@ -1041,7 +1011,7 @@ class PageEditController extends Controller
         $pageEditService->createFolders();
 
         //Defines path
-        $folderPath = $this->getParameter('kernel.root_dir') . '/../web/images/' . $this->getParameter('c975_l_page_edit.folderPages');
+        $folderPath = $pageEditService->getImagesFolder();
 
         //Checks origin - https://www.tinymce.com/docs/advanced/php-upload-handler/
         if ($request->server->get('HTTP_ORIGIN') !== null) {
@@ -1060,7 +1030,7 @@ class PageEditController extends Controller
                     $page = substr($page, strrpos($page, '/') + 1);
                 }
                 $filename = $page . '-' . $now->format('Ymd-His-u') . '.' . $extension;
-                move_uploaded_file($file->getRealPath(), $folderPath . '/' . $filename);
+                move_uploaded_file($file->getRealPath(), $folderPath . $filename);
 
                 //Respond to the successful upload with JSON
                 $location = str_replace('/app_dev.php', '', $request->getUriForPath('/images/' . $this->getParameter('c975_l_page_edit.folderPages') . '/' . $filename));

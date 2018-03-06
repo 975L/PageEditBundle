@@ -1,5 +1,16 @@
 # ChangeLog
 
+v1.28
+-----
+- Added Route to generate PDF from page (06/03/2018)
+- Changed `skeleton.html.twig` to avoid having to override it (06/03/2018)
+- Renamed block `pageEdit` to `pageedit_content` in `skeleton.html.twig` to be coherent with other c975L bundles (06/03/2018)
+- Added method `PageEditService > getContent()` (06/03/2018)
+- Added method `PageEditService > getData()` to simplify code (06/03/2018)
+- Added method `PageEditService > getPagesFolder()` to simplify code (06/03/2018)
+- Added method `PageEditService > getOriginalContent()` to replace multiples calls (06/03/2018)
+- Added `createNotFoundException()` for some method in `PageEditController` (06/03/2018)
+
 v1.27.2
 -------
 - Modified value for linksAction array (05/03/2018)

@@ -36,14 +36,16 @@ class PageEditService
         $fs = new Filesystem();
 
         //Defines paths
-        $folderPath = $this->container->getParameter('kernel.root_dir') . '/Resources/views/' . $this->container->getParameter('c975_l_page_edit.folderPages');
-        $archivedFolder = $folderPath . '/archived';
-        $deletedFolder = $folderPath . '/deleted';
-        $protectedFolderPath = $folderPath . '/protected';
-        $redirectedFolder = $folderPath . '/redirected';
-        $imageFolderPath = $this->container->getParameter('kernel.root_dir') . '/../web/images/' . $this->container->getParameter('c975_l_page_edit.folderPages');
+        $folderPath = $this->getPagesFolder();
+        $pdfFolder = $folderPath . 'pdf';
+        $archivedFolder = $folderPath . 'archived';
+        $deletedFolder = $folderPath . 'deleted';
+        $protectedFolderPath = $folderPath . 'protected';
+        $redirectedFolder = $folderPath . 'redirected';
+        $imageFolderPath = $this->getImagesFolder();
 
         //Creates folders
+        $fs->mkdir($pdfFolder, 0770);
         $fs->mkdir($archivedFolder, 0770);
         $fs->mkdir($deletedFolder, 0770);
         $fs->mkdir($protectedFolderPath, 0770);
@@ -63,6 +65,30 @@ class PageEditService
 
         return $changeFrequency;
     }
+
+    //Gets all data relative to page
+    public function getData($filePath)
+    {
+        //Gets the FileSystem
+        $fs = new Filesystem();
+
+        if ($fs->exists($filePath)) {
+            $fileContent = file_get_contents($filePath);
+            $title = $this->getTitle($fileContent, str_replace( array($this->getPagesFolder(), '.html.twig'), '', $filePath));
+
+            return array(
+                'originalContent' => $this->getOriginalContent($fileContent),
+                'title' => $title,
+                'titleTranslated' => $this->getTitleTranslated($title),
+                'changeFrequency' => $this->getChangeFrequency($fileContent),
+                'priority' => $this->getPriority($fileContent),
+                'description' => $this->getDescription($fileContent),
+            );
+        }
+
+        return null;
+    }
+
 
     //Gets the description of the page
     public function getDescription($fileContent)
@@ -90,12 +116,26 @@ class PageEditService
         return $priority;
     }
 
+    //Returns the images folder
+    public function getImagesFolder()
+    {
+        return $this->container->getParameter('kernel.root_dir') . '/../web/images/' . $this->container->getParameter('c975_l_page_edit.folderPages') . '/';
+    }
+
+    //Returns the pages folder
+    public function getPagesFolder()
+    {
+        return $this->container->getParameter('kernel.root_dir') . '/Resources/views/' . $this->container->getParameter('c975_l_page_edit.folderPages') . '/';
+    }
+
+
     //Gets the start and end of the skeleton
     public function getSkeleton()
     {
         $skeleton = file_get_contents($this->locator->locate($this->parser->parse('c975LPageEditBundle::skeleton.html.twig')));
 
-        $startBlock = '{% block pageEdit %}';
+        //Kept `pageEdit` for compatibility for files not yet modified with new skeleton (06/03/2018)
+        $startBlock = strpos($skeleton, '{% block pageedit_content %}') !== false ? '{% block pageedit_content %}' : '{% block pageEdit %}';
         $endBlock = '{% endblock %}';
 
         $entryPoint = strpos($skeleton, $startBlock) + strlen($startBlock);
@@ -103,23 +143,40 @@ class PageEditService
 
         return array(
             'startSkeleton' => trim(substr($skeleton, 0, $entryPoint)),
-            'endSkeleton' => trim(substr($skeleton, $exitPoint))
+            'endSkeleton' => trim(substr($skeleton, $exitPoint)),
         );
+    }
+
+    //Get original content from a file
+    public function getOriginalContent($fileContent)
+    {
+        //Kept `pageEdit` for compatibility for files not yet modified with new skeleton (06/03/2018)
+        $startBlock = strpos($fileContent, '{% block pageedit_content %}') !== false ? '{% block pageedit_content %}' : '{% block pageEdit %}';
+        $endBlock = '{% endblock %}';
+        $entryPoint = strpos($fileContent, $startBlock) + strlen($startBlock);
+        $exitPoint = strpos($fileContent, $endBlock, $entryPoint);
+
+        $originalContent = trim(substr($fileContent, $entryPoint, $exitPoint - $entryPoint));
+
+        return $originalContent;
     }
 
     //Gets the title of the page
     public function getTitle($fileContent, $slug)
     {
-        $title = $this->container->get('translator')->trans('label.title_not_found', array(), 'pageedit') . ' (' . $slug . ')';
-
         preg_match('/pageedit_title=\"(.*)\"/', $fileContent, $matches);
+
+        //Plain title
         if (!empty($matches)) {
             $title = str_replace('\"', '"', $matches[1]);
+        //Title is using Twig code to translate it
         } else {
-            //Title is using Twig code to translate it
             preg_match('/pageedit_title=(.*)\%\}/', $fileContent, $matches);
             if (!empty($matches)) {
                 $title = trim($matches[1]);
+            //Title not found
+            } else {
+                $title = $this->container->get('translator')->trans('label.title_not_found', array(), 'pageedit') . ' (' . $slug . ')';
             }
         }
 
@@ -166,9 +223,9 @@ class PageEditService
         $fs = new Filesystem();
 
         //Defines paths
-        $folderPath = $this->container->getParameter('kernel.root_dir') . '/Resources/views/' . $this->container->getParameter('c975_l_page_edit.folderPages');
-        $archivedFolder = $folderPath . '/archived';
-        $filePath = $folderPath . '/' . $page . '.html.twig';
+        $folderPath = $this->getPagesFolder();
+        $archivedFolder = $folderPath . 'archived';
+        $filePath = $folderPath . $page . '.html.twig';
 
         //Archives file
         if ($fs->exists($filePath)) {
@@ -191,8 +248,8 @@ class PageEditService
         $fs = new Filesystem();
 
         //Defines path
-        $folderPath = $this->container->getParameter('kernel.root_dir') . '/Resources/views/' . $this->container->getParameter('c975_l_page_edit.folderPages');
-        $redirectedFolder = $folderPath . '/redirected';
+        $folderPath = $this->getPagesFolder();
+        $redirectedFolder = $folderPath . 'redirected';
 
         //Sets the redirection
         $redirectedFilePath = $redirectedFolder . '/' . $page . '.html.twig';
@@ -209,9 +266,9 @@ class PageEditService
         $fs = new Filesystem();
 
         //Defines path
-        $folderPath = $this->container->getParameter('kernel.root_dir') . '/Resources/views/' . $this->container->getParameter('c975_l_page_edit.folderPages');
-        $filePath = $folderPath . '/' . $page . '.html.twig';
-        $deletedFolder = $folderPath . '/deleted';
+        $folderPath = $this->getPagesFolder();
+        $filePath = $folderPath . $page . '.html.twig';
+        $deletedFolder = $folderPath . 'deleted';
 
         //Deletes file
         if ($fs->exists($filePath)) {
@@ -238,8 +295,8 @@ class PageEditService
         $fs = new Filesystem();
 
         //Defines path
-        $folderPath = $this->container->getParameter('kernel.root_dir') . '/Resources/views/' . $this->container->getParameter('c975_l_page_edit.folderPages');
-        $filePath = $folderPath . '/' . $page . '.html.twig';
+        $folderPath = $this->getPagesFolder();
+        $filePath = $folderPath . $page . '.html.twig';
 
         //Gets the skeleton
         extract($this->getSkeleton());
@@ -276,11 +333,11 @@ class PageEditService
         //Create sub-folders
         if (strpos($page, '/') !== false) {
             $subfolder = substr($page, 0, strrpos($page, '/'));
-            $fs->mkdir($folderPath . '/' . $subfolder, 0770);
+            $fs->mkdir($folderPath . $subfolder, 0770);
         }
 
         //Writes new file
-        $newFilePath = $folderPath . '/' . $page . '.html.twig';
+        $newFilePath = $folderPath . $page . '.html.twig';
         $fs->dumpFile($newFilePath, $finalContent);
         $fs->chmod($newFilePath, 0770);
 
