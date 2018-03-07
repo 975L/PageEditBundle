@@ -1,5 +1,9 @@
 # ChangeLog
 
+v1.28.1
+-------
+- Added `h4cc/wkhtmltopdf-amd64` to `composer.json` (07/03/2018)
+
 v1.28
 -----
 - Added Route to generate PDF from page (06/03/2018)

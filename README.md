@@ -170,9 +170,9 @@ The different Routes (naming self-explanatory) available are:
 
 Creation of PDF
 ---------------
-PageEdit uses `KnpSnappyBundle` to generates PDF, which itself uses `wkhtmltopdf`. `wkhtmltopdf` requires that included files, like stylesheets, are included with an absolute url. But, there is a known problem with SSL, see https://github.com/wkhtmltopdf/wkhtmltopdf/issues/3001, which force you to downgrade openssl, like in https://gist.github.com/kai101/99d57462f2459245d28b4f5ea51aa7d0.
+PageEditBundle uses `KnpSnappyBundle` to generates PDF, which itself uses `wkhtmltopdf`. `wkhtmltopdf` requires that included files, like stylesheets, are included with an absolute url. But, there is a known problem with SSL, see https://github.com/wkhtmltopdf/wkhtmltopdf/issues/3001, which force you to downgrade openssl, like in https://gist.github.com/kai101/99d57462f2459245d28b4f5ea51aa7d0.
 
-You can avoid this problem by including the whole content, which is what `wkhtmltopdf` does in your html output. To integrate them easily, you can, as [c975L/SiteBundle](https://github.com/975L/SiteBundle) does, by using [c975L/IncludeLibraryBundle](https://github.com/975L/IncludeLibraryBundle) with the following code:
+You can avoid this problem by including the whole content of included files, which is what `wkhtmltopdf` does in your html output. To integrate them easily, you can, as [c975L/SiteBundle](https://github.com/975L/SiteBundle) does, by using [c975L/IncludeLibraryBundle](https://github.com/975L/IncludeLibraryBundle) with the following code:
 ```twig
 {# in your layout.html.twig > head #}
     {% if display == 'pdf' %}
