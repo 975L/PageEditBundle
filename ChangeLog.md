@@ -1,5 +1,10 @@
 # ChangeLog
 
+v1.28.3
+-------
+- Added pagination above list of pages in dashboard (08/03/2018)
+- Added clean content when writing file for img src (08/03/2018)
+
 v1.28.2
 -------
 - Corrected `REAMDE.md` (08/03/2018)

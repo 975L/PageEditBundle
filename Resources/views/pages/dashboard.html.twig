@@ -49,6 +49,10 @@
                 <a href="?v=redirected">{{ 'label.view_redirected_pages'|trans }}</a>
             {% endif %}
         </p>
+{# Pagination #}
+        <div class="navigation text-center">
+            {{ knp_pagination_render(pages) }}
+        </div>
 {# List of pages and actions #}
         <table class="table table-hover table-condensed table-responsive">
             <thead>
