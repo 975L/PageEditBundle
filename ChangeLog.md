@@ -1,5 +1,13 @@
 # ChangeLog
 
+v1.28.2
+-------
+- Corrected `REAMDE.md` (08/03/2018)
+- Allowed pdf creation for templates located in `protected` folder (08/03/2018)
+- Replaced calls `$this->get('templating')->exists()` by `is_file()` (08/03/2018)
+- Added pdf re-generation after an amount of time (24H) (08/03/2018)
+- Corrected sitemap creation default frequency and priority (08/03/2018)
+
 v1.28.1
 -------
 - Added `h4cc/wkhtmltopdf-amd64` to `composer.json` (07/03/2018)

@@ -195,13 +195,13 @@ class PageEditController extends Controller
         $fileProtectedPath = $folderPath . 'protected/' . $page . '.html.twig';
 
         //Redirected page
-        if ($this->get('templating')->exists($fileRedirectedPath)) {
+        if (is_file($fileRedirectedPath)) {
             return $this->redirectToRoute('pageedit_display', array(
                 'page' => file_get_contents($fileRedirectedPath),
             ));
         }
         //Protected page
-        elseif ($this->get('templating')->exists($fileProtectedPath)) {
+        elseif (is_file($fileProtectedPath)) {
             //Defines toolbar
             $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
                 'type' => 'protected',
@@ -217,7 +217,7 @@ class PageEditController extends Controller
             ));
         }
         //Deleted page
-        elseif ($this->get('templating')->exists($fileDeletedPath)) {
+        elseif (is_file($fileDeletedPath)) {
             throw new HttpException(410);
         }
         //Not existing page
@@ -266,7 +266,7 @@ class PageEditController extends Controller
             $filePath = $this->getParameter('c975_l_page_edit.folderPages') . '/archived/' . $page . '.html.twig';
 
             //Not existing page
-            if (!$this->get('templating')->exists($filePath)) {
+            if (!is_file($filePath)) {
                 throw $this->createNotFoundException();
             }
 
@@ -419,18 +419,27 @@ class PageEditController extends Controller
         $folderPdfPath = $folderPath . 'pdf/';
 
         $filePath = $folderPath . $page . '.html.twig';
+        $fileProtectedPath = $folderPath . 'protected/' . $page . '.html.twig';
         $filePdfPath = $folderPdfPath . $page . '-' . $request->getLocale() . '.pdf';
 
+        //Defines the location of page
+        $fileFinalPath = null;
+        if (is_file($filePath)) {
+            $fileFinalPath = $filePath;
+        } elseif (is_file($fileProtectedPath)) {
+            $fileFinalPath = $fileProtectedPath;
+        }
+
         //Not existing page
-        if (!is_file($filePath)) {
+        if (!is_file($fileFinalPath)) {
             throw $this->createNotFoundException();
         }
 
-        //Creates the pdf if not existing or not up-to-date
-        if (!is_file($filePdfPath) || filemtime($filePdfPath) < filemtime($filePath)) {
+        //Creates the pdf if not existing, not up-to-date or has exceeded an amount of time
+        $amountTime = 60 * 60 * 24;//24 hours
+        if (!is_file($filePdfPath) || filemtime($filePdfPath) < filemtime($fileFinalPath) || filemtime($filePdfPath) + $amountTime < time()) {
             $pageEditService->createFolders();
-
-            $html = $this->renderView($filePath, array(
+            $html = $this->renderView($fileFinalPath, array(
                 'toolbar' => null,
                 'display' => 'pdf',
             ));

@@ -54,7 +54,7 @@ class SitemapCreateCommand extends ContainerAwareCommand
             if (!empty($matches)) {
                 $changeFrequency = $matches[1];
             } else {
-                $changeFrequency = 'weekly';
+                $changeFrequency = 'monthly';
             }
 
             //Gets priority
@@ -62,7 +62,7 @@ class SitemapCreateCommand extends ContainerAwareCommand
             if (!empty($matches)) {
                 $priority = $matches[1] / 10;
             } else {
-                $priority = '0.8';
+                $priority = '0.5';
             }
 
             //Defines data
