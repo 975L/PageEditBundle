@@ -1,5 +1,9 @@
 # ChangeLog
 
+v1.28.4
+-------
+- Corrected `tinymceInit.html.twig > convert_urls` which where causing it to add the url to src and href when modifying (09/03/2018)
+
 v1.28.3
 -------
 - Added pagination above list of pages in dashboard (08/03/2018)
