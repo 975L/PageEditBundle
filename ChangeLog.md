@@ -1,5 +1,10 @@
 # ChangeLog
 
+v1.28.5
+-------
+- Changed display order in Controller (12/03/2018)
+- Used "GoneHttpException" for deleted page (12/03/2018)
+
 v1.28.4
 -------
 - Corrected `tinymceInit.html.twig > convert_urls` which where causing it to add the url to src and href when modifying (09/03/2018)

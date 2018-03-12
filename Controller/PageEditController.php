@@ -17,7 +17,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\GoneHttpException;
 use c975L\PageEditBundle\Entity\PageEdit;
 use c975L\PageEditBundle\Form\PageEditType;
 use c975L\PageEditBundle\Service\PageEditService;
@@ -189,19 +189,35 @@ class PageEditController extends Controller
         $pageEditService = $this->get(PageEditService::class);
         $folderPath = $pageEditService->getPagesFolder();
 
+        //Existing page
         $filePath = $folderPath . $page . '.html.twig';
-        $fileRedirectedPath = $folderPath . 'redirected/' . $page . '.html.twig';
-        $fileDeletedPath = $folderPath . 'deleted/' . $page . '.html.twig';
-        $fileProtectedPath = $folderPath . 'protected/' . $page . '.html.twig';
+        if (is_file($filePath)) {
+            //Gets the user
+            $user = $this->getUser();
 
-        //Redirected page
-        if (is_file($fileRedirectedPath)) {
-            return $this->redirectToRoute('pageedit_display', array(
-                'page' => file_get_contents($fileRedirectedPath),
+            //Defines toolbar
+            $toolbar = '';
+            if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
+                $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
+                    'type' => 'display',
+                    'page' => $page,
+                ));
+                $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
+                    'tools'  => $tools,
+                    'dashboard'  => 'pageedit',
+                ))->getContent();
+            }
+
+            //Renders the page
+            return $this->render($filePath, array(
+                'toolbar' => $toolbar,
+                'display' => 'html',
             ));
         }
+
         //Protected page
-        elseif (is_file($fileProtectedPath)) {
+        $fileProtectedPath = $folderPath . 'protected/' . $page . '.html.twig';
+        if (is_file($fileProtectedPath)) {
             //Defines toolbar
             $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
                 'type' => 'protected',
@@ -216,36 +232,24 @@ class PageEditController extends Controller
                 'toolbar' => $toolbar,
             ));
         }
-        //Deleted page
-        elseif (is_file($fileDeletedPath)) {
-            throw new HttpException(410);
-        }
-        //Not existing page
-        elseif (!is_file($filePath)) {
-            throw $this->createNotFoundException();
-        }
 
-        //Gets the user
-        $user = $this->getUser();
-
-        //Defines toolbar
-        $toolbar = '';
-        if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
-            $tools  = $this->renderView('@c975LPageEdit/tools.html.twig', array(
-                'type' => 'display',
-                'page' => $page,
+        //Redirected page
+        $fileRedirectedPath = $folderPath . 'redirected/' . $page . '.html.twig';
+        //Redirected page
+        if (is_file($fileRedirectedPath)) {
+            return $this->redirectToRoute('pageedit_display', array(
+                'page' => trim(file_get_contents($fileRedirectedPath)),
             ));
-            $toolbar = $this->forward('c975L\ToolbarBundle\Controller\ToolbarController::displayAction', array(
-                'tools'  => $tools,
-                'dashboard'  => 'pageedit',
-            ))->getContent();
         }
 
-        //Renders the page
-        return $this->render($filePath, array(
-            'toolbar' => $toolbar,
-            'display' => 'html',
-        ));
+        //Deleted page
+        $fileDeletedPath = $folderPath . 'deleted/' . $page . '.html.twig';
+        if (is_file($fileDeletedPath)) {
+            throw new GoneHttpException();
+        }
+
+        //Not existing page
+        throw $this->createNotFoundException();
     }
 
 //DISPLAY ARCHIVED

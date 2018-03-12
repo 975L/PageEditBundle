@@ -320,8 +320,8 @@ class PageEditService
 
         //Cleans content
         $content = str_replace(array('{{path', '{{asset'), array('{{ path', '{{ asset'), $formData->getContent());
-        $content = preg_replace('#href=\"(.*){{ path#', 'href="{{path', $content);
-        $content = preg_replace('#src=\"(.*){{ asset#', 'src="{{asset', $content);
+        $content = preg_replace('#href=\"(.*){{ path#', 'href="{{ path', $content);
+        $content = preg_replace('#src=\"(.*){{ asset#', 'src="{{ asset', $content);
 
         //Concatenate skeleton + metadata + content
         $finalContent = $startSkeleton . "\n" . $content . "\n\t\t" . $endSkeleton;
