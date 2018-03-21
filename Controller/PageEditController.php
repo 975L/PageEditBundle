@@ -469,8 +469,11 @@ class PageEditController extends Controller
         //Defines the form
         if ($user !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
             //Defines form
-            $pageEdit = new PageEdit('new');
-            $form = $this->createForm(PageEditType::class, $pageEdit);
+            $pageEdit = new PageEdit();
+            $pageEditConfig = array(
+                'action' => 'new',
+            );
+            $form = $this->createForm(PageEditType::class, $pageEdit, array('pageEditConfig' => $pageEditConfig));
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
@@ -540,8 +543,11 @@ class PageEditController extends Controller
             extract($pageEditService->getData($filePath));
 
             //Defines form
-            $pageEdit = new PageEdit('modify', $originalContent, $title, $page, $changeFrequency, $priority, $description);
-            $form = $this->createForm(PageEditType::class, $pageEdit);
+            $pageEdit = new PageEdit($originalContent, $title, $page, $changeFrequency, $priority, $description);
+            $pageEditConfig = array(
+                'action' => 'modify',
+            );
+            $form = $this->createForm(PageEditType::class, $pageEdit, array('pageEditConfig' => $pageEditConfig));
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
@@ -623,8 +629,11 @@ class PageEditController extends Controller
             extract($pageEditService->getData($filePath));
 
             //Defines form
-            $pageEdit = new PageEdit('duplicate', $originalContent, null, null, $changeFrequency, $priority, $description);
-            $form = $this->createForm(PageEditType::class, $pageEdit);
+            $pageEdit = new PageEdit($originalContent, null, null, $changeFrequency, $priority, $description);
+            $pageEditConfig = array(
+                'action' => 'duplicate',
+            );
+            $form = $this->createForm(PageEditType::class, $pageEdit, array('pageEditConfig' => $pageEditConfig));
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
@@ -695,8 +704,11 @@ class PageEditController extends Controller
             extract($pageEditService->getData($filePath));
 
             //Defines form
-            $pageEdit = new PageEdit('delete', $originalContent, $title, $page);
-            $form = $this->createForm(PageEditType::class, $pageEdit);
+            $pageEdit = new PageEdit($originalContent, $title, $page);
+            $pageEditConfig = array(
+                'action' => 'delete',
+            );
+            $form = $this->createForm(PageEditType::class, $pageEdit, array('pageEditConfig' => $pageEditConfig));
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
@@ -762,8 +774,11 @@ class PageEditController extends Controller
             extract($pageEditService->getData($filePath));
 
             //Defines form
-            $pageEdit = new PageEdit('delete', $originalContent, $title, $page);
-            $form = $this->createForm(PageEditType::class, $pageEdit);
+            $pageEdit = new PageEdit($originalContent, $title, $page);
+            $pageEditConfig = array(
+                'action' => 'delete',
+            );
+            $form = $this->createForm(PageEditType::class, $pageEdit, array('pageEditConfig' => $pageEditConfig));
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
@@ -843,8 +858,11 @@ class PageEditController extends Controller
             extract($pageEditService->getData($filePath));
 
             //Defines form
-            $pageEdit = new PageEdit('delete', $originalContent, $title, $page);
-            $form = $this->createForm(PageEditType::class, $pageEdit);
+            $pageEdit = new PageEdit($originalContent, $title, $page);
+            $pageEditConfig = array(
+                'action' => 'delete',
+            );
+            $form = $this->createForm(PageEditType::class, $pageEdit, array('pageEditConfig' => $pageEditConfig));
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
@@ -911,8 +929,11 @@ class PageEditController extends Controller
             }
 
             //Defines form
-            $pageEdit = new PageEdit('delete', $page, $page, $page);
-            $form = $this->createForm(PageEditType::class, $pageEdit);
+            $pageEdit = new PageEdit($page, $page, $page);
+            $pageEditConfig = array(
+                'action' => 'delete',
+            );
+            $form = $this->createForm(PageEditType::class, $pageEdit, array('pageEditConfig' => $pageEditConfig));
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {

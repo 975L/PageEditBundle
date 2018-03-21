@@ -31,12 +31,10 @@ class PageEdit
     protected $changeFrequency;
     protected $priority;
     protected $description;
-    protected $action;
 
 
-    public function __construct($action = null, $content = null, $title = null, $slug = null, $changeFrequency = null, $priority = null, $description = null)
+    public function __construct($content = null, $title = null, $slug = null, $changeFrequency = null, $priority = null, $description = null)
     {
-        $this->setAction($action);
         $this->setContent($content);
         $this->setTitle($title);
         $this->setSlug($slug);
@@ -176,28 +174,5 @@ class PageEdit
     public function getDescription()
     {
         return $this->description;
-    }
-
-
-    /**
-     * Set action
-     *
-     * @return PageEdit
-     */
-    public function setAction($action)
-    {
-        $this->action = $action;
-
-        return $this;
-    }
-
-    /**
-     * Get action
-     *
-     * @return string
-     */
-    public function getAction()
-    {
-        return $this->action;
     }
 }

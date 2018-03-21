@@ -23,7 +23,7 @@ class PageEditType extends AbstractType
     //Builds the form
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $disabled = $options['data']->getAction() == 'delete' ? true : false;
+        $disabled = $options['pageEditConfig']['action'] == 'delete' ? true : false;
         $disabledSlug = $options['data']->getSlug() == 'home' ? true : $disabled;
 
         $builder
@@ -95,5 +95,7 @@ class PageEditType extends AbstractType
             'intention'  => 'pageEditForm',
             'translation_domain' => 'pageedit',
         ));
+
+        $resolver->setRequired('pageEditConfig');
     }
 }

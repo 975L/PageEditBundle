@@ -1,5 +1,9 @@
 # ChangeLog
 
+v1.28.6
+-------
+- Removed `action` property on Entity `Event` and passed data with array `pageEditConfig` to the form (19/03/2018)
+
 v1.28.5
 -------
 - Changed display order in Controller (12/03/2018)
