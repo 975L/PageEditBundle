@@ -53,13 +53,13 @@ You should also check [KnpSnappyBundle](https://github.com/KnpLabs/KnpSnappyBund
 Setup your Tinymce API key if you use the cloud version, in `parameters.yml`
 ```yml
     #(Optional) Your Tinymce Api key if you use the cloud version
-    #tinymceApiKey: YOUR_API_KEY
+    #tinymceApiKey: 'YOUR_API_KEY'
 ```
 
 And then in `parameters.yml.dist`
 ```yml
     #(Optional) Your Tinymce Api key if you use the cloud version
-    #tinymceApiKey:     ~
+    #tinymceApiKey: ~
 ```
 
 Then, in the `app/config.yml` file of your project, define the following:
@@ -69,8 +69,8 @@ knp_snappy:
     process_timeout: 20
     temporary_folder: "%kernel.cache_dir%/snappy"
     pdf:
-        enabled:    true
-        binary:     "%kernel.root_dir%/../vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64"
+        enabled: true
+        binary: "%kernel.root_dir%/../vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64"
         options:
             print-media-type: true
             page-size: A4
@@ -84,7 +84,7 @@ knp_snappy:
             margin-top: 10mm
             margin-bottom: 10mm
     image:
-        enabled:    false
+        enabled: false
 
 c975_l_page_edit:
     #Path where the files will be stored. The full path ('app/resources/views/[folderPages]') has to be added to .gitignore if Git is used
@@ -108,10 +108,11 @@ Then, enable the routes by adding them to the `app/config/routing.yml` file of y
 ```yml
 c975_l_page_edit:
     resource: "@c975LPageEditBundle/Controller/"
-    type:     annotation
-    prefix:   /
+    type: annotation
+    prefix: /
     #Multilingual website use the following
     #prefix: /{_locale}
+    #defaults:   { _locale: %locale% }
     #requirements:
     #    _locale: en|fr|es
 ```

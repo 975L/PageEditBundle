@@ -1,5 +1,9 @@
 # ChangeLog
 
+v1.28.7
+-------
+- Added 'home' as exception for `page` value in Route `pageedit_display` (14/04/2018)
+
 v1.28.6
 -------
 - Removed `action` property on Entity `Event` and passed data with array `pageEditConfig` to the form (19/03/2018)
