@@ -33,19 +33,5 @@
             {% endif %}
         </p>
         {{ form_widget(form) }}
-{# Page content #}
-        <div class="form-group">
-            <label class="control-label required">
-                {{ 'label.content'|trans }}
-            </label>
-            <br />
-            {{ pageContent|raw }}
-        </div>
-{# Submit #}
-        <div class="form-group">
-            <button type="submit" name="submit" title="{{ 'label.delete'|trans({}, 'toolbar') }}" class="btn btn-lg btn-danger btn-block">
-                <span class="fas fa-trash"></span> {{ 'label.delete'|trans({}, 'toolbar') }}
-            </button>
-        </div>
     {{ form_end(form) }}
 {% endblock %}

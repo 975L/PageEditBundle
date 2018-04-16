@@ -1,5 +1,13 @@
 # ChangeLog
 
+v1.28.8
+-------
+- Added regex class `[A-Z]` in `PageEditController.php` (16/04/2018)
+- Removed unused parenthesis (16/04/2018)
+- Removed 'home' as exception for `page` value in Route `pageedit_display` (16/04/2018)
+- Suppressed content display when deleting page as there is the toolbar option to view it (16/04/2018)
+- Replaced submit button by `SubmitType` (16/04/2018)
+
 v1.28.7
 -------
 - Added 'home' as exception for `page` value in Route `pageedit_display` (14/04/2018)

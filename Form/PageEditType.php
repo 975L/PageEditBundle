@@ -14,6 +14,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -25,6 +26,8 @@ class PageEditType extends AbstractType
     {
         $disabled = $options['pageEditConfig']['action'] == 'delete' ? true : false;
         $disabledSlug = $options['data']->getSlug() == 'home' ? true : $disabled;
+        $submitLabel = $options['pageEditConfig']['action'] == 'delete' ? 'delete' : 'validate';
+        $submitClass = $options['pageEditConfig']['action'] == 'delete' ? 'btn-danger' : 'btn-primary';
 
         $builder
             ->add('title', TextType::class, array(
@@ -86,6 +89,13 @@ class PageEditType extends AbstractType
                     )))
             ;
         }
+        $builder
+            ->add('submit', SubmitType::class, array(
+                'label' => 'label.' . $submitLabel,
+                'translation_domain' => 'toolbar',
+                'attr' => array('class' => 'btn btn-block btn-lg ' . $submitClass),
+            ))
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

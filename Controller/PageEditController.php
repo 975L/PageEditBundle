@@ -178,7 +178,7 @@ class PageEditController extends Controller
      * @Route("/pages/{page}",
      *      name="pageedit_display",
      *      requirements={
-     *          "page": "^(?!archived|dashboard|delete|deleted|duplicate|home|modify|help|links|new|pdf|redirected|slug|upload)([a-z0-9\-\/]+)"
+     *          "page": "^(?!archived|dashboard|delete|deleted|duplicate|modify|help|links|new|pdf|redirected|slug|upload)([a-zA-Z0-9\-\/]+)"
      *      })
      * @Method({"GET", "HEAD"})
      */
@@ -257,7 +257,7 @@ class PageEditController extends Controller
      * @Route("/pages/archived/{page}",
      *      name="pageedit_display_archived",
      *      requirements={
-     *          "page": "^([a-z0-9\-\/]+)"
+     *          "page": "^([a-zA-Z0-9\-\/]+)"
      *      })
      * @Method({"GET", "HEAD"})
      */
@@ -312,7 +312,7 @@ class PageEditController extends Controller
      * @Route("/pages/deleted/{page}",
      *      name="pageedit_display_deleted",
      *      requirements={
-     *          "page": "^([a-z0-9\-\/]+)"
+     *          "page": "^([a-zA-Z0-9\-\/]+)"
      *      })
      * @Method({"GET", "HEAD"})
      */
@@ -359,7 +359,7 @@ class PageEditController extends Controller
      * @Route("/pages/redirected/{page}",
      *      name="pageedit_display_redirected",
      *      requirements={
-     *          "page": "^([a-z0-9\-\/]+)"
+     *          "page": "^([a-zA-Z0-9\-\/]+)"
      *      })
      * @Method({"GET", "HEAD"})
      */
@@ -410,7 +410,7 @@ class PageEditController extends Controller
      * @Route("/pages/pdf/{page}",
      *      name="pageedit_pdf",
      *      requirements={
-     *          "page": "^([a-z0-9\-\/]+)"
+     *          "page": "^([a-zA-Z0-9\-\/]+)"
      *      })
      * @Method({"GET", "HEAD"})
      */
@@ -459,7 +459,6 @@ class PageEditController extends Controller
     /**
      * @Route("/pages/new",
      *      name="pageedit_new")
-     * )
      */
     public function newAction(Request $request)
     {
@@ -518,9 +517,8 @@ class PageEditController extends Controller
      * @Route("/pages/modify/{page}",
      *      name="pageedit_modify",
      *      requirements={
-     *          "page": "^([a-z0-9\-\/]+)"
+     *          "page": "^([a-zA-Z0-9\-\/]+)"
      *      })
-     * )
      */
     public function modifyAction(Request $request, $page)
     {
@@ -604,9 +602,8 @@ class PageEditController extends Controller
      * @Route("/pages/duplicate/{page}",
      *      name="pageedit_duplicate",
      *      requirements={
-     *          "page": "^([a-z0-9\-\/]+)"
+     *          "page": "^([a-zA-Z0-9\-\/]+)"
      *      })
-     * )
      */
     public function duplicateAction(Request $request, $page)
     {
@@ -679,9 +676,8 @@ class PageEditController extends Controller
      * @Route("/pages/delete/{page}",
      *      name="pageedit_delete",
      *      requirements={
-     *          "page": "^(?!archived|deleted|redirected)([a-z0-9\-\/]+)"
+     *          "page": "^(?!archived|deleted|redirected)([a-zA-Z0-9\-\/]+)"
      *      })
-     * )
      */
     public function deleteAction(Request $request, $page)
     {
@@ -749,9 +745,8 @@ class PageEditController extends Controller
      * @Route("/pages/delete/archived/{page}",
      *      name="pageedit_delete_archived",
      *      requirements={
-     *          "page": "^([a-z0-9\-\/]+)"
+     *          "page": "^([a-zA-Z0-9\-\/]+)"
      *      })
-     * )
      */
     public function deleteArchivedAction(Request $request, $page)
     {
@@ -833,9 +828,8 @@ class PageEditController extends Controller
      * @Route("/pages/delete/deleted/{page}",
      *      name="pageedit_delete_deleted",
      *      requirements={
-     *          "page": "^([a-z0-9\-\/]+)"
+     *          "page": "^([a-zA-Z0-9\-\/]+)"
      *      })
-     * )
      */
     public function deleteDeletedAction(Request $request, $page)
     {
@@ -907,9 +901,8 @@ class PageEditController extends Controller
      * @Route("/pages/delete/redirected/{page}",
      *      name="pageedit_delete_redirected",
      *      requirements={
-     *          "page": "^([a-z0-9\-\/]+)"
+     *          "page": "^([a-zA-Z0-9\-\/]+)"
      *      })
-     * )
      */
     public function deleteRedirectedAction(Request $request, $page)
     {
@@ -1034,7 +1027,7 @@ class PageEditController extends Controller
      * @Route("/pages/upload/{page}",
      *      name="pageedit_upload",
      *      requirements={
-     *          "page": "^([a-z0-9\-\/]+)"
+     *          "page": "^([a-zA-Z0-9\-\/]+)"
      *      })
      * @Method({"POST"})
      */
