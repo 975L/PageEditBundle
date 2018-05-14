@@ -234,7 +234,7 @@ class PageEditService
                 $subfolder = substr($page, 0, strrpos($page, '/'));
                 $fs->mkdir($archivedFolder . '/' . $subfolder, 0770);
             }
-            $fs->rename($filePath, $archivedFolder . '/' . $page . '-' . date('Ymd-His-') . $userId . '.html.twig');
+            $fs->rename($filePath, $archivedFolder . '/' . $page . '-' . $userId . '.html.twig');
         }
     }
 

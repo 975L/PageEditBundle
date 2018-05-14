@@ -1,5 +1,13 @@
 # ChangeLog
 
+v1.29
+-----
+- Modified toolbars calls due to modification of c975LToolbarBundle (13/05/2018)
+- Removed calls to FOSUser (13/05/2018)
+- Added templates for forms due to new calls for toolbars (13/05/2018)
+- Added button to get pdf version (13/05/2018)
+- Removed datetime set for archived file, and replaced by filemtime of the file (14/05/2018)
+
 v1.28.8
 -------
 - Added regex class `[A-Z]` in `PageEditController.php` (16/04/2018)

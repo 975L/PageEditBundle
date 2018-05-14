@@ -4,8 +4,7 @@
 
 {% block pageedit_content %}
 {# Toolbar #}
-    {{ toolbar|raw }}
-
+    {{ toolbar_display('@c975LPageEdit/tools.html.twig', 'redirected', 'md', page) }}
 {# Form #}
     <p class="alert alert-warning text-center">
         {{ 'text.redirected_page'|trans }}

@@ -4,11 +4,13 @@
 
 {% block pageedit_content %}
 {# Toolbar #}
-    {{ toolbar_display('@c975LPageEdit/tools.html.twig', 'delete', 'md', page) }}
+    {{ toolbar_display('@c975LPageEdit/tools.html.twig', 'deleteArchived', 'md', page) }}
+{# Warning message #}
+    {{ include('@c975LPageEdit/fragments/warningArchived.html.twig') }}
 {# Form #}
     {{ form_start(form) }}
         <p class="alert alert-danger text-center">
-            {{ 'text.delete_page'|trans }}
+            {{ 'text.delete_archived_page'|trans }}
         </p>
         {{ form_widget(form) }}
     {{ form_end(form) }}

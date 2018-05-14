@@ -1,0 +1,5 @@
+{% trans_default_domain 'pageedit' %}
+
+<div class="alert alert-danger text-center">
+    <span class="fas fa-exclamation-circle"></span> {{ 'label.page_deleted'|trans }} <strong>{{ datetime|localizeddate('medium', 'medium') }}</strong>
+</div>

@@ -1,16 +1,19 @@
 {% trans_default_domain 'toolbar' %}
 
 {% spaceless %}
+{# Dashboard #}
+{{ toolbar_button(path('pageedit_dashboard'), 'dashboard', 'label.pageedit'|trans) }}
+
 {# Display #}
-{% if type == 'modify' or type == 'delete' or type == 'delete-archived' or type == 'delete-deleted' or type == 'delete-redirected' %}
-    {% if type == 'delete-archived' %}
-        {{ toolbar_button(path('pageedit_display_archived', {'page': page}), 'display') }}
-    {% elseif type == 'delete-deleted' %}
-        {{ toolbar_button(path('pageedit_display_deleted', {'page': page}), 'display') }}
-    {% elseif type == 'delete-redirected' %}
-        {{ toolbar_button(path('pageedit_display_redirected', {'page': page}), 'display') }}
+{% if type == 'modify' or type == 'delete' or type == 'deleteArchived' or type == 'deleteDeleted' or type == 'deleteRedirected' %}
+    {% if type == 'deleteArchived' %}
+        {{ toolbar_button(path('pageedit_display_archived', {'page': object}), 'display') }}
+    {% elseif type == 'deleteDeleted' %}
+        {{ toolbar_button(path('pageedit_display_deleted', {'page': object}), 'display') }}
+    {% elseif type == 'deleteRedirected' %}
+        {{ toolbar_button(path('pageedit_display_redirected', {'page': object}), 'display') }}
     {% else %}
-        {{ toolbar_button(path('pageedit_display', {'page': page}), 'display') }}
+        {{ toolbar_button(path('pageedit_display', {'page': object}), 'display') }}
     {% endif %}
 {% endif %}
 
@@ -21,12 +24,17 @@
 
 {# Edit #}
 {% if type == 'display' or type == 'delete' %}
-    {{ toolbar_button(path('pageedit_modify', {'page': page}), 'modify') }}
+    {{ toolbar_button(path('pageedit_modify', {'page': object}), 'modify') }}
 {% endif %}
 
 {# Duplicate #}
+{% if type == 'display' or type == 'modify' %}
+    {{ toolbar_button(path('pageedit_duplicate', {'page': object}), 'duplicate') }}
+{% endif %}
+
+{# Pdf #}
 {% if type == 'display' %}
-    {{ toolbar_button(path('pageedit_duplicate', {'page': page}), 'duplicate') }}
+    {{ toolbar_button(path('pageedit_pdf', {'page': object}), 'pdf') }}
 {% endif %}
 
 {# Cancel #}
@@ -37,13 +45,13 @@
 {# Delete #}
 {% if type == 'display' or type == 'modify' or type == 'archived' or type == 'deleted' or type == 'redirected' %}
     {% if type == 'archived' %}
-        {{ toolbar_button(path('pageedit_delete_archived', {'page': page}), 'delete') }}
+        {{ toolbar_button(path('pageedit_delete_archived', {'page': object}), 'delete') }}
     {% elseif type == 'deleted' %}
-        {{ toolbar_button(path('pageedit_delete_deleted', {'page': page}), 'delete') }}
+        {{ toolbar_button(path('pageedit_delete_deleted', {'page': object}), 'delete') }}
     {% elseif type == 'redirected' %}
-        {{ toolbar_button(path('pageedit_delete_redirected', {'page': page}), 'delete') }}
+        {{ toolbar_button(path('pageedit_delete_redirected', {'page': object}), 'delete') }}
     {% else %}
-        {{ toolbar_button(path('pageedit_delete', {'page': page}), 'delete') }}
+        {{ toolbar_button(path('pageedit_delete', {'page': object}), 'delete') }}
     {% endif %}
 {% endif %}
 
@@ -51,4 +59,10 @@
 {% if type != 'help' %}
     {{ toolbar_button(path('pageedit_help'), 'help') }}
 {% endif %}
+
+{# Signout #}
+{{ toolbar_button(path('user_signout'), 'signout') }}
+
+{# Other dashboards #}
+{{ toolbar_dashboards('md') }}
 {% endspaceless %}

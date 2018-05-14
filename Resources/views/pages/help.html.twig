@@ -4,8 +4,7 @@
 
 {% block pageedit_content %}
 {# Toolbar #}
-    {{ toolbar|raw }}
-
+    {{ toolbar_display('@c975LPageEdit/tools.html.twig', 'help', 'md') }}
 {# Help content #}
     {{ include( ['@c975LPageEdit/pages/languages/help-' ~ app.request.locale ~ '.html.twig', '@c975LPageEdit/pages/languages/help-en.html.twig']) }}
 {% endblock %}

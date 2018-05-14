@@ -5,7 +5,7 @@
 {% block pageedit_content %}
     {{ include('@c975LPageEdit/tinymceInit.html.twig') }}
 {# Toolbar #}
-    {{ toolbar|raw }}
+    {{ toolbar_display('@c975LPageEdit/tools.html.twig', 'duplicate', 'md', page) }}
 {# Form #}
     {{ form_start(form) }}
         <p class="alert alert-warning text-center">
