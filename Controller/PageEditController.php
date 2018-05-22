@@ -180,22 +180,23 @@ class PageEditController extends Controller
         $folderPath = $pageEditService->getPagesFolder();
         $filePath = $folderPath . $page . '.html.twig';
 
+        //Defines toolbar
+        $toolbar = '';
+        if ($this->getUser() !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
+            $tools = $this->renderView('@c975LPageEdit/tools.html.twig', array(
+                'type' => 'display',
+                'object' => $page,
+            ));
+            $toolbar = $this->renderView('@c975LToolbar/toolbar.html.twig', array(
+                'tools' => $tools,
+                'size' => 'md',
+            ));
+        }
+
         //Existing page
         if (is_file($filePath)) {
-            //Defines toolbar
-            $toolbar = '';
-            if ($this->getUser() !== null && $this->get('security.authorization_checker')->isGranted($this->getParameter('c975_l_page_edit.roleNeeded'))) {
-                $tools = $this->renderView('@c975LPageEdit/tools.html.twig', array(
-                    'type' => 'display',
-                    'object' => $page,
-                ));
-                $toolbar = $this->renderView('@c975LToolbar/toolbar.html.twig', array(
-                    'tools' => $tools,
-                    'size' => 'md',
-                ));
-            }
+            $filePath = $this->getParameter('c975_l_page_edit.folderPages') . '/' . $page . '.html.twig';
 
-            //Renders the page
             return $this->render($filePath, array(
                 'toolbar' => $toolbar,
                 'display' => 'html',
@@ -205,6 +206,8 @@ class PageEditController extends Controller
         //Protected page
         $fileProtectedPath = $folderPath . 'protected/' . $page . '.html.twig';
         if (is_file($fileProtectedPath)) {
+            $fileProtectedPath = $this->getParameter('c975_l_page_edit.folderPages') . '/protected/' . $page . '.html.twig';
+
             return $this->render($fileProtectedPath, array(
                 'toolbar' => $toolbar,
             ));
@@ -214,6 +217,8 @@ class PageEditController extends Controller
         $fileRedirectedPath = $folderPath . 'redirected/' . $page . '.html.twig';
         //Redirected page
         if (is_file($fileRedirectedPath)) {
+            $fileRedirectedPath = $this->getParameter('c975_l_page_edit.folderPages') . '/redirected/' . $page . '.html.twig';
+
             return $this->redirectToRoute('pageedit_display', array(
                 'page' => trim(file_get_contents($fileRedirectedPath)),
             ));

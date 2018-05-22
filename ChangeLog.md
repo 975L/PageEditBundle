@@ -1,5 +1,11 @@
 # ChangeLog
 
+v1.29.2
+-------
+- Modified `getSkeleton()` to use real path in place of template locator (22/05/2018)
+- Added path for SF4 templates (22/05/2018)
+- Corrected toolbar display (22/05/2018)
+
 v1.29.1
 -------
 - Removed required in composer.json (22/05/2018)

@@ -15,18 +15,10 @@ use Cocur\Slugify\Slugify;
 class PageEditService
 {
     private $container;
-    private $parser;
-    private $locator;
 
-    public function __construct(
-        \Symfony\Component\DependencyInjection\ContainerInterface $container,
-        \Symfony\Bundle\FrameworkBundle\Templating\TemplateNameParser $parser,
-        \Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator $locator
-        )
+    public function __construct(\Symfony\Component\DependencyInjection\ContainerInterface $container)
     {
         $this->container = $container;
-        $this->parser = $parser;
-        $this->locator = $locator;
     }
 
     //Creates the folders needed by the Bundle
@@ -119,20 +111,27 @@ class PageEditService
     //Returns the images folder
     public function getImagesFolder()
     {
+        if (substr(\Symfony\Component\HttpKernel\Kernel::VERSION, 0, 1) == 4) {
+            return $this->container->getParameter('kernel.root_dir') . '/../public/images/' . $this->container->getParameter('c975_l_page_edit.folderPages') . '/';
+        }
+
         return $this->container->getParameter('kernel.root_dir') . '/../web/images/' . $this->container->getParameter('c975_l_page_edit.folderPages') . '/';
     }
 
     //Returns the pages folder
     public function getPagesFolder()
     {
+        if (substr(\Symfony\Component\HttpKernel\Kernel::VERSION, 0, 1) == 4) {
+            return $this->container->getParameter('kernel.root_dir') . '/../templates/' . $this->container->getParameter('c975_l_page_edit.folderPages') . '/';
+        }
+
         return $this->container->getParameter('kernel.root_dir') . '/Resources/views/' . $this->container->getParameter('c975_l_page_edit.folderPages') . '/';
     }
-
 
     //Gets the start and end of the skeleton
     public function getSkeleton()
     {
-        $skeleton = file_get_contents($this->locator->locate($this->parser->parse('c975LPageEditBundle::skeleton.html.twig')));
+        $skeleton = file_get_contents($this->container->getParameter('kernel.root_dir') . '/../vendor/c975l/pageedit-bundle/Resources/views/skeleton.html.twig');
 
         //Kept `pageEdit` for compatibility for files not yet modified with new skeleton (06/03/2018)
         $startBlock = strpos($skeleton, '{% block pageedit_content %}') !== false ? '{% block pageedit_content %}' : '{% block pageEdit %}';
