@@ -19,9 +19,6 @@
     ],
     "require": {
         "php": ">=5.5.9",
-        "symfony/framework-bundle": "^3",
-        "sensio/framework-extra-bundle": "^3",
-        "symfony/assetic-bundle": "^2",
         "knplabs/knp-paginator-bundle": "^2",
         "knplabs/knp-snappy-bundle": "^1",
         "h4cc/wkhtmltopdf-amd64": "^0",
