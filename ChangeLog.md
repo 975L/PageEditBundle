@@ -1,5 +1,9 @@
 # ChangeLog
 
+v1.29.2.2
+---------
+- Changed version required for symfony/templating (26/06/2018)
+
 v1.29.2.1
 ---------
 - Added 'home' as non-expected value for Route `pageedit_display` (26/06/2018)
