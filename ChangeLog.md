@@ -1,5 +1,9 @@
 # ChangeLog
 
+v1.29.2.1
+---------
+- Added 'home' as non-expected value for Route `pageedit_display` (26/06/2018)
+
 v1.29.2
 -------
 - Modified `getSkeleton()` to use real path in place of template locator (22/05/2018)

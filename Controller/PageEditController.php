@@ -168,7 +168,7 @@ class PageEditController extends Controller
      * @Route("/pages/{page}",
      *      name="pageedit_display",
      *      requirements={
-     *          "page": "^(?!archived|dashboard|delete|deleted|duplicate|modify|help|links|new|pdf|redirected|slug|upload)([a-zA-Z0-9\-\/]+)"
+     *          "page": "^(?!archived|dashboard|delete|deleted|duplicate|home|modify|help|links|new|pdf|redirected|slug|upload)([a-zA-Z0-9\-\/]+)"
      *      })
      * @Method({"GET", "HEAD"})
      */
