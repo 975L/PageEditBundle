@@ -17,9 +17,9 @@
     {% endif %}
 {% endif %}
 
-{# New #}
-{% if type != 'new' %}
-    {{ toolbar_button(path('pageedit_new'), 'new') }}
+{# Create #}
+{% if type != 'create' %}
+    {{ toolbar_button(path('pageedit_create'), 'create') }}
 {% endif %}
 
 {# Edit #}

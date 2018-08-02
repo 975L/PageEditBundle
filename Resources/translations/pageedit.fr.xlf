@@ -166,6 +166,14 @@
                 <source>label.description</source>
                 <target>Description (sera utilisée par les moteurs de recherche et les réseaux sociaux)</target>
             </trans-unit>
+            <trans-unit id="49">
+                <source>label.archive</source>
+                <target>Archive</target>
+            </trans-unit>
+            <trans-unit id="50">
+                <source>label.delete</source>
+                <target>Suppression</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

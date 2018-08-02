@@ -1,0 +1,14 @@
+{% extends "@c975LPageEdit/layout.html.twig" %}
+{% trans_default_domain 'pageedit' %}
+{% set title = 'label.archive'|trans ~ ' "' ~ pageTitle ~ '"' %}
+
+{% block content %}
+{# Toolbar #}
+    {{ toolbar_display('@c975LPageEdit/tools.html.twig', 'archived', 'md', page) }}
+{# Warning message #}
+    {{ include('@c975LPageEdit/fragments/warningArchived.html.twig') }}
+{# Content #}
+    {% block pageedit_content %}
+        {{ pageContent|raw }}
+    {% endblock %}
+{% endblock %}

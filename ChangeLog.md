@@ -1,5 +1,17 @@
 # ChangeLog
 
+v1.30
+-----
+- Made use of Voters for access rights (02/08/2018)
+- Made Controllers more SOLID compliant (02/08/2018)
+- Removed `Action` in controller method name as not requested anymore (02/08/2018)
+- Use of Yoda notation (02/08/2018)
+- Split Controller files (02/08/2018)
+- Corrected dashboard view (02/08/2018)
+- Replaced Route `pageedit_new` with `pageedit_create` to assure consistency in naming as 'new' is a php reserved word (02/08/2018)
+- Added check for existing semantic url (02/08/2018)
+- Displayed html code for Archived and Deleted pages as rendering may give errors (Route doesn't exist, etc.) (02/08/2018)
+
 v1.29.2.2
 ---------
 - Changed version required for symfony/templating (26/06/2018)

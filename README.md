@@ -159,7 +159,7 @@ The different Routes (naming self-explanatory) available are:
 - pageedit_home
 - pageedit_display
 - pageedit_pdf
-- pageedit_new
+- pageedit_create
 - pageedit_modify
 - pageedit_duplicate
 - pageedit_delete

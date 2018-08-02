@@ -7,7 +7,7 @@
     {{ toolbar_display('@c975LPageEdit/tools.html.twig', 'dashboard', 'md') }}
 {# Title #}
     <div class="text-center">
-        <h2>
+        <h2 class="text-center">
             {{ 'text.list_pages'|trans }}
             {% if app.request.query.get('v') == null %}
                 ({{ 'label.current'|trans }})
@@ -25,28 +25,28 @@
             {% if app.request.query.get('v') == null %}
                 <strong>{{ 'label.view_current_pages'|trans }}</strong>
             {% else %}
-                <a href="?v=">{{ 'label.view_current_pages'|trans }}</a>
+                <a href="{{ path('pageedit_dashboard') }}?v=">{{ 'label.view_current_pages'|trans }}</a>
             {% endif %}
             &nbsp;-&nbsp;
 {# Archived #}
             {% if app.request.query.get('v') == 'archived' %}
                 <strong>{{ 'label.view_archived_pages'|trans }}</strong>
             {% else %}
-                <a href="?v=archived">{{ 'label.view_archived_pages'|trans }}</a>
+                <a href="{{ path('pageedit_dashboard') }}?v=archived">{{ 'label.view_archived_pages'|trans }}</a>
             {% endif %}
             &nbsp;-&nbsp;
 {# Deleted #}
             {% if app.request.query.get('v') == 'deleted' %}
                 <strong>{{ 'label.view_deleted_pages'|trans }}</strong>
             {% else %}
-                <a href="?v=deleted">{{ 'label.view_deleted_pages'|trans }}</a>
+                <a href="{{ path('pageedit_dashboard') }}?v=deleted">{{ 'label.view_deleted_pages'|trans }}</a>
             {% endif %}
             &nbsp;-&nbsp;
 {# Redirected #}
             {% if app.request.query.get('v') == 'redirected' %}
                 <strong>{{ 'label.view_redirected_pages'|trans }}</strong>
             {% else %}
-                <a href="?v=redirected">{{ 'label.view_redirected_pages'|trans }}</a>
+                <a href="{{ path('pageedit_dashboard') }}?v=redirected">{{ 'label.view_redirected_pages'|trans }}</a>
             {% endif %}
         </p>
 {# Pagination #}
@@ -78,11 +78,15 @@
                             {% elseif page.status == 'redirected' %}
                                 <a href="{{ path('pageedit_display_redirected', {'page': page.slug}) }}" title="{{ 'label.display'|trans({}, 'toolbar') }}">{{ page.title }}</a>
                             {% else %}
-                                <a href="{{ path('pageedit_display', {'page': page.slug}) }}" title="{{ 'label.display'|trans({}, 'toolbar') }}">{{ page.title }}</a>
+                                {% if page.slug != 'home' %}
+                                    <a href="{{ path('pageedit_display', {'page': page.slug|replace({'protected/': ''}) }) }}" title="{{ 'label.display'|trans({}, 'toolbar') }}">{{ page.title }}</a>
+                                {% else %}
+                                    <a href="{{ path('pageedit_home') }}" title="{{ 'label.display'|trans({}, 'toolbar') }}">{{ page.title }}</a>
+                                {% endif %}
                             {% endif %}
                         </td>
 {# Slug #}
-                        <td class="text-center">
+                        <td class="text-left">
                             {% if '/' in page.slug %}
                                 <strong>/{{ page.slug|replace({(page.slug|split('/')|last): ''}) }}</strong>{{ page.slug|split('/')|last }}
                             {% elseif page.slug != 'home' %}
@@ -96,12 +100,16 @@
                             <td class="text-center">
                                 <a href="{{ path('pageedit_modify', {'page': page.slug}) }}" title="{{ 'label.modify'|trans({}, 'toolbar') }}">{{ 'label.modify'|trans({}, 'toolbar') }}</a>
                             </td>
+                        {% elseif page.status == 'protected' %}
+                            <td></td>
                         {% endif %}
 {# Duplicate #}
                         {% if page.status == 'current' %}
                             <td class="text-center">
                                 <a href="{{ path('pageedit_duplicate', {'page': page.slug}) }}" title="{{ 'label.duplicate'|trans({}, 'toolbar') }}">{{ 'label.duplicate'|trans({}, 'toolbar') }}</a>
                             </td>
+                        {% elseif page.status == 'protected' %}
+                            <td></td>
                         {% endif %}
 {# Delete #}
                         <td class="text-center">

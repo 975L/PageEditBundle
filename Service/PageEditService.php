@@ -10,39 +10,168 @@
 namespace c975L\PageEditBundle\Service;
 
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Cocur\Slugify\Slugify;
 
 class PageEditService
 {
+    private $authChecker;
     private $container;
+    private $knpSnappyPdf;
+    private $request;
+    private $templating;
 
-    public function __construct(\Symfony\Component\DependencyInjection\ContainerInterface $container)
+    public function __construct(
+        \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface $authChecker,
+        \Symfony\Component\DependencyInjection\ContainerInterface $container,
+        \Knp\Snappy\Pdf $knpSnappyPdf,
+        \Symfony\Component\HttpFoundation\RequestStack $requestStack,
+        \Twig_Environment $templating
+        )
     {
+        $this->authChecker = $authChecker;
         $this->container = $container;
+        $this->knpSnappyPdf = $knpSnappyPdf;
+        $this->request = $requestStack->getCurrentRequest();
+        $this->templating = $templating;
+    }
+
+    //Archives file
+    public function archiveFile($page, $userId)
+    {
+        //Defines paths
+        $folderPath = $this->getPagesFolder();
+        $archivedFolder = $folderPath . 'archived';
+        $filePath = $folderPath . $page . '.html.twig';
+
+        //Archives file
+        $fs = new Filesystem();
+        if ($fs->exists($filePath)) {
+            //Create sub-folders
+            if (false !== strpos($page, '/')) {
+                $subfolder = substr($page, 0, strrpos($page, '/'));
+                $fs->mkdir($archivedFolder . '/' . $subfolder, 0770);
+            }
+            $fs->rename($filePath, $archivedFolder . '/' . $page . '-' . date('Ymd-His') . '-' . $userId . '.html.twig');
+        }
     }
 
     //Creates the folders needed by the Bundle
     public function createFolders()
     {
+        //Defines folders
+        $folderPath = $this->getPagesFolder();
+        $folders = array (
+            $folderPath . 'pdf',
+            $folderPath . 'archived',
+            $folderPath . 'deleted',
+            $folderPath . 'protected',
+            $folderPath . 'redirected',
+            $this->getImagesFolder(),
+        );
+
+        //Creates folders
+        $fs = new Filesystem();
+        foreach ($folders as $folder) {
+            if (!is_dir($folder)) {
+                $fs->mkdir($folder, 0770);
+            }
+        }
+    }
+
+    //Creates the pdf
+    public function createPdf($filePath, $page)
+    {
+        $filePdfPath = $this->getPagesFolder() . 'pdf/' . $page . '-' . $this->request->getLocale() . '.pdf';
+        $amountTime = 60 * 60 * 24;//24 hours
+
+        //Checks if pdf is not existing, not up-to-date or has exceeded an amount of time
+        if (!is_file($filePdfPath) ||
+            filemtime($filePdfPath) < filemtime($filePath) ||
+            filemtime($filePdfPath) + $amountTime < time()) {
+
+            $html = $this->templating->render($filePath, array(
+                'toolbar' => '',
+                'display' => 'pdf',
+            ));
+            $this->createFolders();
+            file_put_contents($filePdfPath, $this->knpSnappyPdf->getOutputFromHtml(str_replace('https:', 'http:', $html)));
+        }
+
+        return $filePdfPath;
+    }
+
+    //Defines slug and title for a set of pages
+    public function definePagesSlugTitle($finder, $view)
+    {
+        $pages = array();
+        foreach ($finder as $file) {
+            $slug = str_replace('.html.twig', '', $file->getRelativePathname());
+            $title = $this->getTitle($file->getContents(), $slug);
+            $titleTranslated = $this->getTitleTranslated($title);
+
+            //Defines status of page
+            if (false !== strpos($file->getPath(), 'protected')) {
+                $status = 'protected';
+            } elseif ($view == '') {
+                $status = 'current';
+            } else {
+                $status = $view;
+            }
+
+            //Adds page to array
+            $pages[] = array(
+                'slug' => $slug,
+                'title' => $titleTranslated,
+                'status' => $status,
+            );
+        }
+
+        return $pages;
+    }
+
+    //Defines toolbar
+    public function defineToolbar($kind, $page)
+    {
+        $toolbar = '';
+        if ($this->authChecker->isGranted($this->container->getParameter('c975_l_page_edit.roleNeeded'))) {
+            $tools = $this->templating->render('@c975LPageEdit/tools.html.twig', array(
+                'type' => $kind,
+                'object' => $page,
+            ));
+            $toolbar = $this->templating->render('@c975LToolbar/toolbar.html.twig', array(
+                'tools' => $tools,
+                'size' => 'md',
+            ));
+        }
+
+        return $toolbar;
+    }
+
+    //Moves to deleted/redirected folder the requested file
+    public function deleteFile($page, $archive)
+    {
         //Gets the FileSystem
         $fs = new Filesystem();
 
-        //Defines paths
+        //Defines path
         $folderPath = $this->getPagesFolder();
-        $pdfFolder = $folderPath . 'pdf';
-        $archivedFolder = $folderPath . 'archived';
+        $filePath = $folderPath . $page . '.html.twig';
         $deletedFolder = $folderPath . 'deleted';
-        $protectedFolderPath = $folderPath . 'protected';
-        $redirectedFolder = $folderPath . 'redirected';
-        $imageFolderPath = $this->getImagesFolder();
 
-        //Creates folders
-        $fs->mkdir($pdfFolder, 0770);
-        $fs->mkdir($archivedFolder, 0770);
-        $fs->mkdir($deletedFolder, 0770);
-        $fs->mkdir($protectedFolderPath, 0770);
-        $fs->mkdir($redirectedFolder, 0770);
-        $fs->mkdir($imageFolderPath, 0770);
+        //Deletes file
+        if ($fs->exists($filePath)) {
+            if ($archive === true) {
+                //Create sub-folders
+                if (strpos($page, '/') !== false) {
+                    $subfolder = substr($page, 0, strrpos($page, '/'));
+                    $fs->mkdir($deletedFolder . '/' . $subfolder, 0770);
+                }
+                $fs->rename($filePath, $deletedFolder . '/' . $page . '.html.twig');
+            } else {
+                $fs->remove($filePath);
+            }
+        }
     }
 
     //Gets the change frequency of the page
@@ -61,9 +190,7 @@ class PageEditService
     //Gets all data relative to page
     public function getData($filePath)
     {
-        //Gets the FileSystem
         $fs = new Filesystem();
-
         if ($fs->exists($filePath)) {
             $fileContent = file_get_contents($filePath);
             $title = $this->getTitle($fileContent, str_replace( array($this->getPagesFolder(), '.html.twig'), '', $filePath));
@@ -81,7 +208,6 @@ class PageEditService
         return null;
     }
 
-
     //Gets the description of the page
     public function getDescription($fileContent)
     {
@@ -95,17 +221,30 @@ class PageEditService
         return $description;
     }
 
-    //Gets the priority of the page
-    public function getPriority($fileContent)
+    //Returns file path
+    public function getFilePath($page)
     {
-        $priority = '5';
+        $page = rtrim($page, '/') . '.html.twig';
+        $folderPath = $this->getPagesFolder();
 
-        preg_match('/pageedit_priority=\"(.*)\"/', $fileContent, $matches);
-        if (!empty($matches)) {
-            $priority = $matches[1];
+        //Normal
+        if (is_file($folderPath . $page)) {
+            return $folderPath . $page;
+        //Protected
+        } elseif (is_file($folderPath . 'protected/' . $page)) {
+            return $folderPath . 'protected/' . $page;
+        //Archived
+        } elseif (is_file($folderPath . 'archived/' . $page)) {
+            return $folderPath . 'archived/' . $page;
+        //Redirected
+        } elseif (is_file($folderPath . 'redirected/' . $page)) {
+            return $folderPath . 'redirected/' . $page;
+        //Deleted
+        } elseif (is_file($folderPath . 'deleted/' . $page)) {
+            return $folderPath . 'deleted/' . $page;
         }
 
-        return $priority;
+        return false;
     }
 
     //Returns the images folder
@@ -118,6 +257,88 @@ class PageEditService
         return $this->container->getParameter('kernel.root_dir') . '/../web/images/' . $this->container->getParameter('c975_l_page_edit.folderPages') . '/';
     }
 
+    //Gets links to display in the select in Tinymce
+    public function getLinks()
+    {
+        //Defines paths
+        $folderPath = $this->getPagesFolder();
+        $protectedFolderPath = $folderPath . 'protected';
+
+        //Finds pages
+        $finder = new Finder();
+        $finder
+            ->files()
+            ->in($folderPath)
+            ->in($protectedFolderPath)
+            ->depth('== 0')
+            ->name('*.html.twig')
+            ->sortByName()
+            ;
+
+        //Defines slug and title
+        $pages = array();
+        foreach ($finder as $file) {
+            $slug = str_replace('.html.twig', '', $file->getRelativePathname());
+            $title = $this->getTitle($file->getContents(), $slug);
+            $titleTranslated = $this->getTitleTranslated($title);
+
+            //Creates the array of available pages
+            $pages[] = array(
+                'title' => $titleTranslated,
+                'value' => "{{ path('pageedit_display', {'page': '" . $slug . "'}) }}",
+            );
+        }
+
+        return $pages;
+    }
+
+    //Get original content from a file
+    public function getOriginalContent($fileContent)
+    {
+        //Kept `pageEdit` for compatibility for files not yet modified with new skeleton (06/03/2018)
+        $startBlock = strpos($fileContent, '{% block pageedit_content %}') !== false ? '{% block pageedit_content %}' : '{% block pageEdit %}';
+        $endBlock = '{% endblock %}';
+        $entryPoint = strpos($fileContent, $startBlock) + strlen($startBlock);
+        $exitPoint = strpos($fileContent, $endBlock, $entryPoint);
+
+        $originalContent = trim(substr($fileContent, $entryPoint, $exitPoint - $entryPoint));
+
+        return $originalContent;
+    }
+
+    //Gets all available pages
+    public function getPages()
+    {
+        //Defines path
+        $finder = new Finder();
+        $folderPath = $this->getPagesFolder();
+
+        //Gets pages for specific folder
+        $view = $this->request->get('v');
+        if ($view !== '' && in_array($view, array('archived', 'deleted', 'redirected'))) {
+            $finder
+                ->files()
+                ->in($folderPath .= $view)
+                ->name('*.html.twig')
+                ->sortByType()
+            ;
+        //Gets current pages
+        } else {
+            $finder
+                ->files()
+                ->in($folderPath)
+                ->exclude('archived')
+                ->exclude('deleted')
+                ->exclude('redirected')
+                ->name('*.html.twig')
+                ->sortByType()
+            ;
+        }
+
+        //Returns pages with slug and title
+        return $this->definePagesSlugTitle($finder, $view);
+    }
+
     //Returns the pages folder
     public function getPagesFolder()
     {
@@ -126,6 +347,19 @@ class PageEditService
         }
 
         return $this->container->getParameter('kernel.root_dir') . '/Resources/views/' . $this->container->getParameter('c975_l_page_edit.folderPages') . '/';
+    }
+
+    //Gets the priority of the page
+    public function getPriority($fileContent)
+    {
+        $priority = '5';
+
+        preg_match('/pageedit_priority=\"(.*)\"/', $fileContent, $matches);
+        if (!empty($matches)) {
+            $priority = $matches[1];
+        }
+
+        return $priority;
     }
 
     //Gets the start and end of the skeleton
@@ -144,20 +378,6 @@ class PageEditService
             'startSkeleton' => trim(substr($skeleton, 0, $entryPoint)),
             'endSkeleton' => trim(substr($skeleton, $exitPoint)),
         );
-    }
-
-    //Get original content from a file
-    public function getOriginalContent($fileContent)
-    {
-        //Kept `pageEdit` for compatibility for files not yet modified with new skeleton (06/03/2018)
-        $startBlock = strpos($fileContent, '{% block pageedit_content %}') !== false ? '{% block pageedit_content %}' : '{% block pageEdit %}';
-        $endBlock = '{% endblock %}';
-        $entryPoint = strpos($fileContent, $startBlock) + strlen($startBlock);
-        $exitPoint = strpos($fileContent, $endBlock, $entryPoint);
-
-        $originalContent = trim(substr($fileContent, $entryPoint, $exitPoint - $entryPoint));
-
-        return $originalContent;
     }
 
     //Gets the title of the page
@@ -200,49 +420,31 @@ class PageEditService
         return $titleTranslated;
     }
 
-    //Slugify function - https://github.com/cocur/slugify
-    public function slugify($text, $keepSlashes = false)
+    //Modifies files (+ archive old file)
+    public function modifyFile($page, $originalContent, $formData, $userId)
     {
-        $slugify = new Slugify();
-        if ($keepSlashes === true) {
-            $slugify->addRule('/', '-thereisaslash-');
+        //Gets slug
+        if ($page != $formData->getSlug()) {
+            $slug = $this->slugify($formData->getSlug(), true);
+        } else {
+            $slug = $formData->getSlug();
         }
-        $slugifyText = $slugify->slugify($text);
 
-        return str_replace('-thereisaslash-', '/', $slugifyText);
-    }
-
-    //Archives file
-    public function archiveFile($page, $userId)
-    {
-        //Creates structure in case it not exists
-        $this->createFolders();
-
-        //Gets the FileSystem
-        $fs = new Filesystem();
-
-        //Defines paths
-        $folderPath = $this->getPagesFolder();
-        $archivedFolder = $folderPath . 'archived';
-        $filePath = $folderPath . $page . '.html.twig';
-
-        //Archives file
-        if ($fs->exists($filePath)) {
-            //Create sub-folders
-            if (strpos($page, '/') !== false) {
-                $subfolder = substr($page, 0, strrpos($page, '/'));
-                $fs->mkdir($archivedFolder . '/' . $subfolder, 0770);
-            }
-            $fs->rename($filePath, $archivedFolder . '/' . $page . '-' . $userId . '.html.twig');
+        //Archives and redirects the file if title (then slug) has changed
+        if ($slug != $page) {
+            $this->archiveFile($page, $userId);
+            $this->redirectFile($page, $slug);
         }
+
+        //Writes file
+        $this->writeFile($slug, $originalContent, $formData, $userId);
+
+        return $slug;
     }
 
     //Creates the redirection file
     public function redirectFile($page, $slug)
     {
-        //Creates structure in case it not exists
-        $this->createFolders();
-
         //Gets the FileSystem
         $fs = new Filesystem();
 
@@ -255,44 +457,46 @@ class PageEditService
         $fs->dumpFile($redirectedFilePath, $slug);
     }
 
-    //Moves to deleted/redirected folder the requested file
-    public function deleteFile($page, $archive)
+    //Slugify function - https://github.com/cocur/slugify
+    public function slugify($text, $keepSlashes = false)
     {
-        //Creates structure in case it not exists
-        $this->createFolders();
-
-        //Gets the FileSystem
-        $fs = new Filesystem();
-
-        //Defines path
-        $folderPath = $this->getPagesFolder();
-        $filePath = $folderPath . $page . '.html.twig';
-        $deletedFolder = $folderPath . 'deleted';
-
-        //Deletes file
-        if ($fs->exists($filePath)) {
-            if ($archive === true) {
-                //Create sub-folders
-                if (strpos($page, '/') !== false) {
-                    $subfolder = substr($page, 0, strrpos($page, '/'));
-                    $fs->mkdir($deletedFolder . '/' . $subfolder, 0770);
-                }
-                $fs->rename($filePath, $deletedFolder . '/' . $page . '.html.twig');
-            } else {
-                $fs->remove($filePath);
-            }
+        $slugify = new Slugify();
+        if ($keepSlashes === true) {
+            $slugify->addRule('/', '-thereisaslash-');
         }
+        $slug = str_replace('-thereisaslash-', '/', $slugify->slugify($text));
+
+        //Checks unicity of slug
+        $finalSlug = $slug;
+        $slugExists = true;
+        $i = 1;
+        do {
+            $slugExists = $this->slugExists($finalSlug);
+            if ($slugExists) {
+                $finalSlug = $slug . '-' . $i++;
+            }
+        } while (false !== $slugExists);
+
+        return $finalSlug;
     }
 
-    //Archives old file and writes new one
+    //Checks if slug already exists
+    public function slugExists($slug)
+    {
+        $pages = $this->getPages();
+
+        foreach ($pages as $page) {
+            if (str_replace('protected/', '', $page['slug']) == $slug) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    //Writes file (+ archive old file)
     public function writeFile($page, $originalContent, $formData, $userId)
     {
-        //Creates structure in case it not exists
-        $this->createFolders();
-
-        //Gets the FileSystem
-        $fs = new Filesystem();
-
         //Defines path
         $folderPath = $this->getPagesFolder();
         $filePath = $folderPath . $page . '.html.twig';
@@ -326,12 +530,14 @@ class PageEditService
         $finalContent = $startSkeleton . "\n" . $content . "\n\t\t" . $endSkeleton;
 
         //Archives old file if content or metadata are different
+        $this->createFolders();
+        $fs = new Filesystem();
         if ($fs->exists($filePath) && file_get_contents($filePath) !== $finalContent) {
             $this->archiveFile($page, $userId);
         }
 
         //Create sub-folders
-        if (strpos($page, '/') !== false) {
+        if (false !== strpos($page, '/')) {
             $subfolder = substr($page, 0, strrpos($page, '/'));
             $fs->mkdir($folderPath . $subfolder, 0770);
         }
