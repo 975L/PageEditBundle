@@ -1,8 +1,8 @@
 {
     "name": "c975l/pageedit-bundle",
     "type": "symfony-bundle",
-    "description": "Simple tool to edit content of twig pages",
-    "keywords": ["symfony", "bundle", "twig", "edit"],
+    "description": "Create, modify and manage web pages",
+    "keywords": ["symfony", "bundle", "pages", "modify"],
     "homepage": "https://github.com/975L/PageEditBundle",
     "license": "MIT",
     "authors": [
