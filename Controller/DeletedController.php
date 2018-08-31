@@ -42,7 +42,7 @@ class DeletedController extends Controller
      */
     public function display($page)
     {
-        $this->denyAccessUnlessGranted('deleted', null);
+        $this->denyAccessUnlessGranted('c975LPageEdit-deleted', null);
 
         //Gets page
         $filePath = $this->pageEditService->getFilePath($page);
@@ -77,7 +77,7 @@ class DeletedController extends Controller
      */
     public function delete(Request $request, $page)
     {
-        $this->denyAccessUnlessGranted('deleted-delete', null);
+        $this->denyAccessUnlessGranted('c975LPageEdit-deleted-delete', null);
 
         //Gets page
         $filePath = $this->pageEditService->getFilePath($page);

@@ -161,7 +161,7 @@ class PageEditService
 
         //Deletes file
         if ($fs->exists($filePath)) {
-            if ($archive === true) {
+            if ($archive) {
                 //Create sub-folders
                 if (strpos($page, '/') !== false) {
                     $subfolder = substr($page, 0, strrpos($page, '/'));
@@ -461,7 +461,7 @@ class PageEditService
     public function slugify($text, $keepSlashes = false)
     {
         $slugify = new Slugify();
-        if ($keepSlashes === true) {
+        if ($keepSlashes) {
             $slugify->addRule('/', '-thereisaslash-');
         }
         $slug = str_replace('-thereisaslash-', '/', $slugify->slugify($text));

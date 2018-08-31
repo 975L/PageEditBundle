@@ -61,7 +61,7 @@ class PageEditController extends Controller
      */
     public function dashboard(Request $request, PaginatorInterface $paginator)
     {
-        $this->denyAccessUnlessGranted('dashboard', null);
+        $this->denyAccessUnlessGranted('c975LPageEdit-dashboard', null);
 
         //Gets pages
         $pages = $this->pageEditService->getPages();
@@ -127,7 +127,7 @@ class PageEditController extends Controller
     public function create(Request $request)
     {
         $pageEdit = new PageEdit();
-        $this->denyAccessUnlessGranted('create', null);
+        $this->denyAccessUnlessGranted('c975LPageEdit-create', null);
 
         //Defines form
         $pageEditConfig = array('action' => 'create');
@@ -164,7 +164,7 @@ class PageEditController extends Controller
      */
     public function modify(Request $request, $page)
     {
-        $this->denyAccessUnlessGranted('modify', null);
+        $this->denyAccessUnlessGranted('c975LPageEdit-modify', null);
 
         //Gets page
         $filePath = $this->pageEditService->getFilePath($page);
@@ -219,7 +219,7 @@ class PageEditController extends Controller
      */
     public function duplicate(Request $request, $page)
     {
-        $this->denyAccessUnlessGranted('duplicate', null);
+        $this->denyAccessUnlessGranted('c975LPageEdit-duplicate', null);
 
         //Gets page
         $filePath = $this->pageEditService->getFilePath($page);
@@ -270,7 +270,7 @@ class PageEditController extends Controller
      */
     public function delete(Request $request, $page)
     {
-        $this->denyAccessUnlessGranted('delete', null);
+        $this->denyAccessUnlessGranted('c975LPageEdit-delete', null);
 
         //Gets page
         $filePath = $this->pageEditService->getFilePath($page);
@@ -316,7 +316,7 @@ class PageEditController extends Controller
      */
     public function help()
     {
-        $this->denyAccessUnlessGranted('help', null);
+        $this->denyAccessUnlessGranted('c975LPageEdit-help', null);
 
         //Renders the help
         return $this->render('@c975LPageEdit/pages/help.html.twig');

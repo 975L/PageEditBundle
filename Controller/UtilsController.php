@@ -49,7 +49,7 @@ class UtilsController extends Controller
      */
     public function links(Request $request)
     {
-        $this->denyAccessUnlessGranted('links', null);
+        $this->denyAccessUnlessGranted('c975LPageEdit-links', null);
 
         //Returns the collection in json format
         return $this->json($this->pageEditService->getLinks());
@@ -66,7 +66,7 @@ class UtilsController extends Controller
      */
     public function upload(Request $request, \Symfony\Component\Asset\Packages $assetsManager, $page)
     {
-        $this->denyAccessUnlessGranted('upload', null);
+        $this->denyAccessUnlessGranted('c975LPageEdit-upload', null);
 
         //Defines path
         $folderPath = $this->pageEditService->getImagesFolder();
@@ -81,7 +81,7 @@ class UtilsController extends Controller
         if (is_uploaded_file($file)) {
             //Checks extension
             $extension = strtolower($file->guessExtension());
-            if (in_array($extension, array('jpeg', 'jpg', 'png')) === true) {
+            if (in_array($extension, array('jpeg', 'jpg', 'png'))) {
                 //Moves file
                 $now = \DateTime::createFromFormat('U.u', microtime(true));
                 if (strpos($page, '/') !== false) {
@@ -105,7 +105,7 @@ class UtilsController extends Controller
      */
     public function slug($text)
     {
-        $this->denyAccessUnlessGranted('slug', null);
+        $this->denyAccessUnlessGranted('c975LPageEdit-slug', null);
 
         return $this->json(array('a' => $this->pageEditService->slugify($text)));
     }

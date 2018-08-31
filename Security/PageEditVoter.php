@@ -14,28 +14,124 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use c975L\PageEditBundle\Entity\PageEdit;
 
+/**
+ * Voter for PageEdit access
+ * @author Laurent Marquet <laurent.marquet@laposte.net>
+ * @copyright 2018 975L <contact@975l.com>
+ */
 class PageEditVoter extends Voter
 {
+    /**
+     * @var AccessDecisionManagerInterface
+     */
     private $decisionManager;
+
+    /**
+     * The role needed to be allowed access (defined in config)
+     * @var string
+     */
     private $roleNeeded;
 
-    public const ARCHIVED = 'archived';
-    public const ARCHIVED_DELETE = 'archived-delete';
-    public const CREATE = 'create';
-    public const DASHBOARD = 'dashboard';
-    public const DELETE = 'delete';
-    public const DELETED = 'deleted';
-    public const DELETED_DELETE = 'deleted-delete';
-    public const DISPLAY = 'display';
-    public const DUPLICATE = 'duplicate';
-    public const HELP = 'help';
-    public const LINKS = 'links';
-    public const MODIFY = 'modify';
-    public const REDIRECTED = 'redirected';
-    public const REDIRECTED_DELETE = 'redirected-delete';
-    public const SLUG = 'slug';
-    public const UPLOAD = 'upload';
+    /**
+     * Used for access to archived
+     * @var string
+     */
+    public const ARCHIVED = 'c975LPageEdit-archived';
 
+    /**
+     * Used for access to archived-delete
+     * @var string
+     */
+    public const ARCHIVED_DELETE = 'c975LPageEdit-archived-delete';
+
+    /**
+     * Used for access to create
+     * @var string
+     */
+    public const CREATE = 'c975LPageEdit-create';
+
+    /**
+     * Used for access to dashboard
+     * @var string
+     */
+    public const DASHBOARD = 'c975LPageEdit-dashboard';
+
+    /**
+     * Used for access to delete
+     * @var string
+     */
+    public const DELETE = 'c975LPageEdit-delete';
+
+    /**
+     * Used for access to deleted
+     * @var string
+     */
+    public const DELETED = 'c975LPageEdit-deleted';
+
+    /**
+     * Used for access to deleted-delete
+     * @var string
+     */
+    public const DELETED_DELETE = 'c975LPageEdit-deleted-delete';
+
+    /**
+     * Used for access to display
+     * @var string
+     */
+    public const DISPLAY = 'c975LPageEdit-display';
+
+    /**
+     * Used for access to duplicate
+     * @var string
+     */
+    public const DUPLICATE = 'c975LPageEdit-duplicate';
+
+    /**
+     * Used for access to help
+     * @var string
+     */
+    public const HELP = 'c975LPageEdit-help';
+
+    /**
+     * Used for access to links
+     * @var string
+     */
+    public const LINKS = 'c975LPageEdit-links';
+
+    /**
+     * Used for access to modify
+     * @var string
+     */
+    public const MODIFY = 'c975LPageEdit-modify';
+
+    /**
+     * Used for access to redirected
+     * @var string
+     */
+    public const REDIRECTED = 'c975LPageEdit-redirected';
+
+    /**
+     * Used for access to redirected-delete
+     * @var string
+     */
+    public const REDIRECTED_DELETE = 'c975LPageEdit-redirected-delete';
+
+    /**
+     * Used for access to slug
+     * @var string
+     */
+    public const SLUG = 'c975LPageEdit-slug';
+
+    /**
+     * Used for access to upload
+     * @var string
+     */
+    public const UPLOAD = 'c975LPageEdit-upload';
+
+    /**
+     * Contains all the available attributes to check with in supports()
+     * @var array
+     */
     private const ATTRIBUTES = array(
         self::ARCHIVED,
         self::ARCHIVED_DELETE,
@@ -61,6 +157,10 @@ class PageEditVoter extends Voter
         $this->roleNeeded = $roleNeeded;
     }
 
+    /**
+     * Checks if attribute and subject are supported
+     * @return bool
+     */
     protected function supports($attribute, $subject)
     {
         if (null !== $subject) {
@@ -70,6 +170,11 @@ class PageEditVoter extends Voter
         return in_array($attribute, self::ATTRIBUTES);
     }
 
+    /**
+     * Votes if access is granted
+     * @return bool
+     * @throws \LogicException
+     */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
         //Defines access rights
@@ -91,6 +196,7 @@ class PageEditVoter extends Voter
             case self::SLUG:
             case self::UPLOAD:
                 return $this->decisionManager->decide($token, array($this->roleNeeded));
+                break;
         }
 
         throw new \LogicException('Invalid attribute: ' . $attribute);

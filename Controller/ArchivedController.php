@@ -42,7 +42,7 @@ class ArchivedController extends Controller
      */
     public function display($page)
     {
-        $this->denyAccessUnlessGranted('archived', null);
+        $this->denyAccessUnlessGranted('c975LPageEdit-archived', null);
 
         //Gets page
         $filePath = $this->pageEditService->getFilePath($page);
@@ -77,7 +77,7 @@ class ArchivedController extends Controller
      */
     public function delete(Request $request, $page)
     {
-        $this->denyAccessUnlessGranted('archived-delete', null);
+        $this->denyAccessUnlessGranted('c975LPageEdit-archived-delete', null);
 
         //Gets page
         $filePath = $this->pageEditService->getFilePath($page);

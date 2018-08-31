@@ -2,7 +2,7 @@
 
 {% spaceless %}
 {# Dashboard #}
-{{ toolbar_button(path('pageedit_dashboard'), 'dashboard', 'label.pageedit'|trans) }}
+{{ toolbar_button(path('pageedit_dashboard'), 'dashboard', 'md', 'label.pageedit'|trans) }}
 
 {# Display #}
 {% if type == 'modify' or type == 'delete' or type == 'deleteArchived' or type == 'deleteDeleted' or type == 'deleteRedirected' %}

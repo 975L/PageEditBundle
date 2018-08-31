@@ -1,5 +1,9 @@
 # ChangeLog
 
+v1.30.1
+-------
+- Fixed Voter constants (31/08/2018)
+
 v1.30
 -----
 - Made use of Voters for access rights (02/08/2018)

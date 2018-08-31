@@ -42,7 +42,7 @@ class RedirectedController extends Controller
      */
     public function display($page)
     {
-        $this->denyAccessUnlessGranted('redirected', null);
+        $this->denyAccessUnlessGranted('c975LPageEdit-redirected', null);
 
         //Gets page
         $filePath = $this->pageEditService->getFilePath($page);
@@ -73,7 +73,7 @@ class RedirectedController extends Controller
      */
     public function delete(Request $request, $page)
     {
-        $this->denyAccessUnlessGranted('redirected-delete', null);
+        $this->denyAccessUnlessGranted('c975LPageEdit-redirected-delete', null);
 
         //Gets page
         $filePath = $this->pageEditService->getFilePath($page);
