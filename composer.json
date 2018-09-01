@@ -27,12 +27,17 @@
         "twig/extensions": "^1",
         "c975l/toolbar-bundle": "^1",
         "c975l/includelibrary-bundle": "^1",
+        "c975l/config-bundle": "^2",
         "c975l/services-bundle": "^1"
     },
     "minimum-stability": "dev",
     "autoload": {
-        "psr-4": { "c975L\\PageEditBundle\\": ""
+        "psr-4": {
+            "c975L\\PageEditBundle\\": ""
         }
+    },
+    "config": {
+        "sort-packages": true
     },
     "support": {
         "email": "contact@975l.com",
