@@ -24,10 +24,10 @@ class PageEditType extends AbstractType
     //Builds the form
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $disabled = $options['pageEditConfig']['action'] == 'delete' ? true : false;
+        $disabled = $options['config']['action'] == 'delete' ? true : false;
         $disabledSlug = $options['data']->getSlug() == 'home' ? true : $disabled;
-        $submitLabel = $options['pageEditConfig']['action'] == 'delete' ? 'delete' : 'validate';
-        $submitClass = $options['pageEditConfig']['action'] == 'delete' ? 'btn-danger' : 'btn-primary';
+        $submitLabel = $options['config']['action'] == 'delete' ? 'delete' : 'validate';
+        $submitClass = $options['config']['action'] == 'delete' ? 'btn-danger' : 'btn-primary';
 
         $builder
             ->add('title', TextType::class, array(
@@ -106,6 +106,6 @@ class PageEditType extends AbstractType
             'translation_domain' => 'pageedit',
         ));
 
-        $resolver->setRequired('pageEditConfig');
+        $resolver->setRequired('config');
     }
 }

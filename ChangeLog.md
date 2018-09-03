@@ -8,6 +8,7 @@
 - Updated `PageEditVoter` (03/09/2018)
 - Updated `README.md` (03/09/2018)
 - Added `UPGRADE.md` (03/09/2018)
+- Added `PageEditFormFactory` + Interface (03/09/2018)
 
 v1.x
 ====
