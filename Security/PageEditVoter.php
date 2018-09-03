@@ -12,6 +12,7 @@ namespace c975L\PageEditBundle\Security;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use c975L\PageEditBundle\Entity\PageEdit;
 
 /**
@@ -22,15 +23,16 @@ use c975L\PageEditBundle\Entity\PageEdit;
 class PageEditVoter extends Voter
 {
     /**
+     * Stores ConfigServiceInterface
+     * @var ConfigServiceInterface
+     */
+    private $configService;
+
+    /**
+     * Stores AccessDecisionManagerInterface
      * @var AccessDecisionManagerInterface
      */
     private $decisionManager;
-
-    /**
-     * The role needed to be allowed access (defined in config)
-     * @var string
-     */
-    private $roleNeeded;
 
     /**
      * Used for access to archived
@@ -151,10 +153,13 @@ class PageEditVoter extends Voter
         self::UPLOAD,
     );
 
-    public function __construct(AccessDecisionManagerInterface $decisionManager, string $roleNeeded)
+    public function __construct(
+        ConfigServiceInterface $configService,
+        AccessDecisionManagerInterface $decisionManager
+    )
     {
+        $this->configService = $configService;
         $this->decisionManager = $decisionManager;
-        $this->roleNeeded = $roleNeeded;
     }
 
     /**
@@ -195,7 +200,7 @@ class PageEditVoter extends Voter
             case self::REDIRECTED_DELETE:
             case self::SLUG:
             case self::UPLOAD:
-                return $this->decisionManager->decide($token, array($this->roleNeeded));
+                return $this->decisionManager->decide($token, array($this->configService->getParameter('c975LPageEdit.roleNeeded', 'c975l/pageedit-bundle')));
                 break;
         }
 

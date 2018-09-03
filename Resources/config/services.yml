@@ -10,10 +10,11 @@ services:
     c975L\PageEditBundle\Controller\:
         resource: '../../Controller/*'
 
+    c975L\PageEditBundle\Form\:
+        resource: '../../Form/*'
+
     c975L\PageEditBundle\Security\:
         resource: '../../Security/*'
-        bind:
-            $roleNeeded: '%c975_l_page_edit.roleNeeded%'
 
     c975L\PageEditBundle\Service\:
         resource: '../../Service/*'
