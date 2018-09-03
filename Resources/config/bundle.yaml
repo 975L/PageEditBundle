@@ -1,0 +1,32 @@
+c975LPageEdit:
+    roleNeeded:
+        type: string
+        required: true
+        default: ROLE_ADMIN
+        info: "User's role needed to enable access to data linked to ExceptionCheckerBundle: i.e. ROLE_ADMIN (default)"
+    folderPages:
+        type: string
+        required: true
+        default: pages
+        info: "Path where the pages AND images will be stored. The full paths ('Resources/views/[folderPages]' & 'web/images/[folderPages]') have to be added to .gitignore if Git is used (Default pages)"
+    sitemapBaseUrl:
+        type: string
+        required: true
+        default: null
+        info: "Base url for sitemap creation without leading slash: i.e. https://example.com"
+    sitemapLanguages:
+        type: array
+        required: false
+        default: null
+        info: "Array of available languages of the website: ['en', 'fr', 'es']"
+c975LCommon:
+    tinymceApiKey:
+        type: string
+        required: false
+        default: null
+        info: "Your Tinymce Api key if you use the cloud version"
+    tinymceLanguage:
+        type: string
+        required: false
+        default: null
+        info: "Your tinymce language if you use one, MUST BE placed in 'web/vendor/tinymce/[tinymceLanguage].js: i.e. fr_FR"

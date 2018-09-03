@@ -1,6 +1,14 @@
 # ChangeLog
 
 - Updated composer.json (01/09/2018)
+- Created branch 1.x (02/09/2018)
+- Made use of c975L/ConfigBundle (03/09/2018)
+- Made use of c975L/ServicesBundle (03/09/2018)
+- Added `bundle.yaml` (03/09/2018)
+
+
+v1.x
+====
 
 v1.30.1
 -------
