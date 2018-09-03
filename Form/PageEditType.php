@@ -89,13 +89,6 @@ class PageEditType extends AbstractType
                     )))
             ;
         }
-        $builder
-            ->add('submit', SubmitType::class, array(
-                'label' => 'label.' . $submitLabel,
-                'translation_domain' => 'toolbar',
-                'attr' => array('class' => 'btn btn-block btn-lg ' . $submitClass),
-            ))
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
