@@ -49,6 +49,12 @@ class PageEdit
     protected $content;
 
     /**
+     * Stores filePath
+     * @var string
+     */
+    protected $filePath;
+
+    /**
      * Stores changeFrequency
      * @var string
      */
@@ -155,6 +161,27 @@ class PageEdit
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * Set filePath
+     * @param string
+     * @return PageEdit
+     */
+    public function setFilePath($filePath)
+    {
+        $this->filePath = $filePath;
+
+        return $this;
+    }
+
+    /**
+     * Get filePath
+     * @return string
+     */
+    public function getFilePath()
+    {
+        return $this->filePath;
     }
 
     /**
