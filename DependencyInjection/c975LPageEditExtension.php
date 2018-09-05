@@ -15,11 +15,13 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
+/**
+ * DI Extension Class
+ * @author Laurent Marquet <laurent.marquet@laposte.net>
+ * @copyright 2017 975L <contact@975l.com>
+ */
 class c975LPageEditExtension extends Extension
 {
-    /**
-     * {@inheritdoc}
-     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new YamlFileLoader(
@@ -27,14 +29,5 @@ class c975LPageEditExtension extends Extension
             new FileLocator(__DIR__.'/../Resources/config')
         );
         $loader->load('services.yml');
-
-        $configuration = new Configuration();
-        $processedConfig = $this->processConfiguration($configuration, $configs);
-
-        $container->setParameter('c975_l_page_edit.folderPages', $processedConfig['folderPages']);
-        $container->setParameter('c975_l_page_edit.roleNeeded', $processedConfig['roleNeeded']);
-        $container->setParameter('c975_l_page_edit.sitemapBaseUrl', $processedConfig['sitemapBaseUrl']);
-        $container->setParameter('c975_l_page_edit.sitemapLanguages', $processedConfig['sitemapLanguages']);
-        $container->setParameter('c975_l_page_edit.tinymceLanguage', $processedConfig['tinymceLanguage']);
     }
 }

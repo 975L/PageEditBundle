@@ -11,6 +11,9 @@
 - Added `PageEditFormFactory` + Interface (03/09/2018)
 - Removed SubmitButton from `PageEditType` (03/09/2018)
 - Updated `PageEdit` Entity (03/09/2018)
+- Removed FQCN (03/09/2018)
+- Removed declaration of parameters in Configuration class as they are end-user parameters and defined in c975L/ConfigBundle (05/09/2018)
+
 
 v1.x
 ====
