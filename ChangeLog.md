@@ -15,6 +15,8 @@
 - Removed declaration of parameters in Configuration class as they are end-user parameters and defined in c975L/ConfigBundle (05/09/2018)
 - Split `PageService` in multiple files + Interface (05/09/2018)
 - Updated `SitemapCreateCommand` (05/09/2018)
+- Added link to BuyMeCoffee (03/09/2018)
+- Added link to apidoc (03/09/2018)
 
 
 v1.x

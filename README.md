@@ -15,7 +15,9 @@ It is, of course, still possible to modify directly those files with an editor.
 
 This Bundle relies on the use of [TinyMce](https://www.tinymce.com/), [jQuery](https://jquery.com/) and [Bootstrap](http://getbootstrap.com/).
 
-[PageEdit Bundle dedicated web page](https://975l.com/en/pages/pageedit-bundle).
+[PageEditBundle dedicated web page](https://975l.com/en/pages/pageedit-bundle).
+
+[PageEditBundle API documentation](https://975l.com/apidoc/c975L/PageEditBundle.html).
 
 Bundle installation
 ===================
@@ -219,3 +221,5 @@ Create Sitemap
 --------------
 In a console use `php bin/console pageedit:createSitemap` to create a `sitemap-[folderPages].xml` in the `web` folder of your project. You can use a crontab to generate it every day.
 You can add this file in a `sitemap-index.xml`that groups all your sitemaps or directly use it if you have only one.
+
+**If this project help you to reduce time to develop, you can [buy me a coffee](https://www.buymeacoffee.com/LaurentMarquet) :)**
