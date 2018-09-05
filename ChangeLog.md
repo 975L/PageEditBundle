@@ -1,5 +1,33 @@
 # ChangeLog
 
+v2.0
+----
+- Updated composer.json (01/09/2018)
+- Created branch 1.x (02/09/2018)
+- Made use of c975L/ConfigBundle (03/09/2018)
+- Made use of c975L/ServicesBundle (03/09/2018)
+- Added `bundle.yaml` (03/09/2018)
+- Updated `PageEditVoter` (03/09/2018)
+- Updated `README.md` (03/09/2018)
+- Added `UPGRADE.md` (03/09/2018)
+- Added `PageEditFormFactory` + Interface (03/09/2018)
+- Removed SubmitButton from `PageEditType` (03/09/2018)
+- Updated `PageEdit` Entity (03/09/2018)
+- Removed FQCN (03/09/2018)
+- Removed declaration of parameters in Configuration class as they are end-user parameters and defined in c975L/ConfigBundle (05/09/2018)
+- Split `PageService` in multiple files + Interface (05/09/2018)
+- Updated `SitemapCreateCommand` (05/09/2018)
+- Added link to BuyMeCoffee (05/09/2018)
+- Added link to apidoc (05/09/2018)
+- Made Controllers skinny (05/09/2018)
+- Made use of text buttons in the dashboard (05/09/2018)
+- Added php documentation (05/09/2018)
+- Added `pageedit_config` Route (05/09/2018)
+
+
+v1.x
+====
+
 v1.30.1
 -------
 - Fixed Voter constants (31/08/2018)

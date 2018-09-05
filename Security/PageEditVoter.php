@@ -9,9 +9,11 @@
 
 namespace c975L\PageEditBundle\Security;
 
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use c975L\PageEditBundle\Entity\PageEdit;
 
 /**
@@ -22,15 +24,22 @@ use c975L\PageEditBundle\Entity\PageEdit;
 class PageEditVoter extends Voter
 {
     /**
+     * Stores ConfigServiceInterface
+     * @var ConfigServiceInterface
+     */
+    private $configService;
+
+    /**
+     * Stores AccessDecisionManagerInterface
      * @var AccessDecisionManagerInterface
      */
     private $decisionManager;
 
     /**
-     * The role needed to be allowed access (defined in config)
-     * @var string
+     * Stores current Request
+     * @var RequestStack
      */
-    private $roleNeeded;
+    private $request;
 
     /**
      * Used for access to archived
@@ -43,6 +52,12 @@ class PageEditVoter extends Voter
      * @var string
      */
     public const ARCHIVED_DELETE = 'c975LPageEdit-archived-delete';
+
+    /**
+     * Used for access to config
+     * @var string
+     */
+    public const CONFIG = 'c975LPageEdit-config';
 
     /**
      * Used for access to create
@@ -135,6 +150,7 @@ class PageEditVoter extends Voter
     private const ATTRIBUTES = array(
         self::ARCHIVED,
         self::ARCHIVED_DELETE,
+        self::CONFIG,
         self::CREATE,
         self::DASHBOARD,
         self::DELETE,
@@ -151,10 +167,15 @@ class PageEditVoter extends Voter
         self::UPLOAD,
     );
 
-    public function __construct(AccessDecisionManagerInterface $decisionManager, string $roleNeeded)
+    public function __construct(
+        ConfigServiceInterface $configService,
+        AccessDecisionManagerInterface $decisionManager,
+        RequestStack $requestStack
+    )
     {
+        $this->configService = $configService;
         $this->decisionManager = $decisionManager;
-        $this->roleNeeded = $roleNeeded;
+        $this->request = $requestStack->getCurrentRequest();
     }
 
     /**
@@ -181,6 +202,7 @@ class PageEditVoter extends Voter
         switch ($attribute) {
             case self::ARCHIVED:
             case self::ARCHIVED_DELETE:
+            case self::CONFIG:
             case self::CREATE:
             case self::DASHBOARD:
             case self::DELETE:
@@ -194,11 +216,32 @@ class PageEditVoter extends Voter
             case self::REDIRECTED:
             case self::REDIRECTED_DELETE:
             case self::SLUG:
+                return $this->hasRoleNeeded($token);
+                break;
             case self::UPLOAD:
-                return $this->decisionManager->decide($token, array($this->roleNeeded));
+                return $this->isUploadAllowed($token);
                 break;
         }
 
         throw new \LogicException('Invalid attribute: ' . $attribute);
+    }
+
+    /**
+     * Checks if user has roleNeeded
+     * @return bool
+     */
+    public function hasRoleNeeded($token)
+    {
+        return $this->decisionManager->decide($token, array($this->configService->getParameter('c975LPageEdit.roleNeeded', 'c975l/pageedit-bundle')));
+    }
+
+    /**
+     * Checks if upload is allowed
+     * @return bool
+     */
+    public function isUploadAllowed($token)
+    {
+        //Checks origin - https://www.tinymce.com/docs/advanced/php-upload-handler/ (same origin won't set an origin)
+        return $this->hasRoleNeeded($token) && null === $this->request->server->get('HTTP_ORIGIN');
     }
 }

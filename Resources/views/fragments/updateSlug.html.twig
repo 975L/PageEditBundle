@@ -1,0 +1,21 @@
+{# Updates when title changes #}
+$('#page_edit_title')
+    .change(function() {
+        updateSlug($('#page_edit_title').val())
+    });
+{# Updates when slug changes #}
+$('#page_edit_slug')
+    .change(function() {
+        updateSlug($('#page_edit_slug').val())
+    });
+{# Updates slug #}
+function updateSlug(text) {
+    var slugUrl = '{{ absolute_url(path('pageedit_slug', {'text': 'TEXT'})) }}';
+    var slug = $.post(slugUrl.replace('TEXT', text));
+    slug.done(function(data) {
+        if (data.a != 'false') {
+            $('#page_edit_slug')
+                .val(data.a);
+        }
+    });
+};

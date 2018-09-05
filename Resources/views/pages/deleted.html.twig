@@ -1,14 +1,14 @@
 {% extends "@c975LPageEdit/layout.html.twig" %}
 {% trans_default_domain 'pageedit' %}
-{% set title = 'label.delete'|trans ~ ' "' ~ pageTitle ~ '"' %}
+{% set title = 'label.delete'|trans ~ ' "' ~ pageEdit.titleTranslated ~ '"' %}
 
 {% block content %}
 {# Toolbar #}
-    {{ toolbar_display('@c975LPageEdit/tools.html.twig', 'deleted', 'md', page) }}
+    {{ toolbar_display('@c975LPageEdit/tools.html.twig', 'deleted', 'md', pageEdit.slug) }}
 {# Warning message #}
     {{ include('@c975LPageEdit/fragments/warningDeleted.html.twig') }}
 {# Content #}
     {% block pageedit_content %}
-        {{ pageContent|raw }}
+        {{ pageEdit.content|raw }}
     {% endblock %}
 {% endblock %}

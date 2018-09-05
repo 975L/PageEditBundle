@@ -15,7 +15,9 @@ It is, of course, still possible to modify directly those files with an editor.
 
 This Bundle relies on the use of [TinyMce](https://www.tinymce.com/), [jQuery](https://jquery.com/) and [Bootstrap](http://getbootstrap.com/).
 
-[PageEdit Bundle dedicated web page](https://975l.com/en/pages/pageedit-bundle).
+[PageEditBundle dedicated web page](https://975l.com/en/pages/pageedit-bundle).
+
+[PageEditBundle API documentation](https://975l.com/apidoc/c975L/PageEditBundle.html).
 
 Bundle installation
 ===================
@@ -27,9 +29,9 @@ Use [Composer](https://getcomposer.org) to install the library
     composer require c975l/pageedit-bundle
 ```
 
-Step 2: Enable the Bundles
---------------------------
-Then, enable the bundles by adding them to the list of registered bundles in the `app/AppKernel.php` file of your project:
+Step 2: Enable the Bundle
+-------------------------
+Then, enable the bundle by adding them to the list of registered bundles in the `app/AppKernel.php` file of your project:
 
 ```php
 <?php
@@ -38,32 +40,20 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         $bundles = [
-            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new c975L\PageEditBundle\c975LPageEditBundle(),
         ];
     }
 }
 ```
 
-Step 3: Configure the Bundles
------------------------------
-Check [KnpPaginatorBundle](https://github.com/KnpLabs/KnpPaginatorBundle) for its specific configuration.
-You should also check [KnpSnappyBundle](https://github.com/KnpLabs/KnpSnappyBundle) for its configuration but below is a common set.
+Step 3: Configure the Bundle
+----------------------------
+Check dependencies for their configuration:
+- [KnpPaginatorBundle](https://github.com/KnpLabs/KnpPaginatorBundle)
+- [KnpSnappyBundle](https://github.com/KnpLabs/KnpSnappyBundle)
+- [wkhtmltopdf-amd64](https://github.com/h4cc/wkhtmltopdf-amd64)
 
-Setup your Tinymce API key if you use the cloud version, in `parameters.yml`
-```yml
-    #(Optional) Your Tinymce Api key if you use the cloud version
-    #tinymceApiKey: 'YOUR_API_KEY'
-```
-
-And then in `parameters.yml.dist`
-```yml
-    #(Optional) Your Tinymce Api key if you use the cloud version
-    #tinymceApiKey: ~
-```
-
-Then, in the `app/config.yml` file of your project, define the following:
-
+For KnpSnappyBundle you can use this configuration if it suits to your needs.
 ```yml
 knp_snappy:
     process_timeout: 20
@@ -85,21 +75,13 @@ knp_snappy:
             margin-bottom: 10mm
     image:
         enabled: false
-
-c975_l_page_edit:
-    #Path where the files will be stored. The full path ('app/resources/views/[folderPages]') has to be added to .gitignore if Git is used
-    folderPages: 'pages'
-    #User's role needed to enable access to the edition of page
-    roleNeeded: 'ROLE_ADMIN'
-    #Base url for sitemap creation without leading slash
-    sitemapBaseUrl: 'http://example.com'
-    #(Optional) Array of available languages of the website
-    sitemapLanguages: ['en', 'fr', 'es']
-    #(Optional) Your tinymce language if you use one, MUST BE placed in 'web/vendor/tinymce/[tinymceLanguage].js'
-    tinymceLanguage: 'fr_FR' #default null
 ```
 
-**If you use Git for version control, you need to add the full path `app/Resources/views/[folderPages]` in the `.gitignore`, otherwise all the content will be altered by Git. You also need to add the path `/web/images/[folderPages]` as it will contain the uploaded pictures**
+v2.0+ of c975LPageEditBundle uses [c975L/ConfigBundle](https://github.com/975L/ConfigBundle) to manage configuration parameters. Use the Route "/pages/config" with the proper user role to modify them.
+
+**Upgrading from v1.x? Check [UPGRADE.md](UPGRADE.md).**
+
+**If you use Git for version control, you need to add the full path `app/Resources/views/[folderPages]` and `/web/images/[folderPages]` in the `.gitignore`, otherwise all the content will be altered by Git.**
 
 Step 4: Enable the Routes
 -------------------------
@@ -157,6 +139,7 @@ Link to a page, in Twig, can be done by `<a href="{{ path('pageedit_display', { 
 
 The different Routes (naming self-explanatory) available are:
 - pageedit_home
+- pageedit_config
 - pageedit_display
 - pageedit_pdf
 - pageedit_create
@@ -238,3 +221,5 @@ Create Sitemap
 --------------
 In a console use `php bin/console pageedit:createSitemap` to create a `sitemap-[folderPages].xml` in the `web` folder of your project. You can use a crontab to generate it every day.
 You can add this file in a `sitemap-index.xml`that groups all your sitemaps or directly use it if you have only one.
+
+**If this project help you to reduce time to develop, you can [buy me a coffee](https://www.buymeacoffee.com/LaurentMarquet) :)**

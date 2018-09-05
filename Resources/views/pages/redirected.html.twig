@@ -4,13 +4,13 @@
 
 {% block pageedit_content %}
 {# Toolbar #}
-    {{ toolbar_display('@c975LPageEdit/tools.html.twig', 'redirected', 'md', page) }}
+    {{ toolbar_display('@c975LPageEdit/tools.html.twig', 'redirected', 'md', pageEdit.slug) }}
 {# Warning message #}
     {{ include('@c975LPageEdit/fragments/warningRedirected.html.twig') }}
 {# Form #}
     <p class="alert alert-warning text-center">
         {{ 'text.redirected_page'|trans }}
         <br />
-        <a href="{{ absolute_url(path('pageedit_display', {'page': redirection})) }}">{{ absolute_url(path('pageedit_display', {'page': redirection})) }}</a>
+        <a href="{{ absolute_url(path('pageedit_display', {'page': pageEdit.content})) }}">{{ absolute_url(path('pageedit_display', {'page': pageEdit.content})) }}</a>
     </p>
 {% endblock %}

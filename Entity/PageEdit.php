@@ -11,42 +11,77 @@ namespace c975L\PageEditBundle\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Entity PageEdit (not linked to DB)
+ * @author Laurent Marquet <laurent.marquet@laposte.net>
+ * @copyright 2018 975L <contact@975l.com>
+ */
 class PageEdit
 {
     /**
+     * Stores title
+     * @var string
+     *
      * @Assert\NotBlank()
      */
     protected $title;
 
     /**
+     * Stores titleTranslated
+     * @var string
+     */
+    protected $titleTranslated;
+
+    /**
+     * Stores slug
+     * @var string
+     *
      * @Assert\NotBlank()
      */
     protected $slug;
 
     /**
+     * Stores content
+     * @var string
+     *
      * @Assert\NotBlank()
      */
     protected $content;
 
+    /**
+     * Stores filePath
+     * @var string
+     */
+    protected $filePath;
+
+    /**
+     * Stores changeFrequency
+     * @var string
+     */
     protected $changeFrequency;
+
+    /**
+     * Stores priority
+     * @var int
+     */
     protected $priority;
+
+    /**
+     * Stores description
+     * @var string
+     */
     protected $description;
 
-
-    public function __construct($content = null, $title = null, $slug = null, $changeFrequency = null, $priority = null, $description = null)
-    {
-        $this->setContent($content);
-        $this->setTitle($title);
-        $this->setSlug($slug);
-        $this->setChangeFrequency($changeFrequency);
-        $this->setPriority($priority);
-        $this->setDescription($description);
-    }
+    /**
+     * Stores modification
+     * @var \DateTime
+     */
+    protected $modification;
 
 
     /**
      * Set title
-     *
+     * @param string
      * @return PageEdit
      */
     public function setTitle($title)
@@ -58,7 +93,6 @@ class PageEdit
 
     /**
      * Get title
-     *
      * @return string
      */
     public function getTitle()
@@ -67,8 +101,29 @@ class PageEdit
     }
 
     /**
+     * Set titleTranslated
+     * @param string
+     * @return PageEdit
+     */
+    public function setTitleTranslated($titleTranslated)
+    {
+        $this->titleTranslated = $titleTranslated;
+
+        return $this;
+    }
+
+    /**
+     * Get titleTranslated
+     * @return string
+     */
+    public function getTitleTranslated()
+    {
+        return $this->titleTranslated;
+    }
+
+    /**
      * Set slug
-     *
+     * @param string
      * @return PageEdit
      */
     public function setSlug($slug)
@@ -80,7 +135,6 @@ class PageEdit
 
     /**
      * Get slug
-     *
      * @return string
      */
     public function getSlug()
@@ -90,7 +144,7 @@ class PageEdit
 
     /**
      * Set content
-     *
+     * @param string
      * @return PageEdit
      */
     public function setContent($content)
@@ -102,7 +156,6 @@ class PageEdit
 
     /**
      * Get content
-     *
      * @return string
      */
     public function getContent()
@@ -111,8 +164,29 @@ class PageEdit
     }
 
     /**
+     * Set filePath
+     * @param string
+     * @return PageEdit
+     */
+    public function setFilePath($filePath)
+    {
+        $this->filePath = $filePath;
+
+        return $this;
+    }
+
+    /**
+     * Get filePath
+     * @return string
+     */
+    public function getFilePath()
+    {
+        return $this->filePath;
+    }
+
+    /**
      * Set changeFrequency
-     *
+     * @param string
      * @return PageEdit
      */
     public function setChangeFrequency($changeFrequency)
@@ -124,7 +198,6 @@ class PageEdit
 
     /**
      * Get changeFrequency
-     *
      * @return string
      */
     public function getChangeFrequency()
@@ -134,7 +207,7 @@ class PageEdit
 
     /**
      * Set priority
-     *
+     * @param int
      * @return PageEdit
      */
     public function setPriority($priority)
@@ -146,8 +219,7 @@ class PageEdit
 
     /**
      * Get priority
-     *
-     * @return string
+     * @return int
      */
     public function getPriority()
     {
@@ -156,7 +228,7 @@ class PageEdit
 
     /**
      * Set description
-     *
+     * @param string
      * @return PageEdit
      */
     public function setDescription($description)
@@ -168,11 +240,31 @@ class PageEdit
 
     /**
      * Get description
-     *
      * @return string
      */
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set modification
+     * @param \DateTime
+     * @return PageEdit
+     */
+    public function setModification($modification)
+    {
+        $this->modification = $modification;
+
+        return $this;
+    }
+
+    /**
+     * Get modification
+     * @return \DateTime
+     */
+    public function getModification()
+    {
+        return $this->modification;
     }
 }

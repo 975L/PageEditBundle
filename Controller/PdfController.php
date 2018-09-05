@@ -15,12 +15,24 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use c975L\PageEditBundle\Service\PageEditService;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use c975L\PageEditBundle\Entity\PageEdit;
+use c975L\PageEditBundle\Service\PageEditServiceInterface;
+use c975L\PageEditBundle\Service\Pdf\PageEditPdfInterface;
 
+/**
+ * PdfController class
+ * @author Laurent Marquet <laurent.marquet@laposte.net>
+ * @copyright 2018 975L <contact@975l.com>
+ */
 class PdfController extends Controller
 {
-//DISPLAY
+//DISPLAY THE PDF
     /**
+     * Creates and displays the pdf of the page
+     * @return Response
+     * @throws NotFoundHttpException
+     *
      * @Route("/pages/pdf/{page}",
      *      name="pageedit_pdf",
      *      requirements={
@@ -28,21 +40,18 @@ class PdfController extends Controller
      *      })
      * @Method({"GET", "HEAD"})
      */
-    public function display(PageEditService $pageEditService, $page)
+    public function display(PageEditServiceInterface $pageEditService, PageEditPdfInterface $pageEditPdf, $page)
     {
-        //Gets page
-        $filePath = $pageEditService->getFilePath($page);
+        $pageEdit = $pageEditService->getData($page);
 
-        //Existing page
-        if (false !== $filePath) {
+        if ($pageEdit instanceof PageEdit) {
             //Creates the pdf
-            $filePdfPath = $pageEditService->createPdf($filePath, $page);
+            $filePdfPath = $pageEditPdf->create($pageEdit->getFilePath(), $page);
 
             //Renders the pdf
             return new Response(file_get_contents($filePdfPath), 200, array('Content-Type' => 'application/pdf'));
         }
 
-        //Not found
         throw $this->createNotFoundException();
     }
 }

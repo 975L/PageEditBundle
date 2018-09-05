@@ -9,22 +9,17 @@
 {# Form #}
     {{ form_start(form) }}
         {{ form_widget(form) }}
+{# Submit #}
+        <div class="form-group">
+            <button type="submit" name="submit" title="{{ 'label.validate'|trans({}, 'toolbar') }}" class="btn btn-lg btn-primary btn-block">
+                {{ 'label.validate'|trans({}, 'toolbar') }}
+            </button>
+        </div>
     {{ form_end(form) }}
 {# Javascript #}
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
-{# Update semantic url #}
-            $('#page_edit_title')
-                .change(function() {
-                    var slugUrl = '{{ absolute_url(path('pageedit_slug', {'text': 'TEXT'})) }}';
-                    var slug = $.post(slugUrl.replace('TEXT', $('#page_edit_title').val()));
-                    slug.done(function(data) {
-                        if (data.a != 'false') {
-                            $('#page_edit_slug')
-                                .val(data.a);
-                        }
-                    });
-                });
+            {{ include('@c975LPageEdit/fragments/updateSlug.html.twig') }}
         });
     </script>
 {% endblock %}

@@ -16,16 +16,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use c975L\ConfigBundle\Service\ConfigServiceInterface;
+use c975L\PageEditBundle\Service\PageEditServiceInterface;
+use c975L\PageEditBundle\Service\File\PageEditFileInterface;
+use c975L\PageEditBundle\Service\Slug\PageEditSlugInterface;
 
+/**
+ * UtilsController class
+ * @author Laurent Marquet <laurent.marquet@laposte.net>
+ * @copyright 2018 975L <contact@975l.com>
+ */
 class UtilsController extends Controller
 {
-    private $pageEditService;
-
-    public function __construct(\c975L\PageEditBundle\Service\PageEditService $pageEditService)
-    {
-        $this->pageEditService = $pageEditService;
-    }
-
 //REMOVE TRAILING SLASH
     /**
     * @Route("/{url}",
@@ -43,70 +45,77 @@ class UtilsController extends Controller
 
 //LIST FOR URL LINKING
     /**
-     * @Route("/pages/links",
+     * Provides a list of pages to link to in Tinymce
+     * @return JSON
+     * @throws AccessDeniedException
+     *
+     * @Route("/pageedit/links",
      *      name="pageedit_links")
      * @Method({"GET", "HEAD"})
      */
-    public function links(Request $request)
+    public function links(PageEditServiceInterface $pageEditService)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-links', null);
 
         //Returns the collection in json format
-        return $this->json($this->pageEditService->getLinks());
+        return $this->json($pageEditService->getLinks());
     }
 
-//UPLOAD PICTURES
+//UPLOAD IMAGE
     /**
-     * @Route("/pages/upload/{page}",
+     * Uploads the image defined
+     * @return JSON|false
+     * @throws AccessDeniedException
+     *
+     * @Route("/pageedit/upload/{page}",
      *      name="pageedit_upload",
-     *      requirements={
-     *          "page": "^([a-zA-Z0-9\-\/]+)"
-     *      })
+     *      requirements={"page": "^[a-zA-Z0-9\-\/]+"},
+     *      defaults={"page": "new"})
      * @Method({"POST"})
      */
-    public function upload(Request $request, \Symfony\Component\Asset\Packages $assetsManager, $page)
+    public function upload(Request $request, ConfigServiceInterface $configService, PageEditFileInterface $pageEditFile, $page)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-upload', null);
-
-        //Defines path
-        $folderPath = $this->pageEditService->getImagesFolder();
-
-        //Checks origin - https://www.tinymce.com/docs/advanced/php-upload-handler/
-        if (null !== $request->server->get('HTTP_ORIGIN')) {
-            throw $this->createAccessDeniedException();
-        }
 
         //Checks uploaded file
         $file = $request->files->get('file');
         if (is_uploaded_file($file)) {
             //Checks extension
             $extension = strtolower($file->guessExtension());
-            if (in_array($extension, array('jpeg', 'jpg', 'png'))) {
+            if (in_array($extension, array('jpeg', 'jpg', 'png', 'gif'))) {
                 //Moves file
-                $now = \DateTime::createFromFormat('U.u', microtime(true));
-                if (strpos($page, '/') !== false) {
+                if (false !== strpos($page, '/')) {
                     $page = substr($page, strrpos($page, '/') + 1);
                 }
+                $folderPath = $pageEditFile->getImagesFolder();
+                $now = \DateTime::createFromFormat('U.u', microtime(true));
                 $filename = $page . '-' . $now->format('Ymd-His-u') . '.' . $extension;
                 move_uploaded_file($file->getRealPath(), $folderPath . $filename);
 
-                //Respond to the successful upload with JSON
-                $location = str_replace('/app_dev.php', '', $request->getUriForPath('/images/' . $this->getParameter('c975_l_page_edit.folderPages') . '/' . $filename));
+                //Returns JSON to the successful upload
+                $location = str_replace('/app_dev.php', '', $request->getUriForPath('/images/' . $configService->getParameter('c975LPageEdit.folderPages') . '/' . $filename));
+
                 return $this->json(array('location' => $location));
             }
         }
+
+        return false;
     }
 
 //SLUG
     /**
-     * @Route("/pages/slug/{text}",
+     * Slugs the provided text
+     * @return JSON
+     * @throws AccessDeniedException
+     *
+     * @Route("/pageedit/slug/{text}",
      *      name="pageedit_slug")
      * @Method({"POST"})
      */
-    public function slug($text)
+    public function slug(PageEditSlugInterface $pageEditSlug, $text)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-slug', null);
 
-        return $this->json(array('a' => $this->pageEditService->slugify($text)));
+        return $this->json(array('a' => $pageEditSlug->slugify($text, true)));
     }
 }

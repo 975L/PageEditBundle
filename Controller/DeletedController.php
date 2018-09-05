@@ -20,20 +20,34 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\GoneHttpException;
 use c975L\PageEditBundle\Entity\PageEdit;
 use c975L\PageEditBundle\Form\PageEditType;
-use c975L\PageEditBundle\Service\PageEditService;
+use c975L\PageEditBundle\Service\PageEditServiceInterface;
 
+/**
+ * DeletedController class
+ * @author Laurent Marquet <laurent.marquet@laposte.net>
+ * @copyright 2018 975L <contact@975l.com>
+ */
 class DeletedController extends Controller
 {
+    /**
+     * Stores PageEditServiceInterface
+     * @var PageEditServiceInterface
+     */
     private $pageEditService;
 
-    public function __construct(\c975L\PageEditBundle\Service\PageEditService $pageEditService)
+    public function __construct(PageEditServiceInterface $pageEditService)
     {
         $this->pageEditService = $pageEditService;
     }
 
 //DISPLAY
     /**
-     * @Route("/pages/deleted/{page}",
+     * Displays the deleted page
+     * @return Response
+     * @throws AccessDeniedException
+     * @throws NotFoundHttpException
+     *
+     * @Route("/pageedit/deleted/{page}",
      *      name="pageedit_display_deleted",
      *      requirements={
      *          "page": "^([a-zA-Z0-9\-\/]+)"
@@ -44,53 +58,38 @@ class DeletedController extends Controller
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-deleted', null);
 
-        //Gets page
-        $filePath = $this->pageEditService->getFilePath($page);
-
-        //Existing page
-        if (false !== $filePath) {
-            //Gets data
-            extract($this->pageEditService->getData($filePath));
-
-            //Renders the page
-            $datetime = new \DateTime();
-            $datetime->setTimestamp(filemtime($filePath));
+        //Renders the deleted page
+        $pageEdit = $this->pageEditService->getData($page);
+        if ($pageEdit instanceof PageEdit) {
             return $this->render('@c975LPageEdit/pages/deleted.html.twig', array(
-                'pageContent' => '<pre>' . file_get_contents($filePath) . '</pre>',
-                'pageTitle' => $titleTranslated,
-                'datetime' => $datetime,
-                'page' => $page,
+                'pageEdit' => $pageEdit,
             ));
         }
 
-        //Not found
         throw $this->createNotFoundException();
     }
 
 //DELETE
     /**
-     * @Route("/pages/delete/deleted/{page}",
+     * Deletes the deleted page
+     * @return Response
+     * @throws AccessDeniedException
+     * @throws NotFoundHttpException
+     *
+     * @Route("/pageedit/delete/deleted/{page}",
      *      name="pageedit_delete_deleted",
      *      requirements={
      *          "page": "^([a-zA-Z0-9\-\/]+)"
      *      })
+     * @Method({"GET", "HEAD", "POST"})
      */
     public function delete(Request $request, $page)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-deleted-delete', null);
 
-        //Gets page
-        $filePath = $this->pageEditService->getFilePath($page);
-
-        //Existing page
-        if (false !== $filePath) {
-            //Gets data
-            extract($this->pageEditService->getData($filePath));
-
-            //Defines form
-            $pageEdit = new PageEdit($originalContent, $title, $page);
-            $pageEditConfig = array('action' => 'delete');
-            $form = $this->createForm(PageEditType::class, $pageEdit, array('pageEditConfig' => $pageEditConfig));
+        $pageEdit = $this->pageEditService->getData($page);
+        if ($pageEdit instanceof PageEdit) {
+            $form = $this->pageEditService->createForm('delete', $pageEdit);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
@@ -101,19 +100,13 @@ class DeletedController extends Controller
                 return $this->redirectToRoute('pageedit_dashboard', array('v' => 'deleted'));
             }
 
-            //Returns the delete form
-            $datetime = new \DateTime();
-            $datetime->setTimestamp(filemtime($filePath));
+            //Renders the delete form
             return $this->render('@c975LPageEdit/forms/deleteDeleted.html.twig', array(
                 'form' => $form->createView(),
-                'pageTitle' => $titleTranslated,
-                'page' => $page,
-                'pageContent' => $originalContent,
-                'datetime' => $datetime,
+                'pageEdit' => $pageEdit,
             ));
         }
 
-        //Not found
         throw $this->createNotFoundException();
     }
 }
