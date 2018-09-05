@@ -1,15 +1,22 @@
 {% extends "@c975LPageEdit/layout.html.twig" %}
 {% trans_default_domain 'pageedit' %}
-{% set title = 'label.delete'|trans({}, 'toolbar') ~ ' "' ~ pageTitle ~ '"' %}
+{% set title = 'label.delete'|trans({}, 'toolbar') ~ ' "' ~ pageEdit.titleTranslated ~ '"' %}
 
 {% block pageedit_content %}
 {# Toolbar #}
-    {{ toolbar_display('@c975LPageEdit/tools.html.twig', 'delete', 'md', page) }}
+    {{ toolbar_display('@c975LPageEdit/tools.html.twig', 'delete', 'md', pageEdit.slug) }}
 {# Form #}
     {{ form_start(form) }}
+{# Warning delete info #}
         <p class="alert alert-danger text-center">
             {{ 'text.delete_page'|trans }}
         </p>
         {{ form_widget(form) }}
+{# Submit #}
+        <div class="form-group">
+            <button type="submit" name="submit" title="{{ 'label.delete'|trans({}, 'toolbar') }}" class="btn btn-lg btn-danger btn-block">
+                {{ 'label.delete'|trans({}, 'toolbar') }}
+            </button>
+        </div>
     {{ form_end(form) }}
 {% endblock %}

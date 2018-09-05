@@ -1,6 +1,6 @@
 {# For options, see: https://www.tinymce.com/docs/get-started-cloud/editor-and-features/ #}
-{{ inc_lib('tinymce', 'js', 'stable', '?apiKey=' ~ tinymceApiKey) }}
-<script type="text/javascript">
+{{ inc_lib('tinymce', 'js', 'stable', '?apiKey=' ~ config('c975LCommon.tinymceApiKey')) }}
+<script>
     tinymce.init({
         selector: 'textarea.tinymce',
         statusbar: true,
@@ -11,8 +11,8 @@
         content_css : [
             '{{ inc_link('bootstrap', 'css', '3.*') }}',
         ],
-        {% if tinymceLanguage != null %}
-            language_url : '{{ absolute_url(asset('vendor/tinymce/' ~ tinymceLanguage ~ '.js')) }}',
+        {% if config('c975LCommon.tinymceLanguage') != null %}
+            language_url : '{{ absolute_url(asset('vendor/tinymce/' ~ config('c975LCommon.tinymceLanguage') ~ '.js')) }}',
         {% endif %}
         plugins: [
             'advlist autolink lists link image imagetools charmap print preview hr anchor pagebreak',
@@ -33,7 +33,7 @@
             {title: 'Responsive', value: 'table table-responsive'}
         ],
         image_advtab: true,
-        images_upload_url: '{{ absolute_url(path('pageedit_upload', {'page': page})) }}',
+        images_upload_url: '{{ absolute_url(path('pageedit_upload', {'page': pageEdit.slug})) }}',
         image_title: true,
         image_dimensions: false,
         image_class_list: [

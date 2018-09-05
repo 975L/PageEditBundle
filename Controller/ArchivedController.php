@@ -17,23 +17,38 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\GoneHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use c975L\PageEditBundle\Entity\PageEdit;
 use c975L\PageEditBundle\Form\PageEditType;
-use c975L\PageEditBundle\Service\PageEditService;
+use c975L\PageEditBundle\Service\PageEditServiceInterface;
 
+/**
+ * ArchivedController class
+ * @author Laurent Marquet <laurent.marquet@laposte.net>
+ * @copyright 2018 975L <contact@975l.com>
+ */
 class ArchivedController extends Controller
 {
+    /**
+     * Stores PageEditServiceInterface
+     * @var PageEditServiceInterface
+     */
     private $pageEditService;
 
-    public function __construct(\c975L\PageEditBundle\Service\PageEditService $pageEditService)
+    public function __construct(PageEditServiceInterface $pageEditService)
     {
         $this->pageEditService = $pageEditService;
     }
 
 //DISPLAY
     /**
-     * @Route("/pages/archived/{page}",
+     * Displays the archived page
+     * @return Response
+     * @throws AccessDeniedException
+     * @throws NotFoundHttpException
+     *
+     * @Route("/pageedit/archived/{page}",
      *      name="pageedit_display_archived",
      *      requirements={
      *          "page": "^([a-zA-Z0-9\-\/]+)"
@@ -44,53 +59,38 @@ class ArchivedController extends Controller
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-archived', null);
 
-        //Gets page
-        $filePath = $this->pageEditService->getFilePath($page);
-
-        //Existing page
-        if (false !== $filePath) {
-            //Gets data
-            extract($this->pageEditService->getData($filePath));
-
-            //Renders the page
-            $datetime = new \DateTime();
-            $datetime->setTimestamp(filemtime($filePath));
+        //Renders the archived page
+        $pageEdit = $this->pageEditService->getData($page);
+        if ($pageEdit instanceof PageEdit) {
             return $this->render('@c975LPageEdit/pages/archived.html.twig', array(
-                'pageContent' => '<pre>' . file_get_contents($filePath) . '</pre>',
-                'pageTitle' => $titleTranslated,
-                'datetime' => $datetime,
-                'page' => $page,
+                'pageEdit' => $pageEdit,
             ));
         }
 
-        //Not found
         throw $this->createNotFoundException();
     }
 
 //DELETE
     /**
-     * @Route("/pages/delete/archived/{page}",
+     * Deletes the archived page
+     * @return Response
+     * @throws AccessDeniedException
+     * @throws NotFoundHttpException
+     *
+     * @Route("/pageedit/delete/archived/{page}",
      *      name="pageedit_delete_archived",
      *      requirements={
      *          "page": "^([a-zA-Z0-9\-\/]+)"
      *      })
+     * @Method({"GET", "HEAD", "POST"})
      */
     public function delete(Request $request, $page)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-archived-delete', null);
 
-        //Gets page
-        $filePath = $this->pageEditService->getFilePath($page);
-
-        //Existing page
-        if (false !== $filePath) {
-            //Gets data
-            extract($this->pageEditService->getData($filePath));
-
-            //Defines form
-            $pageEdit = new PageEdit($originalContent, $title, $page);
-            $pageEditConfig = array('action' => 'delete');
-            $form = $this->createForm(PageEditType::class, $pageEdit, array('pageEditConfig' => $pageEditConfig));
+        $pageEdit = $this->pageEditService->getData($page);
+        if ($pageEdit instanceof PageEdit) {
+            $form = $this->pageEditService->createForm('delete', $pageEdit);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
@@ -101,19 +101,13 @@ class ArchivedController extends Controller
                 return $this->redirectToRoute('pageedit_dashboard', array('v' => 'archived'));
             }
 
-            //Returns the delete form
-            $datetime = new \DateTime();
-            $datetime->setTimestamp(filemtime($filePath));
+            //Renders the delete form
             return $this->render('@c975LPageEdit/forms/deleteArchived.html.twig', array(
                 'form' => $form->createView(),
-                'pageTitle' => $titleTranslated,
-                'page' => $page,
-                'pageContent' => $originalContent,
-                'datetime' => $datetime,
+                'pageEdit' => $pageEdit,
             ));
         }
 
-        //Not found
         throw $this->createNotFoundException();
     }
 }

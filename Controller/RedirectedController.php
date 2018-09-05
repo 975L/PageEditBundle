@@ -20,20 +20,34 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\GoneHttpException;
 use c975L\PageEditBundle\Entity\PageEdit;
 use c975L\PageEditBundle\Form\PageEditType;
-use c975L\PageEditBundle\Service\PageEditService;
+use c975L\PageEditBundle\Service\PageEditServiceInterface;
 
+/**
+ * RedirectedController class
+ * @author Laurent Marquet <laurent.marquet@laposte.net>
+ * @copyright 2018 975L <contact@975l.com>
+ */
 class RedirectedController extends Controller
 {
+    /**
+     * Stores PageEditServiceInterface
+     * @var PageEditServiceInterface
+     */
     private $pageEditService;
 
-    public function __construct(\c975L\PageEditBundle\Service\PageEditService $pageEditService)
+    public function __construct(PageEditServiceInterface $pageEditService)
     {
         $this->pageEditService = $pageEditService;
     }
 
 //DISPLAY
     /**
-     * @Route("/pages/redirected/{page}",
+     * Displays the redirected page
+     * @return Response
+     * @throws AccessDeniedException
+     * @throws NotFoundHttpException
+     *
+     * @Route("/pageedit/redirected/{page}",
      *      name="pageedit_display_redirected",
      *      requirements={
      *          "page": "^([a-zA-Z0-9\-\/]+)"
@@ -44,46 +58,38 @@ class RedirectedController extends Controller
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-redirected', null);
 
-        //Gets page
-        $filePath = $this->pageEditService->getFilePath($page);
-
-        //Existing page
-        if (false !== $filePath) {
-            //Renders the page
-            $datetime = new \DateTime();
-            $datetime->setTimestamp(filemtime($filePath));
+        //Renders the redirected page
+        $pageEdit = $this->pageEditService->getData($page);
+        if ($pageEdit instanceof PageEdit) {
             return $this->render('@c975LPageEdit/pages/redirected.html.twig', array(
-                'redirection' => trim(file_get_contents($filePath)),
-                'datetime' => $datetime,
-                'page' => $page,
+                'pageEdit' => $pageEdit,
             ));
         }
 
-        //Not found
         throw $this->createNotFoundException();
     }
 
 //DELETE
     /**
-     * @Route("/pages/delete/redirected/{page}",
+     * Deletes the redirected page
+     * @return Response
+     * @throws AccessDeniedException
+     * @throws NotFoundHttpException
+     *
+     * @Route("/pageedit/delete/redirected/{page}",
      *      name="pageedit_delete_redirected",
      *      requirements={
      *          "page": "^([a-zA-Z0-9\-\/]+)"
      *      })
+     * @Method({"GET", "HEAD", "POST"})
      */
     public function delete(Request $request, $page)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-redirected-delete', null);
 
-        //Gets page
-        $filePath = $this->pageEditService->getFilePath($page);
-
-        //Existing page
-        if (false !== $filePath) {
-            //Defines form
-            $pageEdit = new PageEdit($page, $page, $page);
-            $pageEditConfig = array('action' => 'delete');
-            $form = $this->createForm(PageEditType::class, $pageEdit, array('pageEditConfig' => $pageEditConfig));
+        $pageEdit = $this->pageEditService->getData($page);
+        if ($pageEdit instanceof PageEdit) {
+            $form = $this->pageEditService->createForm('delete', $pageEdit);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
@@ -94,17 +100,13 @@ class RedirectedController extends Controller
                 return $this->redirectToRoute('pageedit_dashboard', array('v' => 'redirected'));
             }
 
-            //Returns the delete form
-            $datetime = new \DateTime();
-            $datetime->setTimestamp(filemtime($filePath));
-            return $this->render('@c975LPageEdit/forms/deleteRedirected.html.twig', array(
+            //Renders the delete form
+            return $this->render('@c975LPageEdit/forms/deleteArchived.html.twig', array(
                 'form' => $form->createView(),
-                'page' => $page,
-                'datetime' => $datetime,
+                'pageEdit' => $pageEdit,
             ));
         }
 
-        //Not found
         throw $this->createNotFoundException();
     }
 }

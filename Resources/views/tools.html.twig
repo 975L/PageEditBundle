@@ -33,7 +33,7 @@
 {% endif %}
 
 {# Pdf #}
-{% if type == 'display' %}
+{% if type == 'display' or type == 'modify' or type == 'delete' %}
     {{ toolbar_button(path('pageedit_pdf', {'page': object}), 'pdf') }}
 {% endif %}
 
@@ -53,6 +53,11 @@
     {% else %}
         {{ toolbar_button(path('pageedit_delete', {'page': object}), 'delete') }}
     {% endif %}
+{% endif %}
+
+{# Config #}
+{% if type != 'config' %}
+    {{ toolbar_button(path('pageedit_config'), 'config') }}
 {% endif %}
 
 {# Help #}

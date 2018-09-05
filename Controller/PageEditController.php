@@ -16,22 +16,37 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\GoneHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use c975L\PageEditBundle\Entity\PageEdit;
 use c975L\PageEditBundle\Form\PageEditType;
+use c975L\PageEditBundle\Service\PageEditServiceInterface;
 
+/**
+ * Main PageEdit Controller class
+ * @author Laurent Marquet <laurent.marquet@laposte.net>
+ * @copyright 2017 975L <contact@975l.com>
+ */
 class PageEditController extends Controller
 {
+    /**
+     * Stores PageEditServiceInterface
+     * @var PageEditServiceInterface
+     */
     private $pageEditService;
 
-    public function __construct(\c975L\PageEditBundle\Service\PageEditService $pageEditService)
+    public function __construct(PageEditServiceInterface $pageEditService)
     {
         $this->pageEditService = $pageEditService;
     }
 
 //HOME
     /**
+     * Redirects to pageedit_home
+     * @return Redirect
+     *
      * @Route("/pages")
      * @Method({"GET", "HEAD"})
      */
@@ -40,22 +55,28 @@ class PageEditController extends Controller
         return $this->redirectToRoute('pageedit_home');
     }
     /**
+     * Displays the homepage
+     * @return Response
+     *
      * @Route("/",
      *      name="pageedit_home")
      * @Method({"GET", "HEAD"})
      */
     public function home()
     {
-        return new Response(
-            $this->forward('c975L\PageEditBundle\Controller\PageEditController::display', array(
-                'page'  => 'home',
-            ))->getContent()
-        );
+        return $this->render('pages/home.html.twig', array(
+            'toolbar' => $this->pageEditService->defineToolbar('display', 'home'),
+            'display' => 'html',
+        ));
     }
 
 //DASHBOARD
     /**
-     * @Route("/pages/dashboard",
+     * Displays dashboard
+     * @return Response
+     * @throws AccessDeniedException
+     *
+     * @Route("/pageedit/dashboard",
      *      name="pageedit_dashboard")
      * @Method({"GET", "HEAD"})
      */
@@ -63,36 +84,37 @@ class PageEditController extends Controller
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-dashboard', null);
 
-        //Gets pages
-        $pages = $this->pageEditService->getPages();
-        $pagination = $paginator->paginate(
-            $pages,
+        //Renders the dashboard
+        $pages = $paginator->paginate(
+            $this->pageEditService->getPages(),
             $request->query->getInt('p', 1),
             15
         );
-
-        //Renders the dashboard
         return $this->render('@c975LPageEdit/pages/dashboard.html.twig', array(
-            'pages' => $pagination,
+            'pages' => $pages,
         ));
     }
 
 //DISPLAY
     /**
+     * Displays the page
+     * @return Response
+     * @throws AccessDeniedException
+     * @throws NotFoundHttpException
+     *
      * @Route("/pages/{page}",
      *      name="pageedit_display",
      *      requirements={
-     *          "page": "^(?!archived|create|dashboard|delete|deleted|duplicate|home|modify|help|links|new|pdf|redirected|slug|upload)([a-zA-Z0-9\-\/]+)"
+     *          "page": "^(?!pdf)([a-zA-Z0-9\-\/]+)"
      *      })
      * @Method({"GET", "HEAD"})
      */
     public function display(AuthorizationCheckerInterface $authChecker, $page)
     {
-        //Gets page
-        $filePath = $this->pageEditService->getFilePath($page);
+        $pageEdit = $this->pageEditService->getData($page);
 
-        //Existing page
-        if (false !== $filePath) {
+        if ($pageEdit instanceof PageEdit) {
+            $filePath = $pageEdit->getFilePath();
             //Redirected page
             if (false !== strpos($filePath, '/redirected/')) {
                 return $this->redirectToRoute('pageedit_display', array(
@@ -106,6 +128,9 @@ class PageEditController extends Controller
                 return $this->redirectToRoute('pageedit_display', array(
                     'page' => str_replace('protected/', '', $page),
                 ));
+            //Homepage called by pages/home
+            } elseif ('home' === $page) {
+                return $this->redirectToRoute('pageedit_home');
             }
 
             //Renders page
@@ -115,29 +140,30 @@ class PageEditController extends Controller
             ));
         }
 
-        //Not found
         throw $this->createNotFoundException();
     }
 
 //CREATE
     /**
-     * @Route("/pages/create",
+     * Creates the PageEdit
+     * @return Response
+     * @throws AccessDeniedException
+     *
+     * @Route("/pageedit/create",
      *      name="pageedit_create")
+     * @Method({"GET", "HEAD", "POST"})
      */
     public function create(Request $request)
     {
-        $pageEdit = new PageEdit();
         $this->denyAccessUnlessGranted('c975LPageEdit-create', null);
 
-        //Defines form
-        $pageEditConfig = array('action' => 'create');
-        $form = $this->createForm(PageEditType::class, $pageEdit, array('pageEditConfig' => $pageEditConfig));
+        $pageEdit = new PageEdit();
+        $form = $this->pageEditService->createForm('create', $pageEdit);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //Writes file
-            $slug = $this->pageEditService->slugify($form->getData()->getSlug(), true);
-            $this->pageEditService->writeFile($slug, null, $form->getData(), $this->getUser()->getId());
+            //Registers file
+            $slug = $this->pageEditService->register('createNewPageEdit', $form, $this->getUser());
 
             //Redirects to the page
             return $this->redirectToRoute('pageedit_display', array(
@@ -148,46 +174,36 @@ class PageEditController extends Controller
         //Returns the create form
         return $this->render('@c975LPageEdit/forms/create.html.twig', array(
             'form' => $form->createView(),
-            'page' => 'new',
-            'tinymceApiKey' => $this->container->hasParameter('tinymceApiKey') ? $this->getParameter('tinymceApiKey') : null,
-            'tinymceLanguage' => $this->getParameter('c975_l_page_edit.tinymceLanguage'),
-            ));
+            'pageEdit' => $pageEdit,
+        ));
     }
 
 //MODIFY
     /**
-     * @Route("/pages/modify/{page}",
+     * Modifies the PageEdit
+     * @return Response
+     * @throws AccessDeniedException
+     *
+     * @Route("/pageedit/modify/{page}",
      *      name="pageedit_modify",
      *      requirements={
-     *          "page": "^([a-zA-Z0-9\-\/]+)"
+     *          "page": "^[a-zA-Z0-9\-\/]+"
      *      })
+     * @Method({"GET", "HEAD", "POST"})
      */
     public function modify(Request $request, $page)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-modify', null);
 
-        //Gets page
-        $filePath = $this->pageEditService->getFilePath($page);
+        $pageEdit = $this->pageEditService->getData($page);
 
-        //Existing page
-        if (false !== $filePath) {
-            //Gets data
-            extract($this->pageEditService->getData($filePath));
-
-            //Defines form
-            $pageEdit = new PageEdit($originalContent, $title, $page, $changeFrequency, $priority, $description);
-            $pageEditConfig = array('action' => 'modify');
-            $form = $this->createForm(PageEditType::class, $pageEdit, array('pageEditConfig' => $pageEditConfig));
+        if ($pageEdit instanceof PageEdit) {
+            $form = $this->pageEditService->createForm('modify', $pageEdit);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                //Writes file
-                $slug = $this->pageEditService->modifyFile($page, $originalContent, $form->getData(), $this->getUser()->getId());
-
-                //Redirects to the homepage
-                if ($slug == 'home') {
-                    return $this->redirectToRoute('pageedit_home');
-                }
+                //Registers file
+                $slug = $this->pageEditService->register($page, $form, $this->getUser());
 
                 //Redirects to the page
                 return $this->redirectToRoute('pageedit_display', array(
@@ -198,47 +214,40 @@ class PageEditController extends Controller
             //Returns the modify form
             return $this->render('@c975LPageEdit/forms/modify.html.twig', array(
                 'form' => $form->createView(),
-                'pageTitle' => str_replace('\"', '"', $titleTranslated),
-                'page' => $page,
-                'tinymceApiKey' => $this->container->hasParameter('tinymceApiKey') ? $this->getParameter('tinymceApiKey') : null,
-                'tinymceLanguage' => $this->getParameter('c975_l_page_edit.tinymceLanguage'),
+                'pageEdit' => $pageEdit,
             ));
         }
 
-        //Not found
         throw $this->createNotFoundException();
     }
 
 //DUPLICATE
     /**
-     * @Route("/pages/duplicate/{page}",
+     * Duplicates the PageEdit
+     * @return Response
+     * @throws AccessDeniedException
+     *
+     * @Route("/pageedit/duplicate/{page}",
      *      name="pageedit_duplicate",
      *      requirements={
-     *          "page": "^([a-zA-Z0-9\-\/]+)"
+     *          "page": "^[a-zA-Z0-9\-\/]+"
      *      })
+     * @Method({"GET", "HEAD", "POST"})
      */
     public function duplicate(Request $request, $page)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-duplicate', null);
 
-        //Gets page
-        $filePath = $this->pageEditService->getFilePath($page);
+        $pageEdit = $this->pageEditService->getData($page);
 
-        //Existing page
-        if (false !== $filePath) {
-            //Gets data
-            extract($this->pageEditService->getData($filePath));
-
-            //Defines form
-            $pageEdit = new PageEdit($originalContent, null, null, $changeFrequency, $priority, $description);
-            $pageEditConfig = array('action' => 'duplicate');
-            $form = $this->createForm(PageEditType::class, $pageEdit, array('pageEditConfig' => $pageEditConfig));
+        if ($pageEdit instanceof PageEdit) {
+            $pageEditClone = $this->pageEditService->cloneObject($pageEdit);
+            $form = $this->pageEditService->createForm('duplicate', $pageEditClone);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                //Writes file
-                $slug = $this->pageEditService->slugify($form->getData()->getSlug(), true);
-                $this->pageEditService->writeFile($slug, $originalContent, $form->getData(), $this->getUser()->getId());
+                //Registers file
+                $slug = $this->pageEditService->register($page, $form, $this->getUser());
 
                 //Redirects to the page
                 return $this->redirectToRoute('pageedit_display', array(
@@ -246,61 +255,51 @@ class PageEditController extends Controller
                 ));
             }
 
-            //Returns the form to duplicate content
+            //Returns the duplicate form
             return $this->render('@c975LPageEdit/forms/duplicate.html.twig', array(
                 'form' => $form->createView(),
-                'pageTitle' => str_replace('\"', '"', $titleTranslated),
-                'page' => $page,
-                'tinymceApiKey' => $this->container->hasParameter('tinymceApiKey') ? $this->getParameter('tinymceApiKey') : null,
-                'tinymceLanguage' => $this->getParameter('c975_l_page_edit.tinymceLanguage'),
+                'pageEdit' => $pageEditClone,
             ));
         }
 
-        //Not found
         throw $this->createNotFoundException();
     }
 
 //DELETE
     /**
-     * @Route("/pages/delete/{page}",
+     * Deletes the PageEdit (Moves the page to deleted folder)
+     * @return Response
+     * @throws AccessDeniedException
+     *
+     * @Route("/pageedit/delete/{page}",
      *      name="pageedit_delete",
      *      requirements={
-     *          "page": "^(?!archived|deleted|redirected)([a-zA-Z0-9\-\/]+)"
+     *          "page": "^[a-zA-Z0-9\-\/]+"
      *      })
+     * @Method({"GET", "HEAD", "POST"})
      */
     public function delete(Request $request, $page)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-delete', null);
 
-        //Gets page
-        $filePath = $this->pageEditService->getFilePath($page);
+        $pageEdit = $this->pageEditService->getData($page);
 
-        //Existing page
-        if (false !== $filePath) {
-            //Gets data
-            extract($this->pageEditService->getData($filePath));
-
-            //Defines form
-            $pageEdit = new PageEdit($originalContent, $title, $page);
-            $pageEditConfig = array('action' => 'delete');
-            $form = $this->createForm(PageEditType::class, $pageEdit, array('pageEditConfig' => $pageEditConfig));
+        if ($pageEdit instanceof PageEdit) {
+            $form = $this->pageEditService->createForm('delete', $pageEdit);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
                 //Deletes file
-                $this->pageEditService->deleteFile($page, true);
+                $slug = $this->pageEditService->delete($page, true);
 
                 //Redirects to the dashboard
                 return $this->redirectToRoute('pageedit_dashboard');
             }
 
-            //Returns the form to delete page
+            //Returns the delete form
             return $this->render('@c975LPageEdit/forms/delete.html.twig', array(
                 'form' => $form->createView(),
-                'pageTitle' => $titleTranslated,
-                'page' => $page,
-                'pageContent' => $originalContent,
-                'type' => 'delete',
+                'pageEdit' => $pageEdit,
             ));
         }
 
@@ -308,9 +307,47 @@ class PageEditController extends Controller
         throw $this->createNotFoundException();
     }
 
+
+//CONFIG
+    /**
+     * Displays the configuration
+     * @return Response
+     * @throws AccessDeniedException
+     *
+     * @Route("/pageedit/config",
+     *      name="pageedit_config")
+     * @Method({"GET", "HEAD", "POST"})
+     */
+    public function config(Request $request, ConfigServiceInterface $configService)
+    {
+        $this->denyAccessUnlessGranted('c975LPageEdit-config', null);
+
+        //Defines form
+        $form = $configService->createForm('c975l/pageedit-bundle');
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            //Validates config
+            $configService->setConfig($form);
+
+            //Redirects
+            return $this->redirectToRoute('pageedit_dashboard');
+        }
+
+        //Renders the config form
+        return $this->render('@c975LConfig/forms/config.html.twig', array(
+            'form' => $form->createView(),
+            'toolbar' => '@c975LPageEdit',
+        ));
+    }
+
 //HELP
     /**
-     * @Route("/pages/help",
+     * Displays the help
+     * @return Response
+     * @throws AccessDeniedException
+     *
+     * @Route("/pageedit/help",
      *      name="pageedit_help")
      * @Method({"GET", "HEAD"})
      */

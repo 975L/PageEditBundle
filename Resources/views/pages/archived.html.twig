@@ -1,14 +1,15 @@
 {% extends "@c975LPageEdit/layout.html.twig" %}
 {% trans_default_domain 'pageedit' %}
-{% set title = 'label.archive'|trans ~ ' "' ~ pageTitle ~ '"' %}
+{% set title = 'label.archive'|trans ~ ' "' ~ pageEdit.titleTranslated ~ '"' %}
 
 {% block content %}
 {# Toolbar #}
-    {{ toolbar_display('@c975LPageEdit/tools.html.twig', 'archived', 'md', page) }}
+    {{ toolbar_display('@c975LPageEdit/tools.html.twig', 'archived', 'md', pageEdit.slug) }}
 {# Warning message #}
     {{ include('@c975LPageEdit/fragments/warningArchived.html.twig') }}
 {# Content #}
     {% block pageedit_content %}
-        {{ pageContent|raw }}
+        <pre>{{ pageEdit.content|raw }}</pre>
+
     {% endblock %}
 {% endblock %}
