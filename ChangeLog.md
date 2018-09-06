@@ -1,5 +1,9 @@
 # ChangeLog
 
+v2.0.1
+------
+- Fixed Twig extension `PageEditFolderContent` (06/09/2018)
+
 v2.0
 ----
 - Updated composer.json (01/09/2018)

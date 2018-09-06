@@ -10,15 +10,35 @@
 namespace c975L\PageEditBundle\Twig;
 
 use Symfony\Component\Finder\Finder;
-use c975L\PageEditBundle\Service\PageEditService;
+use c975L\PageEditBundle\Service\PageEditServiceInterface;
+use c975L\PageEditBundle\Service\File\PageEditFileInterface;
 
+/**
+ * Twig extension to display the formatted GiftVoucherPurchased identifier using `|gv_identifier`
+ * @author Laurent Marquet <laurent.marquet@laposte.net>
+ * @copyright 2018 975L <contact@975l.com>
+ */
 class PageEditFolderContent extends \Twig_Extension
 {
-    private $container;
+    /**
+     * Stores PageEditFileInterface
+     * @var PageEditFileInterface
+     */
+    private $pageEditFile;
 
-    public function __construct(\Symfony\Component\DependencyInjection\ContainerInterface $container)
+    /**
+     * Stores PageEditServiceInterface
+     * @var PageEditServiceInterface
+     */
+    private $pageEditService;
+
+    public function __construct(
+        PageEditFileInterface $pageEditFile,
+        PageEditServiceInterface $pageEditService
+    )
     {
-        $this->container = $container;
+        $this->pageEditFile = $pageEditFile;
+        $this->pageEditService = $pageEditService;
     }
 
     public function getFunctions()
@@ -28,13 +48,15 @@ class PageEditFolderContent extends \Twig_Extension
         );
     }
 
+    /**
+     * Returns an associative array(filename => titleTranslated) for the content ot specified folder
+     * @return array
+     */
     public function folderContent($folder)
     {
-        //Gets the Finder
+        //Gets folder's files
+        $folderPath = $this->pageEditFile->getPagesFolder() . $folder;
         $finder = new Finder();
-
-        //Finds files
-        $folderPath = $this->container->getParameter('kernel.root_dir') . '/Resources/views/' . $this->container->getParameter('c975_l_page_edit.folderPages') . '/' . $folder;
         $finder
             ->files()
             ->in($folderPath)
@@ -43,11 +65,11 @@ class PageEditFolderContent extends \Twig_Extension
         ;
 
         //Finds titles
-        $pageEditService = $this->container->get(PageEditService::class);
         $folderContent = array();
         foreach ($finder as $file) {
-            $title = $pageEditService->getTitle($file->getContents(), $file);
-            $titleTranslated = $pageEditService->getTitleTranslated($title);
+            $title = $this->pageEditService->getTitle($file->getContents(), $file);
+            $titleTranslated = $this->pageEditService->getTitleTranslated($title);
+
             $folderContent[$folder . '/' . str_replace('.html.twig', '', $file->getFilename())] = $titleTranslated;
         }
 
