@@ -1,5 +1,7 @@
 # ChangeLog
 
+- Corrected `UPGRADE.md` for `php bin/console config:create` (03/12/2018)
+
 v2.0.1
 ------
 - Fixed Twig extension `PageEditFolderContent` (06/09/2018)
