@@ -9,9 +9,9 @@
 
 namespace c975L\PageEditBundle\Service\File;
 
+use c975L\PageEditBundle\Entity\PageEdit;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\Form;
-use c975L\PageEditBundle\Entity\PageEdit;
 
 /**
  * Interface to be called for DI for PageEdit File related services

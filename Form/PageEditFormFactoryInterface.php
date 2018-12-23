@@ -9,8 +9,8 @@
 
 namespace c975L\PageEditBundle\Form;
 
-use Symfony\Component\Form\Form;
 use c975L\PageEditBundle\Entity\PageEdit;
+use Symfony\Component\Form\Form;
 
 /**
  * Interface to be called for DI for PageEditFormFactoryInterface related services

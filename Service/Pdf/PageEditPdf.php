@@ -9,11 +9,11 @@
 
 namespace c975L\PageEditBundle\Service\Pdf;
 
-use Symfony\Component\HttpFoundation\RequestStack;
-use Knp\Snappy\Pdf;
-use Twig_Environment;
 use c975L\PageEditBundle\Service\File\PageEditFileInterface;
-use c975L\PageEditBundle\Service\Pdf\PageEditPdfInterface;
+use Knp\Snappy\Pdf;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Twig_Environment;
 
 /**
  * Services related to PageEdit Pdf
@@ -36,7 +36,7 @@ class PageEditPdf implements PageEditPdfInterface
 
     /**
      * Stores current Request
-     * @var RequestStack
+     * @var Request
      */
     private $request;
 

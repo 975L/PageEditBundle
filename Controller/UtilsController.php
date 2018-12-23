@@ -9,17 +9,15 @@
 
 namespace c975L\PageEditBundle\Controller;
 
+use c975L\ConfigBundle\Service\ConfigServiceInterface;
+use c975L\PageEditBundle\Service\File\PageEditFileInterface;
+use c975L\PageEditBundle\Service\PageEditServiceInterface;
+use c975L\PageEditBundle\Service\Slug\PageEditSlugInterface;
+use DateTime;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use c975L\ConfigBundle\Service\ConfigServiceInterface;
-use c975L\PageEditBundle\Service\PageEditServiceInterface;
-use c975L\PageEditBundle\Service\File\PageEditFileInterface;
-use c975L\PageEditBundle\Service\Slug\PageEditSlugInterface;
 
 /**
  * UtilsController class
@@ -29,6 +27,7 @@ use c975L\PageEditBundle\Service\Slug\PageEditSlugInterface;
 class UtilsController extends Controller
 {
 //REMOVE TRAILING SLASH
+
     /**
     * @Route("/{url}",
     *       name="remove_trailing_slash",
@@ -44,6 +43,7 @@ class UtilsController extends Controller
     }
 
 //LIST FOR URL LINKING
+
     /**
      * Provides a list of pages to link to in Tinymce
      * @return JSON
@@ -62,6 +62,7 @@ class UtilsController extends Controller
     }
 
 //UPLOAD IMAGE
+
     /**
      * Uploads the image defined
      * @return JSON|false
@@ -88,7 +89,7 @@ class UtilsController extends Controller
                     $page = substr($page, strrpos($page, '/') + 1);
                 }
                 $folderPath = $pageEditFile->getImagesFolder();
-                $now = \DateTime::createFromFormat('U.u', microtime(true));
+                $now = DateTime::createFromFormat('U.u', microtime(true));
                 $filename = $page . '-' . $now->format('Ymd-His-u') . '.' . $extension;
                 move_uploaded_file($file->getRealPath(), $folderPath . $filename);
 
@@ -103,6 +104,7 @@ class UtilsController extends Controller
     }
 
 //SLUG
+
     /**
      * Slugs the provided text
      * @return JSON

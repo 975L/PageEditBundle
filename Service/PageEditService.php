@@ -9,20 +9,20 @@
 
 namespace c975L\PageEditBundle\Service;
 
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Form\Form;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Translation\TranslatorInterface;
-use Twig_Environment;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use c975L\PageEditBundle\Entity\PageEdit;
 use c975L\PageEditBundle\Form\PageEditFormFactoryInterface;
-use c975L\PageEditBundle\Service\PageEditServiceInterface;
 use c975L\PageEditBundle\Service\File\PageEditFileInterface;
 use c975L\PageEditBundle\Service\Slug\PageEditSlugInterface;
+use DateTime;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Translation\TranslatorInterface;
+use Twig_Environment;
 
 /**
  * Main services related to PageEdit
@@ -38,8 +38,8 @@ class PageEditService implements PageEditServiceInterface
     private $authChecker;
 
     /**
-     * Stores ContainerInterface
-     * @var ContainerInterface
+     * Stores ConfigServiceInterface
+     * @var ConfigServiceInterface
      */
     private $configService;
 
@@ -63,7 +63,7 @@ class PageEditService implements PageEditServiceInterface
 
     /**
      * Stores current Request
-     * @var RequestStack
+     * @var Request
      */
     private $request;
 
@@ -225,7 +225,7 @@ class PageEditService implements PageEditServiceInterface
             $fileContent = file_get_contents($filePath);
             $title = $this->getTitle($fileContent, str_replace( array($this->pageEditFile->getPagesFolder(), '.html.twig'), '', $filePath));
 
-            $modification = new \DateTime();
+            $modification = new DateTime();
             $pageEdit = new PageEdit();
             $pageEdit
                 ->setChangeFrequency($this->getChangeFrequency($fileContent))
@@ -305,7 +305,6 @@ class PageEditService implements PageEditServiceInterface
 
         return $this->definePagesSlugTitle($finder);
     }
-
 
     /**
      * {@inheritdoc}

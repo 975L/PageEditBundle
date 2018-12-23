@@ -9,20 +9,18 @@
 
 namespace c975L\PageEditBundle\Controller;
 
+use c975L\ConfigBundle\Service\ConfigServiceInterface;
+use c975L\PageEditBundle\Entity\PageEdit;
+use c975L\PageEditBundle\Service\PageEditServiceInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\GoneHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Knp\Component\Pager\PaginatorInterface;
-use c975L\ConfigBundle\Service\ConfigServiceInterface;
-use c975L\PageEditBundle\Entity\PageEdit;
-use c975L\PageEditBundle\Form\PageEditType;
-use c975L\PageEditBundle\Service\PageEditServiceInterface;
 
 /**
  * Main PageEdit Controller class
@@ -43,6 +41,7 @@ class PageEditController extends Controller
     }
 
 //HOME
+
     /**
      * Redirects to pageedit_home
      * @return Redirect
@@ -54,6 +53,7 @@ class PageEditController extends Controller
     {
         return $this->redirectToRoute('pageedit_home');
     }
+
     /**
      * Displays the homepage
      * @return Response
@@ -71,6 +71,7 @@ class PageEditController extends Controller
     }
 
 //DASHBOARD
+
     /**
      * Displays dashboard
      * @return Response
@@ -96,6 +97,7 @@ class PageEditController extends Controller
     }
 
 //DISPLAY
+
     /**
      * Displays the page
      * @return Response
@@ -144,6 +146,7 @@ class PageEditController extends Controller
     }
 
 //CREATE
+
     /**
      * Creates the PageEdit
      * @return Response
@@ -179,6 +182,7 @@ class PageEditController extends Controller
     }
 
 //MODIFY
+
     /**
      * Modifies the PageEdit
      * @return Response
@@ -222,6 +226,7 @@ class PageEditController extends Controller
     }
 
 //DUPLICATE
+
     /**
      * Duplicates the PageEdit
      * @return Response
@@ -266,6 +271,7 @@ class PageEditController extends Controller
     }
 
 //DELETE
+
     /**
      * Deletes the PageEdit (Moves the page to deleted folder)
      * @return Response
@@ -307,8 +313,8 @@ class PageEditController extends Controller
         throw $this->createNotFoundException();
     }
 
-
 //CONFIG
+
     /**
      * Displays the configuration
      * @return Response
@@ -342,6 +348,7 @@ class PageEditController extends Controller
     }
 
 //HELP
+
     /**
      * Displays the help
      * @return Response

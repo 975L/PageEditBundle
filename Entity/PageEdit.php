@@ -9,6 +9,7 @@
 
 namespace c975L\PageEditBundle\Entity;
 
+use DateTime;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -74,10 +75,9 @@ class PageEdit
 
     /**
      * Stores modification
-     * @var \DateTime
+     * @var DateTime
      */
     protected $modification;
-
 
     /**
      * Set title
@@ -249,7 +249,7 @@ class PageEdit
 
     /**
      * Set modification
-     * @param \DateTime
+     * @param DateTime
      * @return PageEdit
      */
     public function setModification($modification)
@@ -261,7 +261,7 @@ class PageEdit
 
     /**
      * Get modification
-     * @return \DateTime
+     * @return DateTime
      */
     public function getModification()
     {

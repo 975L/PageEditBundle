@@ -9,12 +9,14 @@
 
 namespace c975L\PageEditBundle\Security;
 
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use c975L\PageEditBundle\Entity\PageEdit;
+use LogicException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
  * Voter for PageEdit access
@@ -37,7 +39,7 @@ class PageEditVoter extends Voter
 
     /**
      * Stores current Request
-     * @var RequestStack
+     * @var Request
      */
     private $request;
 
@@ -194,7 +196,7 @@ class PageEditVoter extends Voter
     /**
      * Votes if access is granted
      * @return bool
-     * @throws \LogicException
+     * @throws LogicException
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
@@ -223,7 +225,7 @@ class PageEditVoter extends Voter
                 break;
         }
 
-        throw new \LogicException('Invalid attribute: ' . $attribute);
+        throw new LogicException('Invalid attribute: ' . $attribute);
     }
 
     /**

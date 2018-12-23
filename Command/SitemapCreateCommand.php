@@ -1,7 +1,9 @@
 <?php
 namespace c975L\PageEditBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use c975L\ConfigBundle\Service\ConfigServiceInterface;
+use c975L\PageEditBundle\Service\PageEditServiceInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -9,15 +11,13 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Kernel;
 use Twig_Environment;
-use c975L\ConfigBundle\Service\ConfigServiceInterface;
-use c975L\PageEditBundle\Service\PageEditServiceInterface;
 
 /**
  * Console command to create sitemap of pages, executed with 'pageedit:createSitemap'
  * @author Laurent Marquet <laurent.marquet@laposte.net>
  * @copyright 2017 975L <contact@975l.com>
  */
-class SitemapCreateCommand extends ContainerAwareCommand
+class SitemapCreateCommand extends Command
 {
     /**
      * Stores ConfigServiceInterface

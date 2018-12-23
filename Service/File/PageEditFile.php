@@ -9,20 +9,19 @@
 
 namespace c975L\PageEditBundle\Service\File;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Form\Form;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Cocur\Slugify\Slugify;
-use Knp\Snappy\Pdf;
-use Twig_Environment;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use c975L\PageEditBundle\Entity\PageEdit;
 use c975L\PageEditBundle\Form\PageEditFormFactoryInterface;
-use c975L\PageEditBundle\Service\File\PageEditFileServiceInterface;
+use Knp\Snappy\Pdf;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Twig_Environment;
 
 /**
  * Services related to PageEdit File
@@ -63,7 +62,7 @@ class PageEditFile implements PageEditFileInterface
 
     /**
      * Stores current Request
-     * @var RequestStack
+     * @var Request
      */
     private $request;
 

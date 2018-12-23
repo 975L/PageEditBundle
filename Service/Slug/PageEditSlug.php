@@ -9,8 +9,8 @@
 
 namespace c975L\PageEditBundle\Service\Slug;
 
-use Cocur\Slugify\Slugify;
 use c975L\PageEditBundle\Service\File\PageEditFileInterface;
+use Cocur\Slugify\Slugify;
 
 /**
  * Services related to PageEdit Slug

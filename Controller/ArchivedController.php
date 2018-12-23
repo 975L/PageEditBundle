@@ -9,19 +9,15 @@
 
 namespace c975L\PageEditBundle\Controller;
 
+use c975L\PageEditBundle\Entity\PageEdit;
+use c975L\PageEditBundle\Service\PageEditServiceInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use c975L\PageEditBundle\Entity\PageEdit;
-use c975L\PageEditBundle\Form\PageEditType;
-use c975L\PageEditBundle\Service\PageEditServiceInterface;
 
 /**
  * ArchivedController class
@@ -42,6 +38,7 @@ class ArchivedController extends Controller
     }
 
 //DISPLAY
+
     /**
      * Displays the archived page
      * @return Response
@@ -71,6 +68,7 @@ class ArchivedController extends Controller
     }
 
 //DELETE
+
     /**
      * Deletes the archived page
      * @return Response

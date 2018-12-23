@@ -9,11 +9,8 @@
 
 namespace c975L\PageEditBundle\Form;
 
-use Symfony\Component\Form\Form;
-use Symfony\Component\Form\FormFactoryInterface;
 use c975L\PageEditBundle\Entity\PageEdit;
-use c975L\PageEditBundle\Form\PageEditType;
-use c975L\PageEditBundle\Form\PageEditFormFactoryInterface;
+use Symfony\Component\Form\FormFactoryInterface;
 
 /**
  * PageEditFormFactory class

@@ -9,16 +9,14 @@
 
 namespace c975L\PageEditBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use c975L\PageEditBundle\Entity\PageEdit;
 use c975L\PageEditBundle\Service\PageEditServiceInterface;
 use c975L\PageEditBundle\Service\Pdf\PageEditPdfInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * PdfController class
@@ -28,6 +26,7 @@ use c975L\PageEditBundle\Service\Pdf\PageEditPdfInterface;
 class PdfController extends Controller
 {
 //DISPLAY THE PDF
+
     /**
      * Creates and displays the pdf of the page
      * @return Response

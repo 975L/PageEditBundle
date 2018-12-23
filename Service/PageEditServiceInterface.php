@@ -9,9 +9,9 @@
 
 namespace c975L\PageEditBundle\Service;
 
+use c975L\PageEditBundle\Entity\PageEdit;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\Form;
-use c975L\PageEditBundle\Entity\PageEdit;
 
 /**
  * Interface to be called for DI for PageEdit Main related services
@@ -37,7 +37,6 @@ interface PageEditServiceInterface
      * @return array
      */
     public function definePagesSlugTitle(Finder $finder);
-
 
     /**
      * Defines the toolbar
