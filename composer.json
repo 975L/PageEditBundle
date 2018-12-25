@@ -27,11 +27,11 @@
         "h4cc/wkhtmltopdf-amd64": "^0",
         "knplabs/knp-paginator-bundle": "^2",
         "knplabs/knp-snappy-bundle": "^1",
-        "symfony/form": "^4.2",
-        "symfony/security": "^4.2",
-        "symfony/templating": "^3",
-        "symfony/translation": "^4.2",
-        "twig/extensions": "^1"
+        "symfony/form": "*",
+        "symfony/security": "*",
+        "symfony/templating": "*",
+        "symfony/translation": "*",
+        "twig/extensions": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.3@dev",
