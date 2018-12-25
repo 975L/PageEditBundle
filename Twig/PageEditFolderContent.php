@@ -13,6 +13,7 @@ use c975L\PageEditBundle\Service\File\PageEditFileInterface;
 use c975L\PageEditBundle\Service\PageEditServiceInterface;
 use Symfony\Component\Finder\Finder;
 use Twig_Extension;
+use Twig_SimpleFunction;
 
 /**
  * Twig extension to display the formatted GiftVoucherPurchased identifier using `|gv_identifier`
