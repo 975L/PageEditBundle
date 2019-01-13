@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\GoneHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
@@ -136,7 +137,8 @@ class PageEditController extends Controller
             }
 
             //Renders page
-            return $this->render(substr($filePath, strpos($filePath, '/views') + 6), array(
+            $filePath = '4' === substr(Kernel::VERSION, 0, 1) ? substr($filePath, strpos($filePath, '/templates') + 10) : substr($filePath, strpos($filePath, '/views') + 6);
+            return $this->render($filePath, array(
                 'toolbar' => $this->pageEditService->defineToolbar('display', $page),
                 'display' => 'html',
             ));

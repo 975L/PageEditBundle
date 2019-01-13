@@ -1,5 +1,10 @@
 # ChangeLog
 
+v2.1
+----
+- Corrected compatibility with Symfony 4 (13/01/2019)
+- Made use of `templates` naming in README.md instead of `Resources/views` (13/01/2019)
+
 v2.0.4
 ------
 - Modified required versions in `composer.json` (25/12/2018)

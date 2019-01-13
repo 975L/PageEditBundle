@@ -8,7 +8,7 @@ c975LPageEdit:
         type: string
         required: true
         default: pages
-        info: "Path where the pages AND images will be stored. The full paths ('Resources/views/[folderPages]' & 'web/images/[folderPages]') have to be added to .gitignore if Git is used (Default pages)"
+        info: "Path where the pages AND images will be stored. The full paths ('templates/[folderPages]' & 'public/images/[folderPages]') have to be added to .gitignore if Git is used (Default pages)"
     sitemapBaseUrl:
         type: string
         required: true
@@ -29,4 +29,4 @@ c975LCommon:
         type: string
         required: false
         default: null
-        info: "Your tinymce language if you use one, MUST BE placed in 'web/vendor/tinymce/[tinymceLanguage].js: i.e. fr_FR"
+        info: "Your tinymce language if you use one, MUST BE placed in 'public/vendor/tinymce/[tinymceLanguage].js: i.e. fr_FR"

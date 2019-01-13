@@ -31,7 +31,7 @@
         "symfony/security": "*",
         "symfony/templating": "*",
         "symfony/translation": "*",
-        "twig/extensions": "*"
+        "twig/extensions": "^1"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.3@dev",

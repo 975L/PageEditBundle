@@ -81,7 +81,7 @@ v2.0+ of c975LPageEditBundle uses [c975L/ConfigBundle](https://github.com/975L/C
 
 **Upgrading from v1.x? Check [UPGRADE.md](UPGRADE.md).**
 
-**If you use Git for version control, you need to add the full path `app/Resources/views/[folderPages]` and `/web/images/[folderPages]` in the `.gitignore`, otherwise all the content will be altered by Git.**
+**If you use Git for version control, you need to add the full path `templates/[folderPages]` and `public/images/[folderPages]` in the `.gitignore`, otherwise all the content will be altered by Git.**
 
 Step 4: Enable the Routes
 -------------------------
@@ -103,7 +103,7 @@ Step 5: Link and initialization of TinyMce
 ------------------------------------------
 It is strongly recommended to use the [Override Templates from Third-Party Bundles feature](http://symfony.com/doc/current/templating/overriding.html) to integrate fully with your site.
 
-For this, simply, create the following structure `app/Resources/c975LPageEditBundle/views/` in your app and then duplicate the file `layout.html.twig` in it, to override the existing Bundle files, then apply your needed changes, such as language, etc.
+For this, simply, create the following structure `templates/bundles/c975LPageEditBundle/views/` in your app and then duplicate the file `layout.html.twig` in it, to override the existing Bundle files, then apply your needed changes, such as language, etc.
 
 In `layout.html.twig`, it will mainly consist to extend your layout and define specific variables, i.e. :
 ```twig
@@ -121,7 +121,7 @@ In `layout.html.twig`, it will mainly consist to extend your layout and define s
 It is recommended to use [Tinymce Cloud version](https://go.tinymce.com/cloud/). You will need a [free API key](https://store.ephox.com/my-account/api-key-manager/).
 **OR** you can download and link to your project [https://www.tinymce.com/download/](https://www.tinymce.com/download/).
 
-If you want to keep all the available tools and make no change to Tinymce as it is, you don't need to overwrite `tinymceInit.html.twig`. You just need to provide, in `parameters.yml`, your `tinymceApiKey` (see above) if you use the cloud version and the `tinymceLanguage` (+ upload the corresponding file on your server under `web/vendor/tinymce/[tinymceLanguage].js`). Oherwise you need to override `tinymceInit.html.twig`.
+If you want to keep all the available tools and make no change to Tinymce as it is, you don't need to overwrite `tinymceInit.html.twig`. You just need to provide, in `parameters.yml`, your `tinymceApiKey` (see above) if you use the cloud version and the `tinymceLanguage` (+ upload the corresponding file on your server under `public/vendor/tinymce/[tinymceLanguage].js`). Oherwise you need to override `tinymceInit.html.twig`.
 
 Step 6: Definitions of start and end of template for file saving
 ----------------------------------------------------------------
@@ -180,7 +180,7 @@ The home page can be managed via PageEdit, but as it is called at the root of th
 
 Protect specific templates
 --------------------------
-If you need to protect specific templates (containing lot of Twig tag, Twig variable setting, etc. or if you don't want your final user to be able to modify them, to not break the website), simply put those templates in `app/Resources/views/[folderPages]/protected`, they will be displayed as other, and included in the sitemap, but not available for modifications.
+If you need to protect specific templates (containing lot of Twig tag, Twig variable setting, etc. or if you don't want your final user to be able to modify them, to not break the website), simply put those templates in `templates/[folderPages]/protected`, they will be displayed as other, and included in the sitemap, but not available for modifications.
 **You just need to encapsulate the content of the template within the `skeleton.html.twig`.**
 
 Use the Twig Extension to automate building menus
@@ -202,9 +202,9 @@ You can use the provided Twig Extension `folder_content()` to easily build menus
 
 Migrating existing files to PageEdit
 ------------------------------------
-To migrate existing files, simply move your existing templates in the folder defined in `app/Resources/views/[folderPages]` (`folderPages` has been defined in Step 3 above), access to PageEdit dashboard and do the modifications. The skeleton will be added to new files and old ones will be archived.
+To migrate existing files, simply move your existing templates in the folder defined in `templates/[folderPages]` (`folderPages` has been defined in Step 3 above), access to PageEdit dashboard and do the modifications. The skeleton will be added to new files and old ones will be archived.
 
-You can use the command `git rm -r --cached app/Resources/views/[folderPages]` to remove it from Git, if the folder was previously indexed.
+You can use the command `git rm -r --cached templates/[folderPages]` to remove it from Git, if the folder was previously indexed.
 
 **Don't forget to make a copy of it, if you use Git as versionning system and if you have added this folder in the `.gitignore`, otherwise your files will be deleted at next commit !**
 
