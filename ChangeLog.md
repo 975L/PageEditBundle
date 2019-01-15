@@ -1,5 +1,9 @@
 # ChangeLog
 
+v2.1.1
+------
+- Updated composer.json (15/01/2019)
+
 v2.1
 ----
 - Corrected compatibility with Symfony 4 (13/01/2019)
