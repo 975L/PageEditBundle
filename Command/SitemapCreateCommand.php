@@ -71,7 +71,7 @@ class SitemapCreateCommand extends Command
         $fs = new Filesystem();
         $rootFolder = $this->container->getParameter('kernel.root_dir');
         $folderPages = $this->configService->getParameter('c975LPageEdit.folderPages');
-        $templatesFolder = '4' === substr(Kernel::VERSION, 0, 1) ? '/templates/' : '/Resources/views/';
+        $templatesFolder = '4' === substr(Kernel::VERSION, 0, 1) ? '/../templates/' : '/Resources/views/';
         $folderPath = $rootFolder . $templatesFolder . $folderPages;
         $protectedFolderPath = $rootFolder . $templatesFolder . $folderPages . '/protected';
         $fs->mkdir(array(

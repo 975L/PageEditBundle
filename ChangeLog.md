@@ -1,5 +1,9 @@
 # ChangeLog
 
+v2.1.2
+------
+- Corrected folder for sitemap for Symfony 4 (31/01/2019)
+
 v2.1.1
 ------
 - Updated composer.json (15/01/2019)
