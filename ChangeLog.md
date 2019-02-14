@@ -1,5 +1,11 @@
 # ChangeLog
 
+v2.1.3
+------
+- Removed deprecations for @Method (13/02/2019)
+- Implemented AstractController instead of Controller (13/02/2019)
+- Modified Dependencyinjection rootNode to be not empty (13/02/2019)
+
 v2.1.2
 ------
 - Corrected folder for sitemap for Symfony 4 (31/01/2019)

@@ -11,9 +11,8 @@ namespace c975L\PageEditBundle\Controller;
 
 use c975L\PageEditBundle\Entity\PageEdit;
 use c975L\PageEditBundle\Service\PageEditServiceInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @author Laurent Marquet <laurent.marquet@laposte.net>
  * @copyright 2018 975L <contact@975l.com>
  */
-class RedirectedController extends Controller
+class RedirectedController extends AbstractController
 {
     /**
      * Stores PageEditServiceInterface
@@ -45,10 +44,8 @@ class RedirectedController extends Controller
      *
      * @Route("/pageedit/redirected/{page}",
      *      name="pageedit_display_redirected",
-     *      requirements={
-     *          "page": "^([a-zA-Z0-9\-\/]+)"
-     *      })
-     * @Method({"GET", "HEAD"})
+     *      requirements={"page": "^([a-zA-Z0-9\-\/]+)"},
+     *    methods={"HEAD", "GET"})
      */
     public function display($page)
     {
@@ -74,11 +71,9 @@ class RedirectedController extends Controller
      * @throws NotFoundHttpException
      *
      * @Route("/pageedit/delete/redirected/{page}",
-     *      name="pageedit_delete_redirected",
-     *      requirements={
-     *          "page": "^([a-zA-Z0-9\-\/]+)"
-     *      })
-     * @Method({"GET", "HEAD", "POST"})
+     *    name="pageedit_delete_redirected",
+     *    requirements={"page": "^([a-zA-Z0-9\-\/]+)"},
+     *    methods={"HEAD", "GET", "POST"})
      */
     public function delete(Request $request, $page)
     {

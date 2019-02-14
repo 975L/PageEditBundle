@@ -14,9 +14,8 @@ use c975L\PageEditBundle\Service\File\PageEditFileInterface;
 use c975L\PageEditBundle\Service\PageEditServiceInterface;
 use c975L\PageEditBundle\Service\Slug\PageEditSlugInterface;
 use DateTime;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -24,16 +23,16 @@ use Symfony\Component\HttpFoundation\Request;
  * @author Laurent Marquet <laurent.marquet@laposte.net>
  * @copyright 2018 975L <contact@975l.com>
  */
-class UtilsController extends Controller
+class UtilsController extends AbstractController
 {
 //REMOVE TRAILING SLASH
 
     /**
-    * @Route("/{url}",
-    *       name="remove_trailing_slash",
-    *       requirements={"url": "^.*\/$"})
-    * @Method({"GET", "HEAD"})
-    */
+     * @Route("/{url}",
+     *    name="remove_trailing_slash",
+     *    requirements={"url": "^.*\/$"},
+     *    methods={"HEAD", "GET"})
+     */
     public function removeTrailingSlash(Request $request)
     {
         $pathInfo = $request->getPathInfo();
@@ -50,8 +49,8 @@ class UtilsController extends Controller
      * @throws AccessDeniedException
      *
      * @Route("/pageedit/links",
-     *      name="pageedit_links")
-     * @Method({"GET", "HEAD"})
+     *    name="pageedit_links",
+     *    methods={"HEAD", "GET"})
      */
     public function links(PageEditServiceInterface $pageEditService)
     {
@@ -69,10 +68,10 @@ class UtilsController extends Controller
      * @throws AccessDeniedException
      *
      * @Route("/pageedit/upload/{page}",
-     *      name="pageedit_upload",
-     *      requirements={"page": "^[a-zA-Z0-9\-\/]+"},
-     *      defaults={"page": "new"})
-     * @Method({"POST"})
+     *    name="pageedit_upload",
+     *    requirements={"page": "^[a-zA-Z0-9\-\/]+"},
+     *    defaults={"page": "new"},
+     *    methods={"POST"})
      */
     public function upload(Request $request, ConfigServiceInterface $configService, PageEditFileInterface $pageEditFile, $page)
     {
@@ -111,8 +110,8 @@ class UtilsController extends Controller
      * @throws AccessDeniedException
      *
      * @Route("/pageedit/slug/{text}",
-     *      name="pageedit_slug")
-     * @Method({"POST"})
+     *    name="pageedit_slug",
+     *    methods={"POST"})
      */
     public function slug(PageEditSlugInterface $pageEditSlug, $text)
     {

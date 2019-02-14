@@ -13,9 +13,8 @@ use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use c975L\PageEditBundle\Entity\PageEdit;
 use c975L\PageEditBundle\Service\PageEditServiceInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\GoneHttpException;
@@ -28,7 +27,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  * @author Laurent Marquet <laurent.marquet@laposte.net>
  * @copyright 2017 975L <contact@975l.com>
  */
-class PageEditController extends Controller
+class PageEditController extends AbstractController
 {
     /**
      * Stores PageEditServiceInterface
@@ -47,8 +46,9 @@ class PageEditController extends Controller
      * Redirects to pageedit_home
      * @return Redirect
      *
-     * @Route("/pages")
-     * @Method({"GET", "HEAD"})
+     * @Route("/pages",
+     *    name="pageedit_redirect_home",
+     *    methods={"HEAD", "GET"})
      */
     public function redirectPages()
     {
@@ -60,8 +60,8 @@ class PageEditController extends Controller
      * @return Response
      *
      * @Route("/",
-     *      name="pageedit_home")
-     * @Method({"GET", "HEAD"})
+     *    name="pageedit_home",
+     *    methods={"HEAD", "GET"})
      */
     public function home()
     {
@@ -79,8 +79,8 @@ class PageEditController extends Controller
      * @throws AccessDeniedException
      *
      * @Route("/pageedit/dashboard",
-     *      name="pageedit_dashboard")
-     * @Method({"GET", "HEAD"})
+     *    name="pageedit_dashboard",
+     *    methods={"HEAD", "GET"})
      */
     public function dashboard(Request $request, PaginatorInterface $paginator)
     {
@@ -106,11 +106,9 @@ class PageEditController extends Controller
      * @throws NotFoundHttpException
      *
      * @Route("/pages/{page}",
-     *      name="pageedit_display",
-     *      requirements={
-     *          "page": "^(?!pdf)([a-zA-Z0-9\-\/]+)"
-     *      })
-     * @Method({"GET", "HEAD"})
+     *    name="pageedit_display",
+     *    requirements={"page": "^(?!pdf)([a-zA-Z0-9\-\/]+)"},
+     *    methods={"HEAD", "GET"})
      */
     public function display(AuthorizationCheckerInterface $authChecker, $page)
     {
@@ -155,8 +153,8 @@ class PageEditController extends Controller
      * @throws AccessDeniedException
      *
      * @Route("/pageedit/create",
-     *      name="pageedit_create")
-     * @Method({"GET", "HEAD", "POST"})
+     *    name="pageedit_create",
+     *    methods={"HEAD", "GET", "POST"})
      */
     public function create(Request $request)
     {
@@ -191,11 +189,9 @@ class PageEditController extends Controller
      * @throws AccessDeniedException
      *
      * @Route("/pageedit/modify/{page}",
-     *      name="pageedit_modify",
-     *      requirements={
-     *          "page": "^[a-zA-Z0-9\-\/]+"
-     *      })
-     * @Method({"GET", "HEAD", "POST"})
+     *    name="pageedit_modify",
+     *    requirements={"page": "^[a-zA-Z0-9\-\/]+"},
+     *    methods={"HEAD", "GET", "POST"})
      */
     public function modify(Request $request, $page)
     {
@@ -235,11 +231,9 @@ class PageEditController extends Controller
      * @throws AccessDeniedException
      *
      * @Route("/pageedit/duplicate/{page}",
-     *      name="pageedit_duplicate",
-     *      requirements={
-     *          "page": "^[a-zA-Z0-9\-\/]+"
-     *      })
-     * @Method({"GET", "HEAD", "POST"})
+     *    name="pageedit_duplicate",
+     *    requirements={"page": "^[a-zA-Z0-9\-\/]+"},
+     *    methods={"HEAD", "GET", "POST"})
      */
     public function duplicate(Request $request, $page)
     {
@@ -280,11 +274,9 @@ class PageEditController extends Controller
      * @throws AccessDeniedException
      *
      * @Route("/pageedit/delete/{page}",
-     *      name="pageedit_delete",
-     *      requirements={
-     *          "page": "^[a-zA-Z0-9\-\/]+"
-     *      })
-     * @Method({"GET", "HEAD", "POST"})
+     *    name="pageedit_delete",
+     *    requirements={"page": "^[a-zA-Z0-9\-\/]+"},
+     *    methods={"HEAD", "GET", "POST"})
      */
     public function delete(Request $request, $page)
     {
@@ -323,8 +315,8 @@ class PageEditController extends Controller
      * @throws AccessDeniedException
      *
      * @Route("/pageedit/config",
-     *      name="pageedit_config")
-     * @Method({"GET", "HEAD", "POST"})
+     *    name="pageedit_config",
+     *    methods={"HEAD", "GET", "POST"})
      */
     public function config(Request $request, ConfigServiceInterface $configService)
     {
@@ -357,8 +349,8 @@ class PageEditController extends Controller
      * @throws AccessDeniedException
      *
      * @Route("/pageedit/help",
-     *      name="pageedit_help")
-     * @Method({"GET", "HEAD"})
+     *    name="pageedit_help",
+     *    methods={"HEAD", "GET"})
      */
     public function help()
     {

@@ -12,9 +12,8 @@ namespace c975L\PageEditBundle\Controller;
 use c975L\PageEditBundle\Entity\PageEdit;
 use c975L\PageEditBundle\Service\PageEditServiceInterface;
 use c975L\PageEditBundle\Service\Pdf\PageEditPdfInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -23,7 +22,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @author Laurent Marquet <laurent.marquet@laposte.net>
  * @copyright 2018 975L <contact@975l.com>
  */
-class PdfController extends Controller
+class PdfController extends AbstractController
 {
 //DISPLAY THE PDF
 
@@ -33,11 +32,9 @@ class PdfController extends Controller
      * @throws NotFoundHttpException
      *
      * @Route("/pages/pdf/{page}",
-     *      name="pageedit_pdf",
-     *      requirements={
-     *          "page": "^([a-zA-Z0-9\-\/]+)"
-     *      })
-     * @Method({"GET", "HEAD"})
+     *    name="pageedit_pdf",
+     *    requirements={"page": "^([a-zA-Z0-9\-\/]+)"},
+     *    methods={"HEAD", "GET"})
      */
     public function display(PageEditServiceInterface $pageEditService, PageEditPdfInterface $pageEditPdf, $page)
     {
