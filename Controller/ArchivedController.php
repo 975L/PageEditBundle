@@ -11,11 +11,11 @@ namespace c975L\PageEditBundle\Controller;
 
 use c975L\PageEditBundle\Entity\PageEdit;
 use c975L\PageEditBundle\Service\PageEditServiceInterface;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
@@ -37,7 +37,6 @@ class ArchivedController extends AbstractController
     }
 
 //DISPLAY
-
     /**
      * Displays the archived page
      * @return Response
@@ -65,7 +64,6 @@ class ArchivedController extends AbstractController
     }
 
 //DELETE
-
     /**
      * Deletes the archived page
      * @return Response

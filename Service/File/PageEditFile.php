@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Twig_Environment;
+use Twig\Environment;
 
 /**
  * Services related to PageEdit File
@@ -67,10 +67,10 @@ class PageEditFile implements PageEditFileInterface
     private $request;
 
     /**
-     * Stores Twig_Environment
-     * @var Twig_Environment
+     * Stores Environment
+     * @var Environment
      */
-    private $templating;
+    private $environment;
 
     public function __construct(
         AuthorizationCheckerInterface $authChecker,
@@ -79,7 +79,7 @@ class PageEditFile implements PageEditFileInterface
         Pdf $knpSnappyPdf,
         PageEditFormFactoryInterface $pageEditFormFactory,
         RequestStack $requestStack,
-        Twig_Environment $templating
+        Environment $environment
     )
     {
         $this->authChecker = $authChecker;
@@ -88,7 +88,7 @@ class PageEditFile implements PageEditFileInterface
         $this->knpSnappyPdf = $knpSnappyPdf;
         $this->pageEditFormFactory = $pageEditFormFactory;
         $this->request = $requestStack->getCurrentRequest();
-        $this->templating = $templating;
+        $this->environment = $environment;
     }
 
     /**

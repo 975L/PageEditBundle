@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
-use Twig_Environment;
+use Twig\Environment;
 
 /**
  * Main services related to PageEdit
@@ -68,10 +68,10 @@ class PageEditService implements PageEditServiceInterface
     private $request;
 
     /**
-     * Stores Twig_Environment
-     * @var Twig_Environment
+     * Stores Environment
+     * @var Environment
      */
-    private $templating;
+    private $environment;
 
     /**
      * Stores TranslatorInterface
@@ -86,7 +86,7 @@ class PageEditService implements PageEditServiceInterface
         PageEditFileInterface $pageEditFile,
         PageEditSlugInterface $pageEditSlug,
         RequestStack $requestStack,
-        Twig_Environment $templating,
+        Environment $environment,
         TranslatorInterface $translator
     )
     {
@@ -96,7 +96,7 @@ class PageEditService implements PageEditServiceInterface
         $this->pageEditFile = $pageEditFile;
         $this->pageEditSlug = $pageEditSlug;
         $this->request = $requestStack->getCurrentRequest();
-        $this->templating = $templating;
+        $this->environment = $environment;
         $this->translator = $translator;
     }
 
@@ -159,11 +159,11 @@ class PageEditService implements PageEditServiceInterface
         $toolbar = null;
 
         if ($this->authChecker->isGranted($this->configService->getParameter('c975LPageEdit.roleNeeded'))) {
-            $tools = $this->templating->render('@c975LPageEdit/tools.html.twig', array(
+            $tools = $this->environment->render('@c975LPageEdit/tools.html.twig', array(
                 'type' => $kind,
                 'object' => $page,
             ));
-            $toolbar = $this->templating->render('@c975LToolbar/toolbar.html.twig', array(
+            $toolbar = $this->environment->render('@c975LToolbar/toolbar.html.twig', array(
                 'tools' => $tools,
                 'size' => 'md',
             ));

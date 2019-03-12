@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Kernel;
-use Twig_Environment;
+use Twig\Environment;
 
 /**
  * Console command to create sitemap of pages, executed with 'pageedit:createSitemap'
@@ -38,23 +38,23 @@ class SitemapCreateCommand extends Command
     private $pageEditService;
 
     /**
-     * Stores Twig_Environment
-     * @var Twig_Environment
+     * Stores Environment
+     * @var Environment
      */
-    private $templating;
+    private $environment;
 
     public function __construct(
         ConfigServiceInterface $configService,
         ContainerInterface $container,
         PageEditServiceInterface $pageEditService,
-        Twig_Environment $templating
+        Environment $environment
     )
     {
         parent::__construct();
         $this->configService = $configService;
         $this->container = $container;
         $this->pageEditService = $pageEditService;
-        $this->templating = $templating;
+        $this->environment = $environment;
     }
 
     protected function configure()
@@ -126,7 +126,7 @@ class SitemapCreateCommand extends Command
         }
 
         //Writes file
-        $sitemapContent = $this->templating->render('@c975LPageEdit/sitemap.xml.twig', array('pages' => $pages));
+        $sitemapContent = $this->environment->render('@c975LPageEdit/sitemap.xml.twig', array('pages' => $pages));
         $sitemapFile = '4' === substr(Kernel::VERSION, 0, 1) ? $rootFolder . '/../public/sitemap-' . $folderPages . '.xml' : $rootFolder . '/../web/sitemap-' . $folderPages . '.xml';
         file_put_contents($sitemapFile, $sitemapContent);
 

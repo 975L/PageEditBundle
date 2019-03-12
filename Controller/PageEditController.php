@@ -13,13 +13,13 @@ use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use c975L\PageEditBundle\Entity\PageEdit;
 use c975L\PageEditBundle\Service\PageEditServiceInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\GoneHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
@@ -41,7 +41,6 @@ class PageEditController extends AbstractController
     }
 
 //HOME
-
     /**
      * Redirects to pageedit_home
      * @return Redirect
@@ -54,7 +53,6 @@ class PageEditController extends AbstractController
     {
         return $this->redirectToRoute('pageedit_home');
     }
-
     /**
      * Displays the homepage
      * @return Response
@@ -72,7 +70,6 @@ class PageEditController extends AbstractController
     }
 
 //DASHBOARD
-
     /**
      * Displays dashboard
      * @return Response
@@ -98,7 +95,6 @@ class PageEditController extends AbstractController
     }
 
 //DISPLAY
-
     /**
      * Displays the page
      * @return Response
@@ -146,7 +142,6 @@ class PageEditController extends AbstractController
     }
 
 //CREATE
-
     /**
      * Creates the PageEdit
      * @return Response
@@ -182,7 +177,6 @@ class PageEditController extends AbstractController
     }
 
 //MODIFY
-
     /**
      * Modifies the PageEdit
      * @return Response
@@ -224,7 +218,6 @@ class PageEditController extends AbstractController
     }
 
 //DUPLICATE
-
     /**
      * Duplicates the PageEdit
      * @return Response
@@ -267,7 +260,6 @@ class PageEditController extends AbstractController
     }
 
 //DELETE
-
     /**
      * Deletes the PageEdit (Moves the page to deleted folder)
      * @return Response
@@ -308,7 +300,6 @@ class PageEditController extends AbstractController
     }
 
 //CONFIG
-
     /**
      * Displays the configuration
      * @return Response
@@ -342,7 +333,6 @@ class PageEditController extends AbstractController
     }
 
 //HELP
-
     /**
      * Displays the help
      * @return Response

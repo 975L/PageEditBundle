@@ -1,5 +1,9 @@
 # ChangeLog
 
+v2.1.4
+------
+- Made use of Twig namespace (07/03/2019)
+
 v2.1.3
 ------
 - Removed deprecations for @Method (13/02/2019)

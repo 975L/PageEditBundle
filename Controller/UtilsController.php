@@ -14,9 +14,9 @@ use c975L\PageEditBundle\Service\File\PageEditFileInterface;
 use c975L\PageEditBundle\Service\PageEditServiceInterface;
 use c975L\PageEditBundle\Service\Slug\PageEditSlugInterface;
 use DateTime;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * UtilsController class
@@ -26,7 +26,6 @@ use Symfony\Component\HttpFoundation\Request;
 class UtilsController extends AbstractController
 {
 //REMOVE TRAILING SLASH
-
     /**
      * @Route("/{url}",
      *    name="remove_trailing_slash",
@@ -42,7 +41,6 @@ class UtilsController extends AbstractController
     }
 
 //LIST FOR URL LINKING
-
     /**
      * Provides a list of pages to link to in Tinymce
      * @return JSON
@@ -61,7 +59,6 @@ class UtilsController extends AbstractController
     }
 
 //UPLOAD IMAGE
-
     /**
      * Uploads the image defined
      * @return JSON|false
@@ -103,7 +100,6 @@ class UtilsController extends AbstractController
     }
 
 //SLUG
-
     /**
      * Slugs the provided text
      * @return JSON

@@ -12,10 +12,10 @@ namespace c975L\PageEditBundle\Controller;
 use c975L\PageEditBundle\Entity\PageEdit;
 use c975L\PageEditBundle\Service\PageEditServiceInterface;
 use c975L\PageEditBundle\Service\Pdf\PageEditPdfInterface;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * PdfController class
@@ -25,7 +25,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class PdfController extends AbstractController
 {
 //DISPLAY THE PDF
-
     /**
      * Creates and displays the pdf of the page
      * @return Response

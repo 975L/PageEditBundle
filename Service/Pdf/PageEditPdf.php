@@ -13,7 +13,7 @@ use c975L\PageEditBundle\Service\File\PageEditFileInterface;
 use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Twig_Environment;
+use Twig\Environment;
 
 /**
  * Services related to PageEdit Pdf
@@ -41,22 +41,22 @@ class PageEditPdf implements PageEditPdfInterface
     private $request;
 
     /**
-     * Stores Twig_Environment
-     * @var Twig_Environment
+     * Stores Environment
+     * @var Environment
      */
-    private $templating;
+    private $environment;
 
     public function __construct(
         Pdf $knpSnappyPdf,
         PageEditFileInterface $pageEditFile,
         RequestStack $requestStack,
-        Twig_Environment $templating
+        Environment $environment
     )
     {
         $this->knpSnappyPdf = $knpSnappyPdf;
         $this->pageEditFile = $pageEditFile;
         $this->request = $requestStack->getCurrentRequest();
-        $this->templating = $templating;
+        $this->environment = $environment;
     }
 
     /**
@@ -72,7 +72,7 @@ class PageEditPdf implements PageEditPdfInterface
             filemtime($filePdfPath) < filemtime($filePath) ||
             filemtime($filePdfPath) + $amountTime < time()) {
 
-            $html = $this->templating->render($filePath, array(
+            $html = $this->environment->render($filePath, array(
                 'toolbar' => '',
                 'display' => 'pdf',
             ));

@@ -11,10 +11,10 @@ namespace c975L\PageEditBundle\Controller;
 
 use c975L\PageEditBundle\Entity\PageEdit;
 use c975L\PageEditBundle\Service\PageEditServiceInterface;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * DeletedController class
@@ -35,7 +35,6 @@ class DeletedController extends AbstractController
     }
 
 //DISPLAY
-
     /**
      * Displays the deleted page
      * @return Response
@@ -63,7 +62,6 @@ class DeletedController extends AbstractController
     }
 
 //DELETE
-
     /**
      * Deletes the deleted page
      * @return Response

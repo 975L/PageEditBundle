@@ -12,15 +12,15 @@ namespace c975L\PageEditBundle\Twig;
 use c975L\PageEditBundle\Service\File\PageEditFileInterface;
 use c975L\PageEditBundle\Service\PageEditServiceInterface;
 use Symfony\Component\Finder\Finder;
-use Twig_Extension;
-use Twig_SimpleFunction;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * Twig extension to display the formatted GiftVoucherPurchased identifier using `|gv_identifier`
  * @author Laurent Marquet <laurent.marquet@laposte.net>
  * @copyright 2018 975L <contact@975l.com>
  */
-class PageEditFolderContent extends Twig_Extension
+class PageEditFolderContent extends AbstractExtension
 {
     /**
      * Stores PageEditFileInterface
@@ -46,7 +46,7 @@ class PageEditFolderContent extends Twig_Extension
     public function getFunctions()
     {
         return array(
-            new Twig_SimpleFunction('folder_content', array($this, 'folderContent')),
+            new TwigFunction('folder_content', array($this, 'folderContent')),
         );
     }
 
