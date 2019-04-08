@@ -1,5 +1,9 @@
 # ChangeLog
 
+v2.1.4.1
+--------
+- Changed Github's author reference url (08/04/2019)
+
 v2.1.4
 ------
 - Made use of Twig namespace (07/03/2019)
