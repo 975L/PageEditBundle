@@ -1,5 +1,9 @@
 # ChangeLog
 
+v2.1.5
+------
+- Added new naming for TinyMce (29/06/2019)
+
 v2.1.4.1
 --------
 - Changed Github's author reference url (08/04/2019)
