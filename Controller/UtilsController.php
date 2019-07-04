@@ -25,21 +25,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UtilsController extends AbstractController
 {
-//REMOVE TRAILING SLASH
-    /**
-     * @Route("/{url}",
-     *    name="remove_trailing_slash",
-     *    requirements={"url": "^.*\/$"},
-     *    methods={"HEAD", "GET"})
-     */
-    public function removeTrailingSlash(Request $request)
-    {
-        $pathInfo = $request->getPathInfo();
-        $requestUri = $request->getRequestUri();
-        $url = str_replace($pathInfo, rtrim($pathInfo, ' /'), $requestUri);
-        return $this->redirect($url);
-    }
-
 //LIST FOR URL LINKING
     /**
      * Provides a list of pages to link to in Tinymce

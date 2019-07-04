@@ -1,5 +1,9 @@
 # ChangeLog
 
+v2.2
+----
+- Removed Route `remove_trailing_slash` as it may lead to multiple redirections (04/07/2019)
+
 v2.1.5
 ------
 - Added new naming for TinyMce (29/06/2019)
