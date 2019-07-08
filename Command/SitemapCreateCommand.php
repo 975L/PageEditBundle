@@ -6,7 +6,6 @@ use c975L\PageEditBundle\Service\PageEditServiceInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Kernel;
@@ -26,12 +25,6 @@ class SitemapCreateCommand extends Command
     private $configService;
 
     /**
-     * Stores ContainerInterface
-     * @var ContainerInterface
-     */
-    private $container;
-
-    /**
      * Stores PageEditServiceInterface
      * @var PageEditServiceInterface
      */
@@ -45,14 +38,12 @@ class SitemapCreateCommand extends Command
 
     public function __construct(
         ConfigServiceInterface $configService,
-        ContainerInterface $container,
         PageEditServiceInterface $pageEditService,
         Environment $environment
     )
     {
         parent::__construct();
         $this->configService = $configService;
-        $this->container = $container;
         $this->pageEditService = $pageEditService;
         $this->environment = $environment;
     }
@@ -69,7 +60,7 @@ class SitemapCreateCommand extends Command
     {
         //Creates structure in case it not exists
         $fs = new Filesystem();
-        $rootFolder = $this->container->getParameter('kernel.root_dir');
+        $rootFolder = $this->configService->getContainerParameter('kernel.root_dir');
         $folderPages = $this->configService->getParameter('c975LPageEdit.folderPages');
         $templatesFolder = '4' === substr(Kernel::VERSION, 0, 1) ? '/../templates/' : '/Resources/views/';
         $folderPath = $rootFolder . $templatesFolder . $folderPages;
