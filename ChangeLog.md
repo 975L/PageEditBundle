@@ -1,5 +1,10 @@
 # ChangeLog
 
+v2.2.2
+------
+- Corrected path for creation of pdf (15/07/2019)
+- Made use of KnpPaginatorBundle v4 (15/07/2019)
+
 v2.2.1
 ------
 - Removed use of ContainerInterface as not used anymore (08/07/2019)

@@ -72,6 +72,10 @@ class PageEditPdf implements PageEditPdfInterface
             filemtime($filePdfPath) < filemtime($filePath) ||
             filemtime($filePdfPath) + $amountTime < time()) {
 
+            //Removes full path to allow environment to find the file
+            $filePath = false !== strpos($filePath, '/templates/') ? substr($filePath, strpos($filePath, '/templates/') + 11) : $filePath;
+
+            //Creates pdf
             $html = $this->environment->render($filePath, array(
                 'toolbar' => '',
                 'display' => 'pdf',
