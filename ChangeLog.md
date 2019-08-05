@@ -1,5 +1,9 @@
 # ChangeLog
 
+v2.3
+----
+- Made use of apply spaceless (05/08/2019)
+
 v2.2.2.1
 --------
 - Added alignment value for toolbar (05/08/2019)
