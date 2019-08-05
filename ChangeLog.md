@@ -1,5 +1,9 @@
 # ChangeLog
 
+v2.2.2.1
+--------
+- Added alignment value for toolbar (05/08/2019)
+
 v2.2.2
 ------
 - Corrected path for creation of pdf (15/07/2019)

@@ -166,6 +166,7 @@ class PageEditService implements PageEditServiceInterface
             $toolbar = $this->environment->render('@c975LToolbar/toolbar.html.twig', array(
                 'tools' => $tools,
                 'size' => 'md',
+                'alignment' => 'center',
             ));
         }
 
