@@ -1,5 +1,9 @@
 # ChangeLog
 
+v2.4
+----
+- Removed use of symplify/easy-coding-standard as abandonned (19/02/2020)
+
 v2.3.1
 ------
 - Removed composer.lock from Git (19/02/2020)
