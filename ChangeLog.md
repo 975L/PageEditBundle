@@ -1,5 +1,9 @@
 # ChangeLog
 
+v2.3.1
+------
+- Removed composer.lock from Git (19/02/2020)
+
 v2.3
 ----
 - Made use of apply spaceless (05/08/2019)

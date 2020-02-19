@@ -10,7 +10,6 @@
 namespace c975L\PageEditBundle\Service\File;
 
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
-use c975L\PageEditBundle\Entity\PageEdit;
 use c975L\PageEditBundle\Form\PageEditFormFactoryInterface;
 use Knp\Snappy\Pdf;
 use Symfony\Component\DependencyInjection\ContainerInterface;
