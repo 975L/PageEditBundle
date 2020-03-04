@@ -53,9 +53,11 @@ class RedirectedController extends AbstractController
         //Renders the redirected page
         $pageEdit = $this->pageEditService->getData($page);
         if ($pageEdit instanceof PageEdit) {
-            return $this->render('@c975LPageEdit/pages/redirected.html.twig', array(
-                'pageEdit' => $pageEdit,
-            ));
+            return $this->render(
+                '@c975LPageEdit/pages/redirected.html.twig',
+                array(
+                    'pageEdit' => $pageEdit,
+                ));
         }
 
         throw $this->createNotFoundException();
@@ -91,10 +93,12 @@ class RedirectedController extends AbstractController
             }
 
             //Renders the delete form
-            return $this->render('@c975LPageEdit/forms/deleteArchived.html.twig', array(
-                'form' => $form->createView(),
-                'pageEdit' => $pageEdit,
-            ));
+            return $this->render(
+                '@c975LPageEdit/forms/deleteArchived.html.twig',
+                array(
+                    'form' => $form->createView(),
+                    'pageEdit' => $pageEdit,
+                ));
         }
 
         throw $this->createNotFoundException();

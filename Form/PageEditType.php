@@ -24,12 +24,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class PageEditType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $disabled = $options['config']['action'] == 'delete' ? true : false;
         $disabledSlug = $options['data']->getSlug() == 'home' ? true : $disabled;
-        $submitLabel = $options['config']['action'] == 'delete' ? 'delete' : 'validate';
-        $submitClass = $options['config']['action'] == 'delete' ? 'btn-danger' : 'btn-primary';
 
         $builder
             ->add('title', TextType::class, array(

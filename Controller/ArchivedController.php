@@ -55,9 +55,11 @@ class ArchivedController extends AbstractController
         //Renders the archived page
         $pageEdit = $this->pageEditService->getData($page);
         if ($pageEdit instanceof PageEdit) {
-            return $this->render('@c975LPageEdit/pages/archived.html.twig', array(
-                'pageEdit' => $pageEdit,
-            ));
+            return $this->render(
+                '@c975LPageEdit/pages/archived.html.twig',
+                array(
+                    'pageEdit' => $pageEdit,
+                ));
         }
 
         throw $this->createNotFoundException();
@@ -93,10 +95,12 @@ class ArchivedController extends AbstractController
             }
 
             //Renders the delete form
-            return $this->render('@c975LPageEdit/forms/deleteArchived.html.twig', array(
-                'form' => $form->createView(),
-                'pageEdit' => $pageEdit,
-            ));
+            return $this->render(
+                '@c975LPageEdit/forms/deleteArchived.html.twig',
+                array(
+                    'form' => $form->createView(),
+                    'pageEdit' => $pageEdit,
+                ));
         }
 
         throw $this->createNotFoundException();

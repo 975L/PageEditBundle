@@ -287,8 +287,8 @@ class PageEditFile implements PageEditFileInterface
         $exitPoint = strpos($skeleton, $endBlock, $entryPoint);
 
         return array(
-            'startSkeleton' => trim(substr($skeleton, 0, $entryPoint)),
-            'endSkeleton' => trim(substr($skeleton, $exitPoint)),
+            'start' => trim(substr($skeleton, 0, $entryPoint)),
+            'end' => trim(substr($skeleton, $exitPoint)),
         );
     }
 
@@ -314,9 +314,7 @@ class PageEditFile implements PageEditFileInterface
         $folderImage = $this->getImagesFolder();
         $filePath = $folderPath . $slug . '.html.twig';
         $formData = $form->getData();
-
-         //Gets $startSkeleton, $endSkeleton
-        extract($this->getSkeletonStartEnd());
+        $skeleton = $this->getSkeletonStartEnd();
 
         //Gets title
         $title = $formData->getTitle();
@@ -329,7 +327,7 @@ class PageEditFile implements PageEditFileInterface
         }
 
         //Updates metadata
-        $startSkeleton = preg_replace('/pageedit_title=\"(.*)\"/', 'pageedit_title=' . $title, $startSkeleton);
+        $startSkeleton = preg_replace('/pageedit_title=\"(.*)\"/', 'pageedit_title=' . $title, $skeleton['start']);
         $startSkeleton = preg_replace('/pageedit_changeFrequency=\"(.*)\"/', 'pageedit_changeFrequency="' . $formData->getChangeFrequency() . '"', $startSkeleton);
         $startSkeleton = preg_replace('/pageedit_priority=\"(.*)\"/', 'pageedit_priority="' . $formData->getPriority() . '"', $startSkeleton);
         $startSkeleton = preg_replace('/pageedit_description=\"(.*)\"/', 'pageedit_description="' . $formData->getDescription() . '"', $startSkeleton);
@@ -355,7 +353,7 @@ class PageEditFile implements PageEditFileInterface
         }
 
         //Concatenate skeleton + metadata + content
-        $finalContent = $startSkeleton . "\n" . $content . "\n\t\t" . $endSkeleton;
+        $finalContent = $startSkeleton . "\n" . $content . "\n\t\t" . $skeleton['end'];
 
         //Archives old file if content or metadata are different
         $this->createFolders();

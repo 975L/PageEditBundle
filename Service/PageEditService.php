@@ -21,7 +21,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 /**
@@ -88,8 +88,7 @@ class PageEditService implements PageEditServiceInterface
         RequestStack $requestStack,
         Environment $environment,
         TranslatorInterface $translator
-    )
-    {
+    ) {
         $this->authChecker = $authChecker;
         $this->configService = $configService;
         $this->pageEditFormFactory = $pageEditFormFactory;

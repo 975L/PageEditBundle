@@ -53,9 +53,11 @@ class DeletedController extends AbstractController
         //Renders the deleted page
         $pageEdit = $this->pageEditService->getData($page);
         if ($pageEdit instanceof PageEdit) {
-            return $this->render('@c975LPageEdit/pages/deleted.html.twig', array(
-                'pageEdit' => $pageEdit,
-            ));
+            return $this->render(
+                '@c975LPageEdit/pages/deleted.html.twig',
+                array(
+                    'pageEdit' => $pageEdit,
+                ));
         }
 
         throw $this->createNotFoundException();
@@ -91,10 +93,12 @@ class DeletedController extends AbstractController
             }
 
             //Renders the delete form
-            return $this->render('@c975LPageEdit/forms/deleteDeleted.html.twig', array(
-                'form' => $form->createView(),
-                'pageEdit' => $pageEdit,
-            ));
+            return $this->render(
+                '@c975LPageEdit/forms/deleteDeleted.html.twig',
+                array(
+                    'form' => $form->createView(),
+                    'pageEdit' => $pageEdit,
+                ));
         }
 
         throw $this->createNotFoundException();

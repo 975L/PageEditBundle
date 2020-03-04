@@ -63,10 +63,12 @@ class PageEditController extends AbstractController
      */
     public function home()
     {
-        return $this->render('pages/home.html.twig', array(
-            'toolbar' => $this->pageEditService->defineToolbar('display', 'home'),
-            'display' => 'html',
-        ));
+        return $this->render(
+            'pages/home.html.twig',
+            array(
+                'toolbar' => $this->pageEditService->defineToolbar('display', 'home'),
+                'display' => 'html',
+            ));
     }
 
 //DASHBOARD
@@ -89,9 +91,11 @@ class PageEditController extends AbstractController
             $request->query->getInt('p', 1),
             15
         );
-        return $this->render('@c975LPageEdit/pages/dashboard.html.twig', array(
-            'pages' => $pages,
-        ));
+        return $this->render(
+            '@c975LPageEdit/pages/dashboard.html.twig',
+            array(
+                'pages' => $pages,
+            ));
     }
 
 //DISPLAY
@@ -106,7 +110,7 @@ class PageEditController extends AbstractController
      *    requirements={"page": "^(?!pdf)([a-zA-Z0-9\-\/]+)"},
      *    methods={"HEAD", "GET"})
      */
-    public function display(AuthorizationCheckerInterface $authChecker, $page)
+    public function display($page)
     {
         $pageEdit = $this->pageEditService->getData($page);
 
@@ -164,16 +168,20 @@ class PageEditController extends AbstractController
             $slug = $this->pageEditService->register('createNewPageEdit', $form, $this->getUser());
 
             //Redirects to the page
-            return $this->redirectToRoute('pageedit_display', array(
-                'page' => $slug,
-            ));
+            return $this->redirectToRoute(
+                'pageedit_display',
+                array(
+                    'page' => $slug,
+                ));
         }
 
         //Returns the create form
-        return $this->render('@c975LPageEdit/forms/create.html.twig', array(
-            'form' => $form->createView(),
-            'pageEdit' => $pageEdit,
-        ));
+        return $this->render(
+            '@c975LPageEdit/forms/create.html.twig',
+            array(
+                'form' => $form->createView(),
+                'pageEdit' => $pageEdit,
+            ));
     }
 
 //MODIFY
@@ -202,16 +210,20 @@ class PageEditController extends AbstractController
                 $slug = $this->pageEditService->register($page, $form, $this->getUser());
 
                 //Redirects to the page
-                return $this->redirectToRoute('pageedit_display', array(
-                    'page' => $slug,
-                ));
+                return $this->redirectToRoute(
+                    'pageedit_display',
+                    array(
+                        'page' => $slug,
+                    ));
             }
 
             //Returns the modify form
-            return $this->render('@c975LPageEdit/forms/modify.html.twig', array(
-                'form' => $form->createView(),
-                'pageEdit' => $pageEdit,
-            ));
+            return $this->render(
+                '@c975LPageEdit/forms/modify.html.twig',
+                array(
+                    'form' => $form->createView(),
+                    'pageEdit' => $pageEdit,
+                ));
         }
 
         throw $this->createNotFoundException();
@@ -244,16 +256,20 @@ class PageEditController extends AbstractController
                 $slug = $this->pageEditService->register($page, $form, $this->getUser());
 
                 //Redirects to the page
-                return $this->redirectToRoute('pageedit_display', array(
-                    'page' => $slug,
-                ));
+                return $this->redirectToRoute(
+                    'pageedit_display',
+                    array(
+                        'page' => $slug,
+                    ));
             }
 
             //Returns the duplicate form
-            return $this->render('@c975LPageEdit/forms/duplicate.html.twig', array(
-                'form' => $form->createView(),
-                'pageEdit' => $pageEditClone,
-            ));
+            return $this->render(
+                '@c975LPageEdit/forms/duplicate.html.twig',
+                array(
+                    'form' => $form->createView(),
+                    'pageEdit' => $pageEditClone,
+                ));
         }
 
         throw $this->createNotFoundException();
@@ -289,10 +305,12 @@ class PageEditController extends AbstractController
             }
 
             //Returns the delete form
-            return $this->render('@c975LPageEdit/forms/delete.html.twig', array(
-                'form' => $form->createView(),
-                'pageEdit' => $pageEdit,
-            ));
+            return $this->render(
+                '@c975LPageEdit/forms/delete.html.twig',
+                array(
+                    'form' => $form->createView(),
+                    'pageEdit' => $pageEdit,
+                ));
         }
 
         //Not found
@@ -326,10 +344,12 @@ class PageEditController extends AbstractController
         }
 
         //Renders the config form
-        return $this->render('@c975LConfig/forms/config.html.twig', array(
-            'form' => $form->createView(),
-            'toolbar' => '@c975LPageEdit',
-        ));
+        return $this->render(
+            '@c975LConfig/forms/config.html.twig',
+            array(
+                'form' => $form->createView(),
+                'toolbar' => '@c975LPageEdit',
+            ));
     }
 
 //HELP
