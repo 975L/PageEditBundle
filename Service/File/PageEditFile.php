@@ -172,16 +172,9 @@ class PageEditFile implements PageEditFileInterface
         }
 
         $root = $this->container->getParameter('kernel.root_dir');
+        $imagesFolder = '3' === substr(Kernel::VERSION, 0, 1) ? $root . '/../web/images/' : $root . '/../public/images/';
 
-        if ('4' === substr(Kernel::VERSION, 0, 1)) {
-            $imagesFolder = $root . '/../public/images/' . $this->configService->getParameter('c975LPageEdit.folderPages') . '/';
-
-            return $imagesFolder;
-        }
-
-        $imagesFolder = $root . '/../web/images/' . $this->configService->getParameter('c975LPageEdit.folderPages') . '/';
-
-        return $imagesFolder;
+        return $imagesFolder . $this->configService->getParameter('c975LPageEdit.folderPages') . '/';
     }
 
     /**
@@ -235,16 +228,9 @@ class PageEditFile implements PageEditFileInterface
         }
 
         $root = $this->container->getParameter('kernel.root_dir');
+        $pageFolder = '3' === substr(Kernel::VERSION, 0, 1) ? $root . '/Resources/views/' : $root . '/../templates/';
 
-        if ('4' === substr(Kernel::VERSION, 0, 1)) {
-            $pageFolder = $root . '/../templates/' . $this->configService->getParameter('c975LPageEdit.folderPages') . '/';
-
-            return $pageFolder;
-        }
-
-        $pageFolder = $root . '/Resources/views/' . $this->configService->getParameter('c975LPageEdit.folderPages') . '/';
-
-        return $pageFolder;
+        return $pageFolder . $this->configService->getParameter('c975LPageEdit.folderPages') . '/';
     }
 
     /**

@@ -1,5 +1,9 @@
 # ChangeLog
 
+## v2.5
+
+- Removed versions constraints in composer (03/09/2021)
+
 ## v2.4.1
 
 - Cosmetic changes due to Codacy review (04/03/2020)
@@ -369,7 +373,7 @@ Upgrading from v1.x? **Check UPGRADE.md**
 - Add of link to dashboard on PageEdit label in toolbar and remove of dashboard button (03/07/2017)
 - Update return location for uploaded images to absolute url + set absolute in tinymceInit (03/07/2017)
 - Group in one function the creation of folders needed by the Bundle (03/07/2017)
-- Remove of "required" on textarea.tinymce as it won't submit for a new page, a refresh has to be done - https://github.com/tinymce/tinymce/issues/2584 (03/07/2017)
+- Remove of "required" on textarea.tinymce as it won't submit for a new page, a refresh has to be done - [#2584](https://github.com/tinymce/tinymce/issues/2584) (03/07/2017)
 
 ## v1.13.1
 

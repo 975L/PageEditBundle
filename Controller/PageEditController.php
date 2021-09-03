@@ -135,11 +135,14 @@ class PageEditController extends AbstractController
             }
 
             //Renders page
-            $filePath = '4' === substr(Kernel::VERSION, 0, 1) ? substr($filePath, strpos($filePath, '/templates') + 10) : substr($filePath, strpos($filePath, '/views') + 6);
-            return $this->render($filePath, array(
-                'toolbar' => $this->pageEditService->defineToolbar('display', $page),
-                'display' => 'html',
-            ));
+            $filePath = '3' === substr(Kernel::VERSION, 0, 1) ? substr($filePath, strpos($filePath, '/views') + 6) : substr($filePath, strpos($filePath, '/templates') + 10);
+
+            return $this->render(
+                $filePath,
+                array(
+                    'toolbar' => $this->pageEditService->defineToolbar('display', $page),
+                    'display' => 'html',
+                ));
         }
 
         throw $this->createNotFoundException();
@@ -298,7 +301,7 @@ class PageEditController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 //Deletes file
-                $slug = $this->pageEditService->delete($page, true);
+                $this->pageEditService->delete($page, true);
 
                 //Redirects to the dashboard
                 return $this->redirectToRoute('pageedit_dashboard');

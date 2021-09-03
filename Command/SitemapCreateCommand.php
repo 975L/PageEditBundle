@@ -56,15 +56,18 @@ class SitemapCreateCommand extends Command
         ;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         //Creates structure in case it not exists
         $fs = new Filesystem();
-        $rootFolder = $this->configService->getContainerParameter('kernel.root_dir');
+        $root = $this->configService->getContainerParameter('kernel.root_dir');
         $folderPages = $this->configService->getParameter('c975LPageEdit.folderPages');
-        $templatesFolder = '4' === substr(Kernel::VERSION, 0, 1) ? '/../templates/' : '/Resources/views/';
-        $folderPath = $rootFolder . $templatesFolder . $folderPages;
-        $protectedFolderPath = $rootFolder . $templatesFolder . $folderPages . '/protected';
+        $templatesFolder = '3' === substr(Kernel::VERSION, 0, 1) ? '/Resources/views/' : '/../templates/';
+        $folderPath = $root . $templatesFolder . $folderPages;
+        $protectedFolderPath = $root . $templatesFolder . $folderPages . '/protected';
         $fs->mkdir(array(
             $folderPath,
             $protectedFolderPath,
@@ -118,7 +121,7 @@ class SitemapCreateCommand extends Command
 
         //Writes file
         $sitemapContent = $this->environment->render('@c975LPageEdit/sitemap.xml.twig', array('pages' => $pages));
-        $sitemapFile = '4' === substr(Kernel::VERSION, 0, 1) ? $rootFolder . '/../public/sitemap-' . $folderPages . '.xml' : $rootFolder . '/../web/sitemap-' . $folderPages . '.xml';
+        $sitemapFile = '3' === substr(Kernel::VERSION, 0, 1) ? $root . '/../web/sitemap-' . $folderPages . '.xml' : $root . '/../public/sitemap-' . $folderPages . '.xml';
         file_put_contents($sitemapFile, $sitemapContent);
 
         //Ouputs message
