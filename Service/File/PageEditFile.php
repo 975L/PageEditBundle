@@ -171,7 +171,7 @@ class PageEditFile implements PageEditFileInterface
             return $imagesFolder;
         }
 
-        $root = $this->container->getParameter('kernel.root_dir');
+        $root = $this->container->getParameter('kernel.project_dir');
         $imagesFolder = '3' === substr(Kernel::VERSION, 0, 1) ? $root . '/../web/images/' : $root . '/../public/images/';
 
         return $imagesFolder . $this->configService->getParameter('c975LPageEdit.folderPages') . '/';
@@ -227,7 +227,7 @@ class PageEditFile implements PageEditFileInterface
             return $pageFolder;
         }
 
-        $root = $this->container->getParameter('kernel.root_dir');
+        $root = $this->container->getParameter('kernel.project_dir');
         $pageFolder = '3' === substr(Kernel::VERSION, 0, 1) ? $root . '/Resources/views/' : $root . '/../templates/';
 
         return $pageFolder . $this->configService->getParameter('c975LPageEdit.folderPages') . '/';
@@ -264,7 +264,7 @@ class PageEditFile implements PageEditFileInterface
     //Gets the start and end of the skeleton
     public function getSkeletonStartEnd()
     {
-        $skeleton = file_get_contents($this->container->getParameter('kernel.root_dir') . '/../vendor/c975l/pageedit-bundle/Resources/views/skeleton.html.twig');
+        $skeleton = file_get_contents($this->container->getParameter('kernel.project_dir') . '/../vendor/c975l/pageedit-bundle/Resources/views/skeleton.html.twig');
 
         $startBlock = '{% block pageedit_content %}';
         $endBlock = '{% endblock %}';

@@ -62,7 +62,7 @@ knp_snappy:
     temporary_folder: "%kernel.cache_dir%/snappy"
     pdf:
         enabled: true
-        binary: "%kernel.root_dir%/../vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64"
+        binary: "%kernel.project_dir%/../vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64"
         options:
             print-media-type: true
             page-size: A4

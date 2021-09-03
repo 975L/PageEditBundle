@@ -1,5 +1,9 @@
 # ChangeLog
 
+## v2.6.1
+
+- Replaced `kernel.root_dir` by `kernel.project_dir` (03/09/2021)
+
 ## v2.6
 
 - Changed `Symfony\Component\Translation\TranslatorInterface` to `Symfony\Contracts\Translation\TranslatorInterface` (03/09/2021)

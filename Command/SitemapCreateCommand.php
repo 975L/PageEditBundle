@@ -63,7 +63,7 @@ class SitemapCreateCommand extends Command
     {
         //Creates structure in case it not exists
         $fs = new Filesystem();
-        $root = $this->configService->getContainerParameter('kernel.root_dir');
+        $root = $this->configService->getContainerParameter('kernel.project_dir');
         $folderPages = $this->configService->getParameter('c975LPageEdit.folderPages');
         $templatesFolder = '3' === substr(Kernel::VERSION, 0, 1) ? '/Resources/views/' : '/../templates/';
         $folderPath = $root . $templatesFolder . $folderPages;
