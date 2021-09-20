@@ -171,8 +171,8 @@ class PageEditFile implements PageEditFileInterface
             return $imagesFolder;
         }
 
-        $root = $this->container->getParameter('kernel.project_dir');
-        $imagesFolder = '3' === substr(Kernel::VERSION, 0, 1) ? $root . '/../web/images/' : $root . '/../public/images/';
+        $imagesFolder = $this->configService->getContainerParameter('kernel.project_dir') . '/public/images/';
+        $imagesFolder = '3' === substr(Kernel::VERSION, 0, 1) ? $this->container->getParameter('kernel.root_dir') . '/../web/images/' : $imagesFolder;
 
         return $imagesFolder . $this->configService->getParameter('c975LPageEdit.folderPages') . '/';
     }
@@ -227,8 +227,8 @@ class PageEditFile implements PageEditFileInterface
             return $pageFolder;
         }
 
-        $root = $this->container->getParameter('kernel.project_dir');
-        $pageFolder = '3' === substr(Kernel::VERSION, 0, 1) ? $root . '/Resources/views/' : $root . '/../templates/';
+        $pageFolder = $this->configService->getContainerParameter('kernel.project_dir') . '/templates/';
+        $pageFolder = '3' === substr(Kernel::VERSION, 0, 1) ? $this->container->getParameter('kernel.root_dir') . '/Resources/views/' : $pageFolder;
 
         return $pageFolder . $this->configService->getParameter('c975LPageEdit.folderPages') . '/';
     }

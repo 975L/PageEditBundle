@@ -1,5 +1,10 @@
 # ChangeLog
 
+
+## v2.6.2
+
+- Corrected `kernel.project_dir` calls (20/09/2021)
+
 ## v2.6.1
 
 - Replaced `kernel.root_dir` by `kernel.project_dir` (03/09/2021)
