@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v2.6.3
+
+- Added return for console Command (08/10/2021)
 
 ## v2.6.2
 

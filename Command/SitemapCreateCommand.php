@@ -65,7 +65,7 @@ class SitemapCreateCommand extends Command
         $fs = new Filesystem();
         $root = $this->configService->getContainerParameter('kernel.project_dir');
         $folderPages = $this->configService->getParameter('c975LPageEdit.folderPages');
-        $templatesFolder = '3' === substr(Kernel::VERSION, 0, 1) ? '/Resources/views/' : '/../templates/';
+        $templatesFolder = '3' === substr(Kernel::VERSION, 0, 1) ? '/Resources/views/' : '/templates/';
         $folderPath = $root . $templatesFolder . $folderPages;
         $protectedFolderPath = $root . $templatesFolder . $folderPages . '/protected';
         $fs->mkdir(array(
@@ -121,10 +121,12 @@ class SitemapCreateCommand extends Command
 
         //Writes file
         $sitemapContent = $this->environment->render('@c975LPageEdit/sitemap.xml.twig', array('pages' => $pages));
-        $sitemapFile = '3' === substr(Kernel::VERSION, 0, 1) ? $root . '/../web/sitemap-' . $folderPages . '.xml' : $root . '/../public/sitemap-' . $folderPages . '.xml';
+        $sitemapFile = '3' === substr(Kernel::VERSION, 0, 1) ? $root . '/../web/sitemap-' . $folderPages . '.xml' : $root . '/public/sitemap-' . $folderPages . '.xml';
         file_put_contents($sitemapFile, $sitemapContent);
 
         //Ouputs message
         $output->writeln('Sitemap created!');
+
+        return Command::SUCCESS;
     }
 }
