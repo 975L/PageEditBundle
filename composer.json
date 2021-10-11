@@ -30,7 +30,8 @@
         "symfony/form": "*",
         "symfony/security": "*",
         "symfony/templating": "*",
-        "symfony/translation": "*"
+        "symfony/translation": "*",
+        "twig/intl-extra": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "*",

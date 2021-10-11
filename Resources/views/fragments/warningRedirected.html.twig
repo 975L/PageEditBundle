@@ -1,5 +1,5 @@
 {% trans_default_domain 'pageedit' %}
 
 <div class="alert alert-danger text-center">
-    <span class="fas fa-exclamation-circle"></span> {{ 'label.page_redirected'|trans }} <strong>{{ pageEdit.modification|localizeddate('medium', 'medium') }}</strong>
+    <span class="fas fa-exclamation-circle"></span> {{ 'label.page_redirected'|trans }} <strong>{{ pageEdit.modification|format_datetime('medium', 'medium') }}</strong>
 </div>

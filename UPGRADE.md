@@ -1,5 +1,9 @@
 # UPGRADE
 
+## v2.x > v3.x
+
+Changed `localizeddate` to `format_datetime`
+
 ## v1.x > v2.x
 
 When upgrading from v1.x to v2.x you should(must) do the following if they apply to your case:
