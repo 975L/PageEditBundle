@@ -127,6 +127,10 @@ class SitemapCreateCommand extends Command
         //Ouputs message
         $output->writeln('Sitemap created!');
 
-        return Command::SUCCESS;
+        if ('5' === substr(Kernel::VERSION, 0, 1)) {
+            return Command::SUCCESS;
+        }
+
+        return 0;
     }
 }
