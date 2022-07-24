@@ -19,23 +19,20 @@
     ],
     "require": {
         "php": "*",
-        "c975l/config-bundle": "^2",
-        "c975l/includelibrary-bundle": "^1",
-        "c975l/services-bundle": "^1",
-        "c975l/toolbar-bundle": "^1",
+        "c975l/config-bundle": "*",
+        "c975l/includelibrary-bundle": "*",
+        "c975l/services-bundle": "*",
+        "c975l/toolbar-bundle": "*",
         "cocur/slugify": "*",
         "h4cc/wkhtmltopdf-amd64": "*",
         "knplabs/knp-paginator-bundle": "*",
         "knplabs/knp-snappy-bundle": "*",
         "symfony/form": "*",
-        "symfony/security": "*",
         "symfony/templating": "*",
         "symfony/translation": "*",
         "twig/intl-extra": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "*",
-        "rector/rector": "*"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

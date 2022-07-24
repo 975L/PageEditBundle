@@ -1,5 +1,9 @@
 # ChangeLog
 
+## v3.0.2
+
+- Changed composer versions constraints (24/07/2022)
+
 ## v3.0.1
 
 - Corrected Command return for SF 4 (14/10/2021)
