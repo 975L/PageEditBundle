@@ -12,7 +12,6 @@ namespace c975L\PageEditBundle\Service\File;
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use c975L\PageEditBundle\Form\PageEditFormFactoryInterface;
 use Knp\Snappy\Pdf;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\Form;
@@ -36,16 +35,10 @@ class PageEditFile implements PageEditFileInterface
     private $authChecker;
 
     /**
-     * Stores ContainerInterface
-     * @var ContainerInterface
-     */
-    private $configService;
-
-    /**
      * Stores ConfigServiceInterface
      * @var ConfigServiceInterface
      */
-    private $container;
+    private $configService;
 
     /**
      * Stores Pdf
@@ -74,7 +67,6 @@ class PageEditFile implements PageEditFileInterface
     public function __construct(
         AuthorizationCheckerInterface $authChecker,
         ConfigServiceInterface $configService,
-        ContainerInterface $container,
         Pdf $knpSnappyPdf,
         PageEditFormFactoryInterface $pageEditFormFactory,
         RequestStack $requestStack,
@@ -83,7 +75,6 @@ class PageEditFile implements PageEditFileInterface
     {
         $this->authChecker = $authChecker;
         $this->configService = $configService;
-        $this->container = $container;
         $this->knpSnappyPdf = $knpSnappyPdf;
         $this->pageEditFormFactory = $pageEditFormFactory;
         $this->request = $requestStack->getCurrentRequest();

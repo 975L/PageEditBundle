@@ -1,5 +1,9 @@
 # ChangeLog
 
+## v3.0.4
+
+- Suppressed use of container (24/07/2022)
+
 ## v3.0.3
 
 - Added return type for Voter (24/07/2022)
