@@ -1,5 +1,9 @@
 # ChangeLog
 
+## v3.0.3
+
+- Added return type for Voter (24/07/2022)
+
 ## v3.0.2
 
 - Changed composer versions constraints (24/07/2022)
