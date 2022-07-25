@@ -26,156 +26,129 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 class PageEditVoter extends Voter
 {
     /**
-     * Stores ConfigServiceInterface
-     * @var ConfigServiceInterface
-     */
-    private $configService;
-
-    /**
-     * Stores AccessDecisionManagerInterface
-     * @var AccessDecisionManagerInterface
-     */
-    private $decisionManager;
-
-    /**
      * Stores current Request
-     * @var Request
      */
-    private $request;
+    private readonly ?\Symfony\Component\HttpFoundation\Request $request;
 
     /**
      * Used for access to archived
      * @var string
      */
-    public const ARCHIVED = 'c975LPageEdit-archived';
+    final public const ARCHIVED = 'c975LPageEdit-archived';
 
     /**
      * Used for access to archived-delete
      * @var string
      */
-    public const ARCHIVED_DELETE = 'c975LPageEdit-archived-delete';
+    final public const ARCHIVED_DELETE = 'c975LPageEdit-archived-delete';
 
     /**
      * Used for access to config
      * @var string
      */
-    public const CONFIG = 'c975LPageEdit-config';
+    final public const CONFIG = 'c975LPageEdit-config';
 
     /**
      * Used for access to create
      * @var string
      */
-    public const CREATE = 'c975LPageEdit-create';
+    final public const CREATE = 'c975LPageEdit-create';
 
     /**
      * Used for access to dashboard
      * @var string
      */
-    public const DASHBOARD = 'c975LPageEdit-dashboard';
+    final public const DASHBOARD = 'c975LPageEdit-dashboard';
 
     /**
      * Used for access to delete
      * @var string
      */
-    public const DELETE = 'c975LPageEdit-delete';
+    final public const DELETE = 'c975LPageEdit-delete';
 
     /**
      * Used for access to deleted
      * @var string
      */
-    public const DELETED = 'c975LPageEdit-deleted';
+    final public const DELETED = 'c975LPageEdit-deleted';
 
     /**
      * Used for access to deleted-delete
      * @var string
      */
-    public const DELETED_DELETE = 'c975LPageEdit-deleted-delete';
+    final public const DELETED_DELETE = 'c975LPageEdit-deleted-delete';
 
     /**
      * Used for access to display
      * @var string
      */
-    public const DISPLAY = 'c975LPageEdit-display';
+    final public const DISPLAY = 'c975LPageEdit-display';
 
     /**
      * Used for access to duplicate
      * @var string
      */
-    public const DUPLICATE = 'c975LPageEdit-duplicate';
+    final public const DUPLICATE = 'c975LPageEdit-duplicate';
 
     /**
      * Used for access to help
      * @var string
      */
-    public const HELP = 'c975LPageEdit-help';
+    final public const HELP = 'c975LPageEdit-help';
 
     /**
      * Used for access to links
      * @var string
      */
-    public const LINKS = 'c975LPageEdit-links';
+    final public const LINKS = 'c975LPageEdit-links';
 
     /**
      * Used for access to modify
      * @var string
      */
-    public const MODIFY = 'c975LPageEdit-modify';
+    final public const MODIFY = 'c975LPageEdit-modify';
 
     /**
      * Used for access to redirected
      * @var string
      */
-    public const REDIRECTED = 'c975LPageEdit-redirected';
+    final public const REDIRECTED = 'c975LPageEdit-redirected';
 
     /**
      * Used for access to redirected-delete
      * @var string
      */
-    public const REDIRECTED_DELETE = 'c975LPageEdit-redirected-delete';
+    final public const REDIRECTED_DELETE = 'c975LPageEdit-redirected-delete';
 
     /**
      * Used for access to slug
      * @var string
      */
-    public const SLUG = 'c975LPageEdit-slug';
+    final public const SLUG = 'c975LPageEdit-slug';
 
     /**
      * Used for access to upload
      * @var string
      */
-    public const UPLOAD = 'c975LPageEdit-upload';
+    final public const UPLOAD = 'c975LPageEdit-upload';
 
     /**
      * Contains all the available attributes to check with in supports()
      * @var array
      */
-    private const ATTRIBUTES = array(
-        self::ARCHIVED,
-        self::ARCHIVED_DELETE,
-        self::CONFIG,
-        self::CREATE,
-        self::DASHBOARD,
-        self::DELETE,
-        self::DELETED,
-        self::DELETED_DELETE,
-        self::DISPLAY,
-        self::DUPLICATE,
-        self::HELP,
-        self::LINKS,
-        self::MODIFY,
-        self::REDIRECTED,
-        self::REDIRECTED_DELETE,
-        self::SLUG,
-        self::UPLOAD,
-    );
+    private const ATTRIBUTES = [self::ARCHIVED, self::ARCHIVED_DELETE, self::CONFIG, self::CREATE, self::DASHBOARD, self::DELETE, self::DELETED, self::DELETED_DELETE, self::DISPLAY, self::DUPLICATE, self::HELP, self::LINKS, self::MODIFY, self::REDIRECTED, self::REDIRECTED_DELETE, self::SLUG, self::UPLOAD];
 
     public function __construct(
-        ConfigServiceInterface $configService,
-        AccessDecisionManagerInterface $decisionManager,
+        /**
+         * Stores ConfigServiceInterface
+         */
+        private readonly ConfigServiceInterface $configService,
+        /**
+         * Stores AccessDecisionManagerInterface
+         */
+        private readonly AccessDecisionManagerInterface $decisionManager,
         RequestStack $requestStack
     ) {
-        $this->configService = $configService;
-        $this->decisionManager = $decisionManager;
         $this->request = $requestStack->getCurrentRequest();
     }
 
@@ -196,32 +169,11 @@ class PageEditVoter extends Voter
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
-        //Defines access rights
-        switch ($attribute) {
-            case self::ARCHIVED:
-            case self::ARCHIVED_DELETE:
-            case self::CONFIG:
-            case self::CREATE:
-            case self::DASHBOARD:
-            case self::DELETE:
-            case self::DELETED:
-            case self::DELETED_DELETE:
-            case self::DISPLAY:
-            case self::DUPLICATE:
-            case self::HELP:
-            case self::LINKS:
-            case self::MODIFY:
-            case self::REDIRECTED:
-            case self::REDIRECTED_DELETE:
-            case self::SLUG:
-                return $this->hasRoleNeeded($token);
-                break;
-            case self::UPLOAD:
-                return $this->isUploadAllowed($token);
-                break;
-        }
-
-        throw new LogicException('Invalid attribute: ' . $attribute);
+        return match ($attribute) {
+            self::ARCHIVED, self::ARCHIVED_DELETE, self::CONFIG, self::CREATE, self::DASHBOARD, self::DELETE, self::DELETED, self::DELETED_DELETE, self::DISPLAY, self::DUPLICATE, self::HELP, self::LINKS, self::MODIFY, self::REDIRECTED, self::REDIRECTED_DELETE, self::SLUG => $this->hasRoleNeeded($token),
+            self::UPLOAD => $this->isUploadAllowed($token),
+            default => throw new LogicException('Invalid attribute: ' . $attribute),
+        };
     }
 
     /**
@@ -230,7 +182,7 @@ class PageEditVoter extends Voter
      */
     public function hasRoleNeeded($token)
     {
-        return $this->decisionManager->decide($token, array($this->configService->getParameter('c975LPageEdit.roleNeeded', 'c975l/pageedit-bundle')));
+        return $this->decisionManager->decide($token, [$this->configService->getParameter('c975LPageEdit.roleNeeded', 'c975l/pageedit-bundle')]);
     }
 
     /**

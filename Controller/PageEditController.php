@@ -29,15 +29,13 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
  */
 class PageEditController extends AbstractController
 {
-    /**
-     * Stores PageEditServiceInterface
-     * @var PageEditServiceInterface
-     */
-    private $pageEditService;
-
-    public function __construct(PageEditServiceInterface $pageEditService)
+    public function __construct(
+        /**
+         * Stores PageEditServiceInterface
+         */
+        private readonly PageEditServiceInterface $pageEditService
+    )
     {
-        $this->pageEditService = $pageEditService;
     }
 
 //HOME
@@ -65,10 +63,7 @@ class PageEditController extends AbstractController
     {
         return $this->render(
             'pages/home.html.twig',
-            array(
-                'toolbar' => $this->pageEditService->defineToolbar('display', 'home'),
-                'display' => 'html',
-            ));
+            ['toolbar' => $this->pageEditService->defineToolbar('display', 'home'), 'display' => 'html']);
     }
 
 //DASHBOARD
@@ -93,9 +88,7 @@ class PageEditController extends AbstractController
         );
         return $this->render(
             '@c975LPageEdit/pages/dashboard.html.twig',
-            array(
-                'pages' => $pages,
-            ));
+            ['pages' => $pages]);
     }
 
 //DISPLAY
@@ -117,32 +110,25 @@ class PageEditController extends AbstractController
         if ($pageEdit instanceof PageEdit) {
             $filePath = $pageEdit->getFilePath();
             //Redirected page
-            if (false !== strpos($filePath, '/redirected/')) {
-                return $this->redirectToRoute('pageedit_display', array(
-                    'page' => trim(file_get_contents($filePath)),
-                ));
+            if (str_contains($filePath, '/redirected/')) {
+                return $this->redirectToRoute('pageedit_display', ['page' => trim(file_get_contents($filePath))]);
             //Deleted page
-            } elseif (false !== strpos($filePath, '/deleted/')) {
+            } elseif (str_contains($filePath, '/deleted/')) {
                 throw new GoneHttpException();
             //Protected url
-            } elseif(false !== strpos($page, 'protected/')) {
-                return $this->redirectToRoute('pageedit_display', array(
-                    'page' => str_replace('protected/', '', $page),
-                ));
+            } elseif(str_contains((string) $page, 'protected/')) {
+                return $this->redirectToRoute('pageedit_display', ['page' => str_replace('protected/', '', (string) $page)]);
             //Homepage called by pages/home
             } elseif ('home' === $page) {
                 return $this->redirectToRoute('pageedit_home');
             }
 
             //Renders page
-            $filePath = '3' === substr(Kernel::VERSION, 0, 1) ? substr($filePath, strpos($filePath, '/views') + 6) : substr($filePath, strpos($filePath, '/templates') + 10);
+            $filePath = str_starts_with(Kernel::VERSION, '3') ? substr($filePath, strpos($filePath, '/views') + 6) : substr($filePath, strpos($filePath, '/templates') + 10);
 
             return $this->render(
                 $filePath,
-                array(
-                    'toolbar' => $this->pageEditService->defineToolbar('display', $page),
-                    'display' => 'html',
-                ));
+                ['toolbar' => $this->pageEditService->defineToolbar('display', $page), 'display' => 'html']);
         }
 
         throw $this->createNotFoundException();
@@ -173,18 +159,13 @@ class PageEditController extends AbstractController
             //Redirects to the page
             return $this->redirectToRoute(
                 'pageedit_display',
-                array(
-                    'page' => $slug,
-                ));
+                ['page' => $slug]);
         }
 
         //Returns the create form
         return $this->render(
             '@c975LPageEdit/forms/create.html.twig',
-            array(
-                'form' => $form->createView(),
-                'pageEdit' => $pageEdit,
-            ));
+            ['form' => $form->createView(), 'pageEdit' => $pageEdit]);
     }
 
 //MODIFY
@@ -215,18 +196,13 @@ class PageEditController extends AbstractController
                 //Redirects to the page
                 return $this->redirectToRoute(
                     'pageedit_display',
-                    array(
-                        'page' => $slug,
-                    ));
+                    ['page' => $slug]);
             }
 
             //Returns the modify form
             return $this->render(
                 '@c975LPageEdit/forms/modify.html.twig',
-                array(
-                    'form' => $form->createView(),
-                    'pageEdit' => $pageEdit,
-                ));
+                ['form' => $form->createView(), 'pageEdit' => $pageEdit]);
         }
 
         throw $this->createNotFoundException();
@@ -261,18 +237,13 @@ class PageEditController extends AbstractController
                 //Redirects to the page
                 return $this->redirectToRoute(
                     'pageedit_display',
-                    array(
-                        'page' => $slug,
-                    ));
+                    ['page' => $slug]);
             }
 
             //Returns the duplicate form
             return $this->render(
                 '@c975LPageEdit/forms/duplicate.html.twig',
-                array(
-                    'form' => $form->createView(),
-                    'pageEdit' => $pageEditClone,
-                ));
+                ['form' => $form->createView(), 'pageEdit' => $pageEditClone]);
         }
 
         throw $this->createNotFoundException();
@@ -310,10 +281,7 @@ class PageEditController extends AbstractController
             //Returns the delete form
             return $this->render(
                 '@c975LPageEdit/forms/delete.html.twig',
-                array(
-                    'form' => $form->createView(),
-                    'pageEdit' => $pageEdit,
-                ));
+                ['form' => $form->createView(), 'pageEdit' => $pageEdit]);
         }
 
         //Not found
@@ -349,10 +317,7 @@ class PageEditController extends AbstractController
         //Renders the config form
         return $this->render(
             '@c975LConfig/forms/config.html.twig',
-            array(
-                'form' => $form->createView(),
-                'toolbar' => '@c975LPageEdit',
-            ));
+            ['form' => $form->createView(), 'toolbar' => '@c975LPageEdit']);
     }
 
 //HELP

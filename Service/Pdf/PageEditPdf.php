@@ -23,40 +23,27 @@ use Twig\Environment;
 class PageEditPdf implements PageEditPdfInterface
 {
     /**
-     * Stores Pdf
-     * @var Pdf
-     */
-    private $knpSnappyPdf;
-
-    /**
-     * Stores PageEditFileInterface
-     * @var PageEditFileInterface
-     */
-    private $pageEditFile;
-
-    /**
      * Stores current Request
-     * @var Request
      */
-    private $request;
-
-    /**
-     * Stores Environment
-     * @var Environment
-     */
-    private $environment;
+    private readonly ?\Symfony\Component\HttpFoundation\Request $request;
 
     public function __construct(
-        Pdf $knpSnappyPdf,
-        PageEditFileInterface $pageEditFile,
+        /**
+         * Stores Pdf
+         */
+        private readonly Pdf $knpSnappyPdf,
+        /**
+         * Stores PageEditFileInterface
+         */
+        private readonly PageEditFileInterface $pageEditFile,
         RequestStack $requestStack,
-        Environment $environment
+        /**
+         * Stores Environment
+         */
+        private readonly Environment $environment
     )
     {
-        $this->knpSnappyPdf = $knpSnappyPdf;
-        $this->pageEditFile = $pageEditFile;
         $this->request = $requestStack->getCurrentRequest();
-        $this->environment = $environment;
     }
 
     /**
@@ -73,13 +60,10 @@ class PageEditPdf implements PageEditPdfInterface
             filemtime($filePdfPath) + $amountTime < time()) {
 
             //Removes full path to allow environment to find the file
-            $filePath = false !== strpos($filePath, '/templates/') ? substr($filePath, strpos($filePath, '/templates/') + 11) : $filePath;
+            $filePath = str_contains($filePath, '/templates/') ? substr($filePath, strpos($filePath, '/templates/') + 11) : $filePath;
 
             //Creates pdf
-            $html = $this->environment->render($filePath, array(
-                'toolbar' => '',
-                'display' => 'pdf',
-            ));
+            $html = $this->environment->render($filePath, ['toolbar' => '', 'display' => 'pdf']);
             $this->pageEditFile->createFolders();
             file_put_contents($filePdfPath, $this->knpSnappyPdf->getOutputFromHtml(str_replace('https:', 'http:', $html)));
         }

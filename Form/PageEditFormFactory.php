@@ -19,15 +19,13 @@ use Symfony\Component\Form\FormFactoryInterface;
  */
 class PageEditFormFactory implements PageEditFormFactoryInterface
 {
-    /**
-     * Stores FormFactoryInterface
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
-
-    public function __construct(FormFactoryInterface $formFactory)
+    public function __construct(
+        /**
+         * Stores FormFactoryInterface
+         */
+        private readonly FormFactoryInterface $formFactory
+    )
     {
-        $this->formFactory = $formFactory;
     }
 
     /**
@@ -40,13 +38,13 @@ class PageEditFormFactory implements PageEditFormFactoryInterface
             case 'modify':
             case 'duplicate':
             case 'delete':
-                $config = array('action' => $name);
+                $config = ['action' => $name];
                 break;
             default:
-                $config = array();
+                $config = [];
                 break;
         }
 
-        return $this->formFactory->create(PageEditType::class, $pageEdit, array('config' => $config));
+        return $this->formFactory->create(PageEditType::class, $pageEdit, ['config' => $config]);
     }
 }

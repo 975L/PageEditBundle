@@ -44,7 +44,7 @@ class PdfController extends AbstractController
             $filePdfPath = $pageEditPdf->create($pageEdit->getFilePath(), $page);
 
             //Renders the pdf
-            return new Response(file_get_contents($filePdfPath), 200, array('Content-Type' => 'application/pdf'));
+            return new Response(file_get_contents($filePdfPath), 200, ['Content-Type' => 'application/pdf']);
         }
 
         throw $this->createNotFoundException();

@@ -22,32 +22,22 @@ use Twig\TwigFunction;
  */
 class PageEditFolderContent extends AbstractExtension
 {
-    /**
-     * Stores PageEditFileInterface
-     * @var PageEditFileInterface
-     */
-    private $pageEditFile;
-
-    /**
-     * Stores PageEditServiceInterface
-     * @var PageEditServiceInterface
-     */
-    private $pageEditService;
-
     public function __construct(
-        PageEditFileInterface $pageEditFile,
-        PageEditServiceInterface $pageEditService
+        /**
+         * Stores PageEditFileInterface
+         */
+        private readonly PageEditFileInterface $pageEditFile,
+        /**
+         * Stores PageEditServiceInterface
+         */
+        private readonly PageEditServiceInterface $pageEditService
     )
     {
-        $this->pageEditFile = $pageEditFile;
-        $this->pageEditService = $pageEditService;
     }
 
     public function getFunctions()
     {
-        return array(
-            new TwigFunction('folder_content', array($this, 'folderContent')),
-        );
+        return [new TwigFunction('folder_content', $this->folderContent(...))];
     }
 
     /**
@@ -67,7 +57,7 @@ class PageEditFolderContent extends AbstractExtension
         ;
 
         //Finds titles
-        $folderContent = array();
+        $folderContent = [];
         foreach ($finder as $file) {
             $title = $this->pageEditService->getTitle($file->getContents(), $file);
             $titleTranslated = $this->pageEditService->getTitleTranslated($title);

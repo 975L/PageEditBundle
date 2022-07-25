@@ -23,15 +23,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class RedirectedController extends AbstractController
 {
-    /**
-     * Stores PageEditServiceInterface
-     * @var PageEditServiceInterface
-     */
-    private $pageEditService;
-
-    public function __construct(PageEditServiceInterface $pageEditService)
+    public function __construct(
+        /**
+         * Stores PageEditServiceInterface
+         */
+        private readonly PageEditServiceInterface $pageEditService
+    )
     {
-        $this->pageEditService = $pageEditService;
     }
 
 //DISPLAY
@@ -55,9 +53,7 @@ class RedirectedController extends AbstractController
         if ($pageEdit instanceof PageEdit) {
             return $this->render(
                 '@c975LPageEdit/pages/redirected.html.twig',
-                array(
-                    'pageEdit' => $pageEdit,
-                ));
+                ['pageEdit' => $pageEdit]);
         }
 
         throw $this->createNotFoundException();
@@ -89,16 +85,13 @@ class RedirectedController extends AbstractController
                 $this->pageEditService->deleteFile('redirected/' . $page, false);
 
                 //Redirects to the page which will be HTTP 410
-                return $this->redirectToRoute('pageedit_dashboard', array('v' => 'redirected'));
+                return $this->redirectToRoute('pageedit_dashboard', ['v' => 'redirected']);
             }
 
             //Renders the delete form
             return $this->render(
                 '@c975LPageEdit/forms/deleteArchived.html.twig',
-                array(
-                    'form' => $form->createView(),
-                    'pageEdit' => $pageEdit,
-                ));
+                ['form' => $form->createView(), 'pageEdit' => $pageEdit]);
         }
 
         throw $this->createNotFoundException();

@@ -29,56 +29,35 @@ use Twig\Environment;
 class PageEditFile implements PageEditFileInterface
 {
     /**
-     * Stores AuthorizationCheckerInterface
-     * @var AuthorizationCheckerInterface
-     */
-    private $authChecker;
-
-    /**
-     * Stores ConfigServiceInterface
-     * @var ConfigServiceInterface
-     */
-    private $configService;
-
-    /**
-     * Stores Pdf
-     * @var Pdf
-     */
-    private $knpSnappyPdf;
-
-    /**
-     * Stores PageEditFormFactoryInterface
-     * @var PageEditFormFactoryInterface
-     */
-    private $pageEditFormFactory;
-
-    /**
      * Stores current Request
-     * @var Request
      */
-    private $request;
-
-    /**
-     * Stores Environment
-     * @var Environment
-     */
-    private $environment;
+    private readonly ?\Symfony\Component\HttpFoundation\Request $request;
 
     public function __construct(
-        AuthorizationCheckerInterface $authChecker,
-        ConfigServiceInterface $configService,
-        Pdf $knpSnappyPdf,
-        PageEditFormFactoryInterface $pageEditFormFactory,
+        /**
+         * Stores AuthorizationCheckerInterface
+         */
+        private readonly AuthorizationCheckerInterface $authChecker,
+        /**
+         * Stores ConfigServiceInterface
+         */
+        private readonly ConfigServiceInterface $configService,
+        /**
+         * Stores Pdf
+         */
+        private readonly Pdf $knpSnappyPdf,
+        /**
+         * Stores PageEditFormFactoryInterface
+         */
+        private readonly PageEditFormFactoryInterface $pageEditFormFactory,
         RequestStack $requestStack,
-        Environment $environment
+        /**
+         * Stores Environment
+         */
+        private readonly Environment $environment
     )
     {
-        $this->authChecker = $authChecker;
-        $this->configService = $configService;
-        $this->knpSnappyPdf = $knpSnappyPdf;
-        $this->pageEditFormFactory = $pageEditFormFactory;
         $this->request = $requestStack->getCurrentRequest();
-        $this->environment = $environment;
     }
 
     /**
@@ -93,7 +72,7 @@ class PageEditFile implements PageEditFileInterface
         $fs = new Filesystem();
         if ($fs->exists($filePath)) {
             //Create sub-folders
-            if (false !== strpos($page, '/')) {
+            if (str_contains($page, '/')) {
                 $subfolder = substr($page, 0, strrpos($page, '/'));
                 $fs->mkdir($archivedFolder . '/' . $subfolder, 0770);
             }
@@ -109,14 +88,7 @@ class PageEditFile implements PageEditFileInterface
     {
         //Defines folders
         $folderPath = $this->getPagesFolder();
-        $folders = array (
-            $folderPath . 'archived',
-            $folderPath . 'deleted',
-            $folderPath . 'pdf',
-            $folderPath . 'protected',
-            $folderPath . 'redirected',
-            $this->getImagesFolder(),
-        );
+        $folders = [$folderPath . 'archived', $folderPath . 'deleted', $folderPath . 'pdf', $folderPath . 'protected', $folderPath . 'redirected', $this->getImagesFolder()];
 
         //Creates folders
         $fs = new Filesystem();
@@ -140,7 +112,7 @@ class PageEditFile implements PageEditFileInterface
         if ($fs->exists($filePath)) {
             if ($archive) {
                 //Create sub-folders
-                if (strpos($page, '/') !== false) {
+                if (str_contains($page, '/')) {
                     $subfolder = substr($page, 0, strrpos($page, '/'));
                     $fs->mkdir($deletedFolder . '/' . $subfolder, 0770);
                 }
@@ -163,7 +135,7 @@ class PageEditFile implements PageEditFileInterface
         }
 
         $imagesFolder = $this->configService->getContainerParameter('kernel.project_dir') . '/public/images/';
-        $imagesFolder = '3' === substr(Kernel::VERSION, 0, 1) ? $this->container->getParameter('kernel.root_dir') . '/../web/images/' : $imagesFolder;
+        $imagesFolder = str_starts_with(Kernel::VERSION, '3') ? $this->container->getParameter('kernel.root_dir') . '/../web/images/' : $imagesFolder;
 
         return $imagesFolder . $this->configService->getParameter('c975LPageEdit.folderPages') . '/';
     }
@@ -184,7 +156,7 @@ class PageEditFile implements PageEditFileInterface
         $view = $this->request->get('v');
 
         //Gets pages for specific folder
-        if (null !== $view && in_array($view, array('archived', 'deleted', 'redirected'))) {
+        if (null !== $view && in_array($view, ['archived', 'deleted', 'redirected'])) {
             $pages
                 ->files()
                 ->in($folderPath .= $view)
@@ -219,7 +191,7 @@ class PageEditFile implements PageEditFileInterface
         }
 
         $pageFolder = $this->configService->getContainerParameter('kernel.project_dir') . '/templates/';
-        $pageFolder = '3' === substr(Kernel::VERSION, 0, 1) ? $this->container->getParameter('kernel.root_dir') . '/Resources/views/' : $pageFolder;
+        $pageFolder = str_starts_with(Kernel::VERSION, '3') ? $this->container->getParameter('kernel.root_dir') . '/Resources/views/' : $pageFolder;
 
         return $pageFolder . $this->configService->getParameter('c975LPageEdit.folderPages') . '/';
     }
@@ -263,10 +235,7 @@ class PageEditFile implements PageEditFileInterface
         $entryPoint = strpos($skeleton, $startBlock) + strlen($startBlock);
         $exitPoint = strpos($skeleton, $endBlock, $entryPoint);
 
-        return array(
-            'start' => trim(substr($skeleton, 0, $entryPoint)),
-            'end' => trim(substr($skeleton, $exitPoint)),
-        );
+        return ['start' => trim(substr($skeleton, 0, $entryPoint)), 'end' => trim(substr($skeleton, $exitPoint))];
     }
 
     /**
@@ -296,11 +265,11 @@ class PageEditFile implements PageEditFileInterface
         //Gets title
         $title = $formData->getTitle();
         //Title is using Twig code to translate it
-        if (0 === strpos($title, '{{')) {
-            $title = trim(str_replace(array('{{', '}}'), '', $title));
+        if (str_starts_with((string) $title, '{{')) {
+            $title = trim(str_replace(['{{', '}}'], '', (string) $title));
         //Title is text
-        } elseif (false === strpos($title, '|trans')) {
-            $title = '"' . str_replace('"', '\"', $formData->getTitle()) . '"';
+        } elseif (!str_contains((string) $title, '|trans')) {
+            $title = '"' . str_replace('"', '\"', (string) $formData->getTitle()) . '"';
         }
 
         //Updates metadata
@@ -310,7 +279,7 @@ class PageEditFile implements PageEditFileInterface
         $startSkeleton = preg_replace('/pageedit_description=\"(.*)\"/', 'pageedit_description="' . $formData->getDescription() . '"', $startSkeleton);
 
         //Cleans content
-        $content = str_replace(array('{{path', '{{asset'), array('{{ path', '{{ asset'), $formData->getContent());
+        $content = str_replace(['{{path', '{{asset'], ['{{ path', '{{ asset'], (string) $formData->getContent());
         $content = preg_replace('#href=\"(.*){{ path#', 'href="{{ path', $content);
         $content = preg_replace('#src=\"(.*){{ asset#', 'src="{{ asset', $content);
 
@@ -321,7 +290,7 @@ class PageEditFile implements PageEditFileInterface
         $fs = new Filesystem();
         if (!empty($images)) {
             foreach ($images[1] as $image) {
-                $slugImage = str_replace('new', $slug, $image);
+                $slugImage = str_replace('new', $slug, (string) $image);
                 $content = str_replace($image, $slugImage, $content);
                 if ($fs->exists($folderImage . $image)) {
                     $fs->rename($folderImage . $image, $folderImage . $slugImage);
@@ -339,7 +308,7 @@ class PageEditFile implements PageEditFileInterface
         }
 
         //Create sub-folders
-        if (false !== strpos($slug, '/')) {
+        if (str_contains($slug, '/')) {
             $subfolder = substr($slug, 0, strrpos($slug, '/'));
             $fs->mkdir($folderPath . $subfolder, 0770);
         }

@@ -19,15 +19,13 @@ use Cocur\Slugify\Slugify;
  */
 class PageEditSlug implements PageEditSlugInterface
 {
-    /**
-     * Stores PageEditFileInterface
-     * @var PageEditFileInterface
-     */
-    private $pageEditFile;
-
-    public function __construct(PageEditFileInterface $pageEditFile)
+    public function __construct(
+        /**
+         * Stores PageEditFileInterface
+         */
+        private readonly PageEditFileInterface $pageEditFile
+    )
     {
-        $this->pageEditFile = $pageEditFile;
     }
 
     /**
@@ -38,7 +36,7 @@ class PageEditSlug implements PageEditSlugInterface
         $pages = $this->pageEditFile->getPages();
 
         foreach ($pages as $page) {
-            if ($slug === str_replace(array('protected/', '.html.twig'), '', $page->getRelativePathname())) {
+            if ($slug === str_replace(['protected/', '.html.twig'], '', $page->getRelativePathname())) {
                 return true;
             }
         }

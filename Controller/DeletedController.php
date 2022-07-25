@@ -23,15 +23,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class DeletedController extends AbstractController
 {
-    /**
-     * Stores PageEditServiceInterface
-     * @var PageEditServiceInterface
-     */
-    private $pageEditService;
-
-    public function __construct(PageEditServiceInterface $pageEditService)
+    public function __construct(
+        /**
+         * Stores PageEditServiceInterface
+         */
+        private readonly PageEditServiceInterface $pageEditService
+    )
     {
-        $this->pageEditService = $pageEditService;
     }
 
 //DISPLAY
@@ -55,9 +53,7 @@ class DeletedController extends AbstractController
         if ($pageEdit instanceof PageEdit) {
             return $this->render(
                 '@c975LPageEdit/pages/deleted.html.twig',
-                array(
-                    'pageEdit' => $pageEdit,
-                ));
+                ['pageEdit' => $pageEdit]);
         }
 
         throw $this->createNotFoundException();
@@ -89,16 +85,13 @@ class DeletedController extends AbstractController
                 $this->pageEditService->deleteFile('deleted/' . $page, false);
 
                 //Redirects to the page which will be HTTP 410
-                return $this->redirectToRoute('pageedit_dashboard', array('v' => 'deleted'));
+                return $this->redirectToRoute('pageedit_dashboard', ['v' => 'deleted']);
             }
 
             //Renders the delete form
             return $this->render(
                 '@c975LPageEdit/forms/deleteDeleted.html.twig',
-                array(
-                    'form' => $form->createView(),
-                    'pageEdit' => $pageEdit,
-                ));
+                ['form' => $form->createView(), 'pageEdit' => $pageEdit]);
         }
 
         throw $this->createNotFoundException();

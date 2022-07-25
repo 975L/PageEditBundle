@@ -63,9 +63,8 @@ interface PageEditServiceInterface
 
     /**
      * Returns a PageEdit object
-     * @return PageEdit|false
      */
-    public function getData(string $page);
+    public function getData(string $page): PageEdit|false;
 
     /**
      * Gets the description of the page

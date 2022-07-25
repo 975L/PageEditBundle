@@ -46,16 +46,14 @@ class UtilsController extends AbstractController
 //UPLOAD IMAGE
     /**
      * Uploads the image defined
-     * @return JSON|false
      * @throws AccessDeniedException
-     *
      * @Route("/pageedit/upload/{page}",
      *    name="pageedit_upload",
      *    requirements={"page": "^[a-zA-Z0-9\-\/]+"},
      *    defaults={"page": "new"},
      *    methods={"POST"})
      */
-    public function upload(Request $request, ConfigServiceInterface $configService, PageEditFileInterface $pageEditFile, $page)
+    public function upload(Request $request, ConfigServiceInterface $configService, PageEditFileInterface $pageEditFile, $page): \JSON|false
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-upload', null);
 
@@ -63,11 +61,11 @@ class UtilsController extends AbstractController
         $file = $request->files->get('file');
         if (is_uploaded_file($file)) {
             //Checks extension
-            $extension = strtolower($file->guessExtension());
-            if (in_array($extension, array('jpeg', 'jpg', 'png', 'gif'))) {
+            $extension = strtolower((string) $file->guessExtension());
+            if (in_array($extension, ['jpeg', 'jpg', 'png', 'gif'])) {
                 //Moves file
-                if (false !== strpos($page, '/')) {
-                    $page = substr($page, strrpos($page, '/') + 1);
+                if (str_contains((string) $page, '/')) {
+                    $page = substr((string) $page, strrpos((string) $page, '/') + 1);
                 }
                 $folderPath = $pageEditFile->getImagesFolder();
                 $now = DateTime::createFromFormat('U.u', microtime(true));
@@ -77,7 +75,7 @@ class UtilsController extends AbstractController
                 //Returns JSON to the successful upload
                 $location = str_replace('/app_dev.php', '', $request->getUriForPath('/images/' . $configService->getParameter('c975LPageEdit.folderPages') . '/' . $filename));
 
-                return $this->json(array('location' => $location));
+                return $this->json(['location' => $location]);
             }
         }
 
@@ -98,6 +96,6 @@ class UtilsController extends AbstractController
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-slug', null);
 
-        return $this->json(array('a' => $pageEditSlug->slugify($text, true)));
+        return $this->json(['a' => $pageEditSlug->slugify($text, true)]);
     }
 }

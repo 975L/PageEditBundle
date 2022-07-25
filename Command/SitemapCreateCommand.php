@@ -18,34 +18,22 @@ use Twig\Environment;
  */
 class SitemapCreateCommand extends Command
 {
-    /**
-     * Stores ConfigServiceInterface
-     * @var ConfigServiceInterface
-     */
-    private $configService;
-
-    /**
-     * Stores PageEditServiceInterface
-     * @var PageEditServiceInterface
-     */
-    private $pageEditService;
-
-    /**
-     * Stores Environment
-     * @var Environment
-     */
-    private $environment;
-
     public function __construct(
-        ConfigServiceInterface $configService,
-        PageEditServiceInterface $pageEditService,
-        Environment $environment
+        /**
+         * Stores ConfigServiceInterface
+         */
+        private readonly ConfigServiceInterface $configService,
+        /**
+         * Stores PageEditServiceInterface
+         */
+        private readonly PageEditServiceInterface $pageEditService,
+        /**
+         * Stores Environment
+         */
+        private readonly Environment $environment
     )
     {
         parent::__construct();
-        $this->configService = $configService;
-        $this->pageEditService = $pageEditService;
-        $this->environment = $environment;
     }
 
     protected function configure()
@@ -65,13 +53,10 @@ class SitemapCreateCommand extends Command
         $fs = new Filesystem();
         $root = $this->configService->getContainerParameter('kernel.project_dir');
         $folderPages = $this->configService->getParameter('c975LPageEdit.folderPages');
-        $templatesFolder = '3' === substr(Kernel::VERSION, 0, 1) ? '/Resources/views/' : '/templates/';
+        $templatesFolder = str_starts_with(Kernel::VERSION, '3') ? '/Resources/views/' : '/templates/';
         $folderPath = $root . $templatesFolder . $folderPages;
         $protectedFolderPath = $root . $templatesFolder . $folderPages . '/protected';
-        $fs->mkdir(array(
-            $folderPath,
-            $protectedFolderPath,
-        ) , 0770);
+        $fs->mkdir([$folderPath, $protectedFolderPath] , 0770);
 
         //Gets pages
         $finder = new Finder();
@@ -85,7 +70,7 @@ class SitemapCreateCommand extends Command
         ;
 
         //Defines data related to pages
-        $pages = array();
+        $pages = [];
         $languages = $this->configService->getParameter('c975LPageEdit.sitemapLanguages');
 
         $urlRoot = $this->configService->getParameter('c975LPageEdit.sitemapBaseUrl');
@@ -100,34 +85,24 @@ class SitemapCreateCommand extends Command
                     $url = $urlRoot;
                     $url .= '/' . $language;
                     $url .= '/pages/' . str_replace('.html.twig', '', $file->getRelativePathname());
-                    $pages[]= array(
-                        'url' => $url,
-                        'lastModified' => date('Y-m-d', $file->getMTime()),
-                        'changeFrequency' => $changeFrequency,
-                        'priority' => $priority,
-                    );
+                    $pages[]= ['url' => $url, 'lastModified' => date('Y-m-d', $file->getMTime()), 'changeFrequency' => $changeFrequency, 'priority' => $priority];
                 }
             } else {
                 $url = $urlRoot;
                 $url .= '/pages/' . str_replace('.html.twig', '', $file->getRelativePathname());
-                $pages[]= array(
-                    'url' => $url,
-                    'lastModified' => date('Y-m-d', $file->getMTime()),
-                    'changeFrequency' => $changeFrequency,
-                    'priority' => $priority,
-                );
+                $pages[]= ['url' => $url, 'lastModified' => date('Y-m-d', $file->getMTime()), 'changeFrequency' => $changeFrequency, 'priority' => $priority];
             }
         }
 
         //Writes file
-        $sitemapContent = $this->environment->render('@c975LPageEdit/sitemap.xml.twig', array('pages' => $pages));
-        $sitemapFile = '3' === substr(Kernel::VERSION, 0, 1) ? $root . '/../web/sitemap-' . $folderPages . '.xml' : $root . '/public/sitemap-' . $folderPages . '.xml';
+        $sitemapContent = $this->environment->render('@c975LPageEdit/sitemap.xml.twig', ['pages' => $pages]);
+        $sitemapFile = str_starts_with(Kernel::VERSION, '3') ? $root . '/../web/sitemap-' . $folderPages . '.xml' : $root . '/public/sitemap-' . $folderPages . '.xml';
         file_put_contents($sitemapFile, $sitemapContent);
 
         //Ouputs message
         $output->writeln('Sitemap created!');
 
-        if ('5' === substr(Kernel::VERSION, 0, 1)) {
+        if (str_starts_with(Kernel::VERSION, '5')) {
             return Command::SUCCESS;
         }
 

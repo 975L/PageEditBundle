@@ -33,74 +33,22 @@ class PageEditType extends AbstractType
         $disabledSlug = $options['data']->getSlug() == 'home' ? true : $disabled;
 
         $builder
-            ->add('title', TextType::class, array(
-                'label' => 'label.title',
-                'disabled' => $disabled,
-                'required' => true,
-                'attr' => array(
-                    'placeholder' => 'label.title',
-                )))
-            ->add('slug', TextType::class, array(
-                'label' => 'label.semantic_url_explanation',
-                'disabled' => $disabledSlug,
-                'required' => true,
-                'attr' => array(
-                    'placeholder' => 'text.semantic_url',
-                )))
+            ->add('title', TextType::class, ['label' => 'label.title', 'disabled' => $disabled, 'required' => true, 'attr' => ['placeholder' => 'label.title']])
+            ->add('slug', TextType::class, ['label' => 'label.semantic_url_explanation', 'disabled' => $disabledSlug, 'required' => true, 'attr' => ['placeholder' => 'text.semantic_url']])
         ;
         if ($disabled === false) {
             $builder
-                ->add('content', TextareaType::class, array(
-                    'label' => 'label.content',
-                    'disabled' => $disabled,
-                    'required' => true,
-                    'attr' => array(
-                        'class' => 'tinymce',
-                        'cols' => 100,
-                        'rows' => 25,
-                        'placeholder' => 'label.content',
-                    )))
-                ->add('changeFrequency', ChoiceType::class, array(
-                    'label' => 'label.change_frequency',
-                    'disabled' => $disabled,
-                    'required' => true,
-                    'choices'  => array(
-                        'label.never' => 'never',
-                        'label.yearly' => 'yearly',
-                        'label.monthly' => 'monthly',
-                        'label.weekly' => 'weekly',
-                        'label.daily' => 'daily',
-                        'label.hourly' => 'hourly',
-                        'label.always' => 'always',
-                    )))
-                ->add('priority', RangeType::class, array(
-                    'label' => 'label.significance',
-                    'disabled' => $disabled,
-                    'required' => true,
-                    'attr' => array(
-                        'min' => 0,
-                        'max' => 10
-                    )))
-                ->add('description', TextareaType::class, array(
-                    'label' => 'label.description',
-                    'disabled' => $disabled,
-                    'required' => false,
-                    'attr' => array(
-                        'cols' => 100,
-                        'rows' => 5,
-                        'placeholder' => 'label.description',
-                    )))
+                ->add('content', TextareaType::class, ['label' => 'label.content', 'disabled' => $disabled, 'required' => true, 'attr' => ['class' => 'tinymce', 'cols' => 100, 'rows' => 25, 'placeholder' => 'label.content']])
+                ->add('changeFrequency', ChoiceType::class, ['label' => 'label.change_frequency', 'disabled' => $disabled, 'required' => true, 'choices'  => ['label.never' => 'never', 'label.yearly' => 'yearly', 'label.monthly' => 'monthly', 'label.weekly' => 'weekly', 'label.daily' => 'daily', 'label.hourly' => 'hourly', 'label.always' => 'always']])
+                ->add('priority', RangeType::class, ['label' => 'label.significance', 'disabled' => $disabled, 'required' => true, 'attr' => ['min' => 0, 'max' => 10]])
+                ->add('description', TextareaType::class, ['label' => 'label.description', 'disabled' => $disabled, 'required' => false, 'attr' => ['cols' => 100, 'rows' => 5, 'placeholder' => 'label.description']])
             ;
         }
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'c975L\PageEditBundle\Entity\PageEdit',
-            'intention'  => 'pageEditForm',
-            'translation_domain' => 'pageedit',
-        ));
+        $resolver->setDefaults(['data_class' => \c975L\PageEditBundle\Entity\PageEdit::class, 'intention'  => 'pageEditForm', 'translation_domain' => 'pageedit']);
 
         $resolver->setRequired('config');
     }

@@ -32,71 +32,42 @@ use Twig\Environment;
 class PageEditService implements PageEditServiceInterface
 {
     /**
-     * Stores AuthorizationCheckerInterface
-     * @var AuthorizationCheckerInterface
-     */
-    private $authChecker;
-
-    /**
-     * Stores ConfigServiceInterface
-     * @var ConfigServiceInterface
-     */
-    private $configService;
-
-    /**
-     * Stores PageEditFormFactoryInterface
-     * @var PageEditFormFactoryInterface
-     */
-    private $pageEditFormFactory;
-
-    /**
-     * Stores PageEditFileInterface
-     * @var PageEditFileInterface
-     */
-    private $pageEditFile;
-
-    /**
-     * Stores PageEditSlugInterface
-     * @var PageEditSlugInterface
-     */
-    private $pageEditSlug;
-
-    /**
      * Stores current Request
-     * @var Request
      */
-    private $request;
-
-    /**
-     * Stores Environment
-     * @var Environment
-     */
-    private $environment;
-
-    /**
-     * Stores TranslatorInterface
-     * @var TranslatorInterface
-     */
-    private $translator;
+    private readonly ?\Symfony\Component\HttpFoundation\Request $request;
 
     public function __construct(
-        AuthorizationCheckerInterface $authChecker,
-        ConfigServiceInterface $configService,
-        PageEditFormFactoryInterface $pageEditFormFactory,
-        PageEditFileInterface $pageEditFile,
-        PageEditSlugInterface $pageEditSlug,
+        /**
+         * Stores AuthorizationCheckerInterface
+         */
+        private readonly AuthorizationCheckerInterface $authChecker,
+        /**
+         * Stores ConfigServiceInterface
+         */
+        private readonly ConfigServiceInterface $configService,
+        /**
+         * Stores PageEditFormFactoryInterface
+         */
+        private readonly PageEditFormFactoryInterface $pageEditFormFactory,
+        /**
+         * Stores PageEditFileInterface
+         */
+        private readonly PageEditFileInterface $pageEditFile,
+        /**
+         * Stores PageEditSlugInterface
+         */
+        private readonly PageEditSlugInterface $pageEditSlug,
         RequestStack $requestStack,
-        Environment $environment,
-        TranslatorInterface $translator
+        /**
+         * Stores Environment
+         */
+        private readonly Environment $environment,
+        /**
+         * Stores TranslatorInterface
+         */
+        private readonly TranslatorInterface $translator
     ) {
-        $this->authChecker = $authChecker;
-        $this->configService = $configService;
-        $this->pageEditFormFactory = $pageEditFormFactory;
-        $this->pageEditFile = $pageEditFile;
-        $this->pageEditSlug = $pageEditSlug;
         $this->request = $requestStack->getCurrentRequest();
-        $this->environment = $environment;
-        $this->translator = $translator;
     }
 
     /**
@@ -123,7 +94,7 @@ class PageEditService implements PageEditServiceInterface
      */
     public function definePagesSlugTitle(Finder $finder)
     {
-        $pages = array();
+        $pages = [];
         $view = $this->request->get('v');
 
         foreach ($finder as $file) {
@@ -133,7 +104,7 @@ class PageEditService implements PageEditServiceInterface
             $titleTranslated = $this->getTitleTranslated($title);
 
             //Defines status of page
-            if (false !== strpos($file->getPath(), 'protected')) {
+            if (str_contains($file->getPath(), 'protected')) {
                 $status = 'protected';
             } elseif (null === $view) {
                 $status = 'current';
@@ -142,11 +113,7 @@ class PageEditService implements PageEditServiceInterface
             }
 
             //Adds page to array
-            $pages[] = array(
-                'slug' => $slug,
-                'title' => $titleTranslated,
-                'status' => $status,
-            );
+            $pages[] = ['slug' => $slug, 'title' => $titleTranslated, 'status' => $status];
         }
 
         return $pages;
@@ -158,15 +125,8 @@ class PageEditService implements PageEditServiceInterface
         $toolbar = null;
 
         if ($this->authChecker->isGranted($this->configService->getParameter('c975LPageEdit.roleNeeded'))) {
-            $tools = $this->environment->render('@c975LPageEdit/tools.html.twig', array(
-                'type' => $kind,
-                'object' => $page,
-            ));
-            $toolbar = $this->environment->render('@c975LToolbar/toolbar.html.twig', array(
-                'tools' => $tools,
-                'size' => 'md',
-                'alignment' => 'center',
-            ));
+            $tools = $this->environment->render('@c975LPageEdit/tools.html.twig', ['type' => $kind, 'object' => $page]);
+            $toolbar = $this->environment->render('@c975LToolbar/toolbar.html.twig', ['tools' => $tools, 'size' => 'md', 'alignment' => 'center']);
         }
 
         return $toolbar;
@@ -201,9 +161,9 @@ class PageEditService implements PageEditServiceInterface
     public function getContent(string $fileContent)
     {
         //Kept block pageEdit for compatibility with files not modified with new skeleton (06/03/2018)
-        $startBlock = strpos($fileContent, '{% block pageedit_content %}') !== false ? '{% block pageedit_content %}' : '{% block pageEdit %}';
+        $startBlock = str_contains($fileContent, '{% block pageedit_content %}') ? '{% block pageedit_content %}' : '{% block pageEdit %}';
         $endBlock = '{% endblock %}';
-        if (false !== strpos($fileContent, $startBlock)) {
+        if (str_contains($fileContent, $startBlock)) {
             $entryPoint = strpos($fileContent, $startBlock) + strlen($startBlock);
             $exitPoint = strpos($fileContent, $endBlock, $entryPoint);
 
@@ -216,14 +176,14 @@ class PageEditService implements PageEditServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getData(string $page)
+    public function getData(string $page): PageEdit|false
     {
         $filePath = $this->pageEditFile->getPath($page);
 
         $fs = new Filesystem();
         if ($fs->exists($filePath)) {
             $fileContent = file_get_contents($filePath);
-            $title = $this->getTitle($fileContent, str_replace( array($this->pageEditFile->getPagesFolder(), '.html.twig'), '', $filePath));
+            $title = $this->getTitle($fileContent, str_replace( [$this->pageEditFile->getPagesFolder(), '.html.twig'], '', $filePath));
 
             $modification = new DateTime();
             $pageEdit = new PageEdit();
@@ -281,16 +241,13 @@ class PageEditService implements PageEditServiceInterface
             ;
 
         //Defines title and link value
-        $pages = array();
+        $pages = [];
         foreach ($finder as $file) {
             $slug = str_replace('.html.twig', '', $file->getRelativePathname());
             $title = $this->getTitle($file->getContents(), $slug);
             $titleTranslated = $this->getTitleTranslated($title);
 
-            $pages[] = array(
-                'title' => $titleTranslated,
-                'value' => "{{ path('pageedit_display', {'page': '" . $slug . "'}) }}",
-            );
+            $pages[] = ['title' => $titleTranslated, 'value' => "{{ path('pageedit_display', {'page': '" . $slug . "'}) }}"];
         }
 
         return $pages;
@@ -330,15 +287,15 @@ class PageEditService implements PageEditServiceInterface
 
         //Plain title
         if (!empty($matches)) {
-            $title = str_replace('\"', '"', $matches[1]);
+            $title = str_replace('\"', '"', (string) $matches[1]);
         //Title is using Twig code to translate it
         } else {
             preg_match('/pageedit_title=(.*)\%\}/', $fileContent, $matches);
             if (!empty($matches)) {
-                $title = trim($matches[1]);
+                $title = trim((string) $matches[1]);
             //Title not found
             } else {
-                $title = $this->translator->trans('label.title_not_found', array(), 'pageedit') . ' (' . $slug . ')';
+                $title = $this->translator->trans('label.title_not_found', [], 'pageedit') . ' (' . $slug . ')';
             }
         }
 
@@ -352,14 +309,14 @@ class PageEditService implements PageEditServiceInterface
     {
         $titleTranslated = $title;
 
-        if (strpos($title, '|trans') !== false) {
+        if (str_contains($title, '|trans')) {
             $translateLabel = trim(substr($title, 0, strpos($title, '|trans')), "'");
             $translateDomain = 'messages';
-            if (strpos($title, '|trans(') !== false) {
+            if (str_contains($title, '|trans(')) {
                 $translateDomain = trim(trim(substr($title, strpos($title, '}') + 2)), "'");
                 $translateDomain = substr($translateDomain, 0, strlen($translateDomain) - 2);
             }
-            $titleTranslated = $this->translator->trans($translateLabel, array(), $translateDomain);
+            $titleTranslated = $this->translator->trans($translateLabel, [], $translateDomain);
         }
 
         return $titleTranslated;

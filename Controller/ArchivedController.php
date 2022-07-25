@@ -25,15 +25,13 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class ArchivedController extends AbstractController
 {
-    /**
-     * Stores PageEditServiceInterface
-     * @var PageEditServiceInterface
-     */
-    private $pageEditService;
-
-    public function __construct(PageEditServiceInterface $pageEditService)
+    public function __construct(
+        /**
+         * Stores PageEditServiceInterface
+         */
+        private readonly PageEditServiceInterface $pageEditService
+    )
     {
-        $this->pageEditService = $pageEditService;
     }
 
 //DISPLAY
@@ -57,9 +55,7 @@ class ArchivedController extends AbstractController
         if ($pageEdit instanceof PageEdit) {
             return $this->render(
                 '@c975LPageEdit/pages/archived.html.twig',
-                array(
-                    'pageEdit' => $pageEdit,
-                ));
+                ['pageEdit' => $pageEdit]);
         }
 
         throw $this->createNotFoundException();
@@ -91,16 +87,13 @@ class ArchivedController extends AbstractController
                 $this->pageEditService->deleteFile('archived/' . $page, false);
 
                 //Redirects to the page which will be HTTP 410
-                return $this->redirectToRoute('pageedit_dashboard', array('v' => 'archived'));
+                return $this->redirectToRoute('pageedit_dashboard', ['v' => 'archived']);
             }
 
             //Renders the delete form
             return $this->render(
                 '@c975LPageEdit/forms/deleteArchived.html.twig',
-                array(
-                    'form' => $form->createView(),
-                    'pageEdit' => $pageEdit,
-                ));
+                ['form' => $form->createView(), 'pageEdit' => $pageEdit]);
         }
 
         throw $this->createNotFoundException();
