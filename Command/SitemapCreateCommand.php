@@ -47,7 +47,7 @@ class SitemapCreateCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         //Creates structure in case it not exists
         $fs = new Filesystem();
