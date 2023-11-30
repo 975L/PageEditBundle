@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v4.1.2
+- re-added FQCN (30/11/2023)
+
 ## v4.1.1
 - Commented use of KNP SnappyBundle, to be replaced later (30/11/2023)
 

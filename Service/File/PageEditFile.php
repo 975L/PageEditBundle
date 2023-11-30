@@ -30,7 +30,7 @@ class PageEditFile implements PageEditFileInterface
     /**
      * Stores current Request
      */
-    private readonly ?Request $request;
+    private readonly ?\Symfony\Component\HttpFoundation\Request $request;
 
     public function __construct(
         /**
