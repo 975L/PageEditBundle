@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v4.1
+- Suppressed use of KNP SnappyBundle (30/11/2023)
+
 ## v4.0.2
 
 - Added TreeBuilder return type (29/05/2023)

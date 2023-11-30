@@ -26,7 +26,6 @@
         "cocur/slugify": "*",
         "h4cc/wkhtmltopdf-amd64": "*",
         "knplabs/knp-paginator-bundle": "*",
-        "knplabs/knp-snappy-bundle": "*",
         "symfony/form": "*",
         "symfony/templating": "*",
         "symfony/translation": "*",
