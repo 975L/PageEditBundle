@@ -10,7 +10,6 @@
 namespace c975L\PageEditBundle\Service\Pdf;
 
 use c975L\PageEditBundle\Service\File\PageEditFileInterface;
-use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
@@ -25,17 +24,14 @@ class PageEditPdf implements PageEditPdfInterface
     /**
      * Stores current Request
      */
-    private readonly ?\Symfony\Component\HttpFoundation\Request $request;
+    private readonly ?Request $request;
 
     public function __construct(
-        /**
-         * Stores Pdf
-         */
-        private readonly Pdf $knpSnappyPdf,
         /**
          * Stores PageEditFileInterface
          */
         private readonly PageEditFileInterface $pageEditFile,
+
         RequestStack $requestStack,
         /**
          * Stores Environment
@@ -65,7 +61,7 @@ class PageEditPdf implements PageEditPdfInterface
             //Creates pdf
             $html = $this->environment->render($filePath, ['toolbar' => '', 'display' => 'pdf']);
             $this->pageEditFile->createFolders();
-            file_put_contents($filePdfPath, $this->knpSnappyPdf->getOutputFromHtml(str_replace('https:', 'http:', $html)));
+//            file_put_contents($filePdfPath, $this->knpSnappyPdf->getOutputFromHtml(str_replace('https:', 'http:', $html)));
         }
 
         return $filePdfPath;

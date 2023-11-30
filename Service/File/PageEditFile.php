@@ -11,7 +11,6 @@ namespace c975L\PageEditBundle\Service\File;
 
 use c975L\ConfigBundle\Service\ConfigServiceInterface;
 use c975L\PageEditBundle\Form\PageEditFormFactoryInterface;
-use Knp\Snappy\Pdf;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Form\Form;
@@ -31,25 +30,24 @@ class PageEditFile implements PageEditFileInterface
     /**
      * Stores current Request
      */
-    private readonly ?\Symfony\Component\HttpFoundation\Request $request;
+    private readonly ?Request $request;
 
     public function __construct(
         /**
          * Stores AuthorizationCheckerInterface
          */
         private readonly AuthorizationCheckerInterface $authChecker,
+
         /**
          * Stores ConfigServiceInterface
          */
         private readonly ConfigServiceInterface $configService,
-        /**
-         * Stores Pdf
-         */
-        private readonly Pdf $knpSnappyPdf,
+
         /**
          * Stores PageEditFormFactoryInterface
          */
         private readonly PageEditFormFactoryInterface $pageEditFormFactory,
+
         RequestStack $requestStack,
         /**
          * Stores Environment
