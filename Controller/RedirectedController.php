@@ -38,12 +38,15 @@ class RedirectedController extends AbstractController
      * @return Response
      * @throws AccessDeniedException
      * @throws NotFoundHttpException
-     *
-     * @Route("/pageedit/redirected/{page}",
-     *      name="pageedit_display_redirected",
-     *      requirements={"page": "^([a-zA-Z0-9\-\/]+)"},
-     *    methods={"HEAD", "GET"})
      */
+    #[Route(
+        '/pageedit/redirected/{page}',
+        name: 'pageedit_display_redirected',
+        requirements: [
+            'page' => '^([a-zA-Z0-9\-\/]+)'
+        ],
+        methods: ['GET']
+    )]
     public function display($page)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-redirected', null);
@@ -65,12 +68,15 @@ class RedirectedController extends AbstractController
      * @return Response
      * @throws AccessDeniedException
      * @throws NotFoundHttpException
-     *
-     * @Route("/pageedit/delete/redirected/{page}",
-     *    name="pageedit_delete_redirected",
-     *    requirements={"page": "^([a-zA-Z0-9\-\/]+)"},
-     *    methods={"HEAD", "GET", "POST"})
      */
+    #[Route(
+        '/pageedit/delete/redirected/{page}',
+        name: 'pageedit_delete_redirected',
+        requirements: [
+            'page' => '^([a-zA-Z0-9\-\/]+)'
+        ],
+        methods: ['GET', 'POST']
+    )]
     public function delete(Request $request, $page)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-redirected-delete', null);

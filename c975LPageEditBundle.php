@@ -9,8 +9,8 @@
 
 namespace c975L\PageEditBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
-class c975LPageEditBundle extends Bundle
+class c975LPageEditBundle extends AbstractBundle
 {
 }

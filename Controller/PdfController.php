@@ -29,12 +29,15 @@ class PdfController extends AbstractController
      * Creates and displays the pdf of the page
      * @return Response
      * @throws NotFoundHttpException
-     *
-     * @Route("/pages/pdf/{page}",
-     *    name="pageedit_pdf",
-     *    requirements={"page": "^([a-zA-Z0-9\-\/]+)"},
-     *    methods={"HEAD", "GET"})
      */
+    #[Route(
+        '/pages/pdf/{page}',
+        name: 'pageedit_pdf',
+        requirements: [
+            'page' => '^([a-zA-Z0-9\-\/]+)'
+        ],
+        methods: ['GET']
+    )]
     public function display(PageEditServiceInterface $pageEditService, PageEditPdfInterface $pageEditPdf, $page)
     {
         $pageEdit = $pageEditService->getData($page);

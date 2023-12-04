@@ -30,11 +30,12 @@ class UtilsController extends AbstractController
      * Provides a list of pages to link to in Tinymce
      * @return JSON
      * @throws AccessDeniedException
-     *
-     * @Route("/pageedit/links",
-     *    name="pageedit_links",
-     *    methods={"HEAD", "GET"})
      */
+    #[Route(
+        '/pageedit/links',
+        name: 'pageedit_links',
+        methods: ['GET']
+    )]
     public function links(PageEditServiceInterface $pageEditService)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-links', null);
@@ -47,12 +48,16 @@ class UtilsController extends AbstractController
     /**
      * Uploads the image defined
      * @throws AccessDeniedException
-     * @Route("/pageedit/upload/{page}",
-     *    name="pageedit_upload",
-     *    requirements={"page": "^[a-zA-Z0-9\-\/]+"},
-     *    defaults={"page": "new"},
-     *    methods={"POST"})
      */
+    #[Route(
+        '/pageedit/upload/{page}',
+        name: 'pageedit_upload',
+        requirements: [
+            'page' => '^([a-zA-Z0-9\-\/]+)'
+        ],
+        defaults: ['page' +> 'new'],
+        methods: ['POST']
+    )]
     public function upload(Request $request, ConfigServiceInterface $configService, PageEditFileInterface $pageEditFile, $page): \JSON|false
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-upload', null);
@@ -87,11 +92,12 @@ class UtilsController extends AbstractController
      * Slugs the provided text
      * @return JSON
      * @throws AccessDeniedException
-     *
-     * @Route("/pageedit/slug/{text}",
-     *    name="pageedit_slug",
-     *    methods={"POST"})
      */
+    #[Route(
+        '/pageedit/slug/{text}',
+        name: 'pageedit_slug',
+        methods: ['POST']
+    )]
     public function slug(PageEditSlugInterface $pageEditSlug, $text)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-slug', null);

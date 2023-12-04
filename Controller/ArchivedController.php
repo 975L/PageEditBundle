@@ -40,12 +40,15 @@ class ArchivedController extends AbstractController
      * @return Response
      * @throws AccessDeniedException
      * @throws NotFoundHttpException
-     *
-     * @Route("/pageedit/archived/{page}",
-     *    name="pageedit_display_archived",
-     *    requirements={"page": "^([a-zA-Z0-9\-\/]+)"},
-     *    methods={"HEAD", "GET"})
      */
+    #[Route(
+        '/pageedit/archived/{page}',
+        name: 'pageedit_display_archived',
+        requirements: [
+            'page' => '^([a-zA-Z0-9\-\/]+)'
+        ],
+        methods: ['GET']
+    )]
     public function display($page)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-archived', null);
@@ -67,12 +70,15 @@ class ArchivedController extends AbstractController
      * @return Response
      * @throws AccessDeniedException
      * @throws NotFoundHttpException
-     *
-     * @Route("/pageedit/delete/archived/{page}",
-     *    name="pageedit_delete_archived",
-     *    requirements={"page": "^([a-zA-Z0-9\-\/]+)"},
-     *    methods={"HEAD", "GET", "POST"})
      */
+    #[Route(
+        '/pageedit/delete/archived/{page}',
+        name: 'pageedit_delete_archived',
+        requirements: [
+            'page' => '^([a-zA-Z0-9\-\/]+)'
+        ],
+        methods: ['GET']
+    )]
     public function delete(Request $request, $page)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-archived-delete', null);

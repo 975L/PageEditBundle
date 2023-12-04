@@ -42,11 +42,12 @@ class PageEditController extends AbstractController
     /**
      * Redirects to pageedit_home
      * @return Redirect
-     *
-     * @Route("/pages",
-     *    name="pageedit_redirect_home",
-     *    methods={"HEAD", "GET"})
      */
+    #[Route(
+        '/pages',
+        name: 'pageedit_redirect_home',
+        methods: ['GET']
+    )]
     public function redirectPages()
     {
         return $this->redirectToRoute('pageedit_home');
@@ -54,11 +55,12 @@ class PageEditController extends AbstractController
     /**
      * Displays the homepage
      * @return Response
-     *
-     * @Route("/",
-     *    name="pageedit_home",
-     *    methods={"HEAD", "GET"})
      */
+    #[Route(
+        '/',
+        name: 'pageedit_home',
+        methods: ['GET']
+    )]
     public function home()
     {
         return $this->render(
@@ -71,11 +73,12 @@ class PageEditController extends AbstractController
      * Displays dashboard
      * @return Response
      * @throws AccessDeniedException
-     *
-     * @Route("/pageedit/dashboard",
-     *    name="pageedit_dashboard",
-     *    methods={"HEAD", "GET"})
      */
+    #[Route(
+        '/pageedit/dashboard',
+        name: 'pageedit_dashboard',
+        methods: ['GET']
+    )]
     public function dashboard(Request $request, PaginatorInterface $paginator)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-dashboard', null);
@@ -97,12 +100,15 @@ class PageEditController extends AbstractController
      * @return Response
      * @throws AccessDeniedException
      * @throws NotFoundHttpException
-     *
-     * @Route("/pages/{page}",
-     *    name="pageedit_display",
-     *    requirements={"page": "^(?!pdf)([a-zA-Z0-9\-\/]+)"},
-     *    methods={"HEAD", "GET"})
      */
+    #[Route(
+        '/pages/{page}',
+        name: 'pageedit_display',
+        requirements: [
+            'page' => '^(?!pdf)([a-zA-Z0-9\-\/]+)'
+        ],
+        methods: ['GET']
+    )]
     public function display($page)
     {
         $pageEdit = $this->pageEditService->getData($page);
@@ -139,11 +145,12 @@ class PageEditController extends AbstractController
      * Creates the PageEdit
      * @return Response
      * @throws AccessDeniedException
-     *
-     * @Route("/pageedit/create",
-     *    name="pageedit_create",
-     *    methods={"HEAD", "GET", "POST"})
      */
+    #[Route(
+        '/pageedit/create',
+        name: 'pageedit_create',
+        methods: ['GET', 'POST']
+    )]
     public function create(Request $request)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-create', null);
@@ -173,12 +180,15 @@ class PageEditController extends AbstractController
      * Modifies the PageEdit
      * @return Response
      * @throws AccessDeniedException
-     *
-     * @Route("/pageedit/modify/{page}",
-     *    name="pageedit_modify",
-     *    requirements={"page": "^[a-zA-Z0-9\-\/]+"},
-     *    methods={"HEAD", "GET", "POST"})
      */
+    #[Route(
+        '/pageedit/modify/{page}',
+        name: 'pageedit_modify',
+        requirements: [
+            'page' => '^([a-zA-Z0-9\-\/]+)'
+        ],
+        methods: ['GET', 'POST']
+    )]
     public function modify(Request $request, $page)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-modify', null);
@@ -213,12 +223,15 @@ class PageEditController extends AbstractController
      * Duplicates the PageEdit
      * @return Response
      * @throws AccessDeniedException
-     *
-     * @Route("/pageedit/duplicate/{page}",
-     *    name="pageedit_duplicate",
-     *    requirements={"page": "^[a-zA-Z0-9\-\/]+"},
-     *    methods={"HEAD", "GET", "POST"})
      */
+    #[Route(
+        '/pageedit/duplicate/{page}',
+        name: 'pageedit_duplicate',
+        requirements: [
+            'page' => '^([a-zA-Z0-9\-\/]+)'
+        ],
+        methods: ['GET', 'POST']
+    )]
     public function duplicate(Request $request, $page)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-duplicate', null);
@@ -254,12 +267,15 @@ class PageEditController extends AbstractController
      * Deletes the PageEdit (Moves the page to deleted folder)
      * @return Response
      * @throws AccessDeniedException
-     *
-     * @Route("/pageedit/delete/{page}",
-     *    name="pageedit_delete",
-     *    requirements={"page": "^[a-zA-Z0-9\-\/]+"},
-     *    methods={"HEAD", "GET", "POST"})
      */
+    #[Route(
+        '/pageedit/delete/{page}',
+        name: 'pageedit_delete',
+        requirements: [
+            'page' => '^([a-zA-Z0-9\-\/]+)'
+        ],
+        methods: ['GET', 'POST']
+    )]
     public function delete(Request $request, $page)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-delete', null);
@@ -293,11 +309,12 @@ class PageEditController extends AbstractController
      * Displays the configuration
      * @return Response
      * @throws AccessDeniedException
-     *
-     * @Route("/pageedit/config",
-     *    name="pageedit_config",
-     *    methods={"HEAD", "GET", "POST"})
      */
+    #[Route(
+        '/pageedit/config',
+        name: 'pageedit_config',
+        methods: ['GET', 'POST']
+    )]
     public function config(Request $request, ConfigServiceInterface $configService)
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-config', null);
@@ -325,11 +342,12 @@ class PageEditController extends AbstractController
      * Displays the help
      * @return Response
      * @throws AccessDeniedException
-     *
-     * @Route("/pageedit/help",
-     *    name="pageedit_help",
-     *    methods={"HEAD", "GET"})
      */
+    #[Route(
+        '/pageedit/help',
+        name: 'pageedit_help',
+        methods: ['GET']
+    )]
     public function help()
     {
         $this->denyAccessUnlessGranted('c975LPageEdit-help', null);

@@ -1,12 +1,20 @@
 # ChangeLog
 
+## v5.0
+
+- Changed to AbstractBundle (04/12/2023)
+- Changed routes to attribute (04/12/2023)
+
 ## v4.1.2
+
 - re-added FQCN (30/11/2023)
 
 ## v4.1.1
+
 - Commented use of KNP SnappyBundle, to be replaced later (30/11/2023)
 
 ## v4.1
+
 - Suppressed use of KNP SnappyBundle (30/11/2023)
 
 ## v4.0.2
