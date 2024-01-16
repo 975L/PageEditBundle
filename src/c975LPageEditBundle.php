@@ -10,7 +10,13 @@
 namespace c975L\PageEditBundle;
 
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class c975LPageEditBundle extends AbstractBundle
 {
+    public function loadExtension(array $config, ContainerConfigurator $containerConfigurator, ContainerBuilder $containerBuilder): void
+    {
+        $containerConfigurator->import('../config/services.yml');
+    }
 }

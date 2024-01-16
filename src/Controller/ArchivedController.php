@@ -14,14 +14,16 @@ use c975L\PageEditBundle\Service\PageEditServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
- * DeletedController class
+ * ArchivedController class
  * @author Laurent Marquet <laurent.marquet@laposte.net>
  * @copyright 2018 975L <contact@975l.com>
  */
-class DeletedController extends AbstractController
+class ArchivedController extends AbstractController
 {
     public function __construct(
         /**
@@ -32,16 +34,25 @@ class DeletedController extends AbstractController
     {
     }
 
+    #[Route('/essai', name: 'app_essai')]
+    public function index(): Response
+    {
+        return $this->render('essai/index.html.twig', [
+            'controller_name' => 'EssaiController',
+        ]);
+    }
+
+
 //DISPLAY
     /**
-     * Displays the deleted page
+     * Displays the archived page
      * @return Response
      * @throws AccessDeniedException
      * @throws NotFoundHttpException
      */
     #[Route(
-        '/pageedit/deleted/{page}',
-        name: 'pageedit_display_deleted',
+        '/pageedit/archived/{page}',
+        name: 'pageedit_display_archived',
         requirements: [
             'page' => '^([a-zA-Z0-9\-\/]+)'
         ],
@@ -49,13 +60,13 @@ class DeletedController extends AbstractController
     )]
     public function display($page)
     {
-        $this->denyAccessUnlessGranted('c975LPageEdit-deleted', null);
+        $this->denyAccessUnlessGranted('c975LPageEdit-archived', null);
 
-        //Renders the deleted page
+        //Renders the archived page
         $pageEdit = $this->pageEditService->getData($page);
         if ($pageEdit instanceof PageEdit) {
             return $this->render(
-                '@c975LPageEdit/pages/deleted.html.twig',
+                '@c975LPageEdit/pages/archived.html.twig',
                 ['pageEdit' => $pageEdit]);
         }
 
@@ -64,14 +75,14 @@ class DeletedController extends AbstractController
 
 //DELETE
     /**
-     * Deletes the deleted page
+     * Deletes the archived page
      * @return Response
      * @throws AccessDeniedException
      * @throws NotFoundHttpException
      */
     #[Route(
-        '/pageedit/delete/deleted/{page}',
-        name: 'pageedit_delete_deleted',
+        '/pageedit/delete/archived/{page}',
+        name: 'pageedit_delete_archived',
         requirements: [
             'page' => '^([a-zA-Z0-9\-\/]+)'
         ],
@@ -79,7 +90,7 @@ class DeletedController extends AbstractController
     )]
     public function delete(Request $request, $page)
     {
-        $this->denyAccessUnlessGranted('c975LPageEdit-deleted-delete', null);
+        $this->denyAccessUnlessGranted('c975LPageEdit-archived-delete', null);
 
         $pageEdit = $this->pageEditService->getData($page);
         if ($pageEdit instanceof PageEdit) {
@@ -88,15 +99,15 @@ class DeletedController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 //Deletes file
-                $this->pageEditService->deleteFile('deleted/' . $page, false);
+                $this->pageEditService->deleteFile('archived/' . $page, false);
 
                 //Redirects to the page which will be HTTP 410
-                return $this->redirectToRoute('pageedit_dashboard', ['v' => 'deleted']);
+                return $this->redirectToRoute('pageedit_dashboard', ['v' => 'archived']);
             }
 
             //Renders the delete form
             return $this->render(
-                '@c975LPageEdit/forms/deleteDeleted.html.twig',
+                '@c975LPageEdit/forms/deleteArchived.html.twig',
                 ['form' => $form->createView(), 'pageEdit' => $pageEdit]);
         }
 

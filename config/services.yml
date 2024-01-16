@@ -5,19 +5,19 @@ services:
         public: true
 
     c975L\PageEditBundle\Command\:
-        resource: '../../Command/*'
+        resource: '../src/Command/*'
 
     c975L\PageEditBundle\Controller\:
-        resource: '../../Controller/*'
+        resource: '../src/Controller/*'
 
     c975L\PageEditBundle\Form\:
-        resource: '../../Form/*'
+        resource: '../src/Form/*'
 
     c975L\PageEditBundle\Security\:
-        resource: '../../Security/*'
+        resource: '../src/Security/*'
 
     c975L\PageEditBundle\Service\:
-        resource: '../../Service/*'
+        resource: '../src/Service/*'
 
     c975L\PageEditBundle\Twig\:
-        resource: '../../Twig/*'
+        resource: '../src/Twig/*'

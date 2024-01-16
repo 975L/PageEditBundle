@@ -1,9 +1,17 @@
 # ChangeLog
 
+## v6.0
+
+- Changed to new recomended bundle SF 7 structure (16/01/2024)
+
+Upgrading from v5.x? **Check UPGRADE.md**
+
 ## v5.0
 
 - Changed to AbstractBundle (04/12/2023)
 - Changed routes to attribute (04/12/2023)
+
+Upgrading from v4.x? **Check UPGRADE.md**
 
 ## v4.1.2
 
