@@ -55,7 +55,7 @@ class UtilsController extends AbstractController
         requirements: [
             'page' => '^([a-zA-Z0-9\-\/]+)'
         ],
-        defaults: ['page' +> 'new'],
+        defaults: ['page' => 'new'],
         methods: ['POST']
     )]
     public function upload(Request $request, ConfigServiceInterface $configService, PageEditFileInterface $pageEditFile, $page): \JSON|false
