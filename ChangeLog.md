@@ -1,5 +1,9 @@
 # ChangeLog
 
+## v6.0.2
+
+- Corrected UtilsController file (17/01/2024)
+
 ## v6.0.1
 
 - Added previous removed files... (17/01/2024)
