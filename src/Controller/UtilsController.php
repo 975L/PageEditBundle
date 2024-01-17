@@ -14,16 +14,14 @@ use c975L\PageEditBundle\Service\PageEditServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
- * ArchivedController class
+ * RedirectedController class
  * @author Laurent Marquet <laurent.marquet@laposte.net>
  * @copyright 2018 975L <contact@975l.com>
  */
-class ArchivedController extends AbstractController
+class RedirectedController extends AbstractController
 {
     public function __construct(
         /**
@@ -36,14 +34,14 @@ class ArchivedController extends AbstractController
 
 //DISPLAY
     /**
-     * Displays the archived page
+     * Displays the redirected page
      * @return Response
      * @throws AccessDeniedException
      * @throws NotFoundHttpException
      */
     #[Route(
-        '/pageedit/archived/{page}',
-        name: 'pageedit_display_archived',
+        '/pageedit/redirected/{page}',
+        name: 'pageedit_display_redirected',
         requirements: [
             'page' => '^([a-zA-Z0-9\-\/]+)'
         ],
@@ -51,13 +49,13 @@ class ArchivedController extends AbstractController
     )]
     public function display($page)
     {
-        $this->denyAccessUnlessGranted('c975LPageEdit-archived', null);
+        $this->denyAccessUnlessGranted('c975LPageEdit-redirected', null);
 
-        //Renders the archived page
+        //Renders the redirected page
         $pageEdit = $this->pageEditService->getData($page);
         if ($pageEdit instanceof PageEdit) {
             return $this->render(
-                '@c975LPageEdit/pages/archived.html.twig',
+                '@c975LPageEdit/pages/redirected.html.twig',
                 ['pageEdit' => $pageEdit]);
         }
 
@@ -66,22 +64,22 @@ class ArchivedController extends AbstractController
 
 //DELETE
     /**
-     * Deletes the archived page
+     * Deletes the redirected page
      * @return Response
      * @throws AccessDeniedException
      * @throws NotFoundHttpException
      */
     #[Route(
-        '/pageedit/delete/archived/{page}',
-        name: 'pageedit_delete_archived',
+        '/pageedit/delete/redirected/{page}',
+        name: 'pageedit_delete_redirected',
         requirements: [
             'page' => '^([a-zA-Z0-9\-\/]+)'
         ],
-        methods: ['GET']
+        methods: ['GET', 'POST']
     )]
     public function delete(Request $request, $page)
     {
-        $this->denyAccessUnlessGranted('c975LPageEdit-archived-delete', null);
+        $this->denyAccessUnlessGranted('c975LPageEdit-redirected-delete', null);
 
         $pageEdit = $this->pageEditService->getData($page);
         if ($pageEdit instanceof PageEdit) {
@@ -90,10 +88,10 @@ class ArchivedController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 //Deletes file
-                $this->pageEditService->deleteFile('archived/' . $page, false);
+                $this->pageEditService->deleteFile('redirected/' . $page, false);
 
                 //Redirects to the page which will be HTTP 410
-                return $this->redirectToRoute('pageedit_dashboard', ['v' => 'archived']);
+                return $this->redirectToRoute('pageedit_dashboard', ['v' => 'redirected']);
             }
 
             //Renders the delete form
