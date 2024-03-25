@@ -1,5 +1,9 @@
 # ChangeLog
 
+## v6.0.5
+
+- Correction for sitemap to remove the "/pages/home" part (25/03/2024)
+
 ## v6.0.4
 
 - Cosmetic changes (22/01/2024)

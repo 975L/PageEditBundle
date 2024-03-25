@@ -27,7 +27,7 @@ class PageEditType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $disabled = $options['config']['action'] == 'delete' ? true : false;
         $disabledSlug = $options['data']->getSlug() == 'home' ? true : $disabled;

@@ -85,11 +85,13 @@ class SitemapCreateCommand extends Command
                     $url = $urlRoot;
                     $url .= '/' . $language;
                     $url .= '/pages/' . str_replace('.html.twig', '', $file->getRelativePathname());
+                    $url = $url === $urlRoot . '/' . $language . "/pages/home" ? $urlRoot . '/' . $language . '/' : $url;
                     $pages[]= ['url' => $url, 'lastModified' => date('Y-m-d', $file->getMTime()), 'changeFrequency' => $changeFrequency, 'priority' => $priority];
                 }
             } else {
                 $url = $urlRoot;
                 $url .= '/pages/' . str_replace('.html.twig', '', $file->getRelativePathname());
+                $url = $url === $urlRoot . "/pages/home" ? $urlRoot : $url;
                 $pages[]= ['url' => $url, 'lastModified' => date('Y-m-d', $file->getMTime()), 'changeFrequency' => $changeFrequency, 'priority' => $priority];
             }
         }
