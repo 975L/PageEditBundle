@@ -126,14 +126,7 @@ class PageEditFile implements PageEditFileInterface
      */
     public function getImagesFolder()
     {
-        static $imagesFolder;
-
-        if (null !== $imagesFolder) {
-            return $imagesFolder;
-        }
-
         $imagesFolder = $this->configService->getContainerParameter('kernel.project_dir') . '/public/images/';
-        $imagesFolder = str_starts_with(Kernel::VERSION, '3') ? $this->container->getParameter('kernel.root_dir') . '/../web/images/' : $imagesFolder;
 
         return $imagesFolder . $this->configService->getParameter('c975LPageEdit.folderPages') . '/';
     }
@@ -182,14 +175,7 @@ class PageEditFile implements PageEditFileInterface
      */
     public function getPagesFolder()
     {
-        static $pageFolder;
-
-        if (null !== $pageFolder) {
-            return $pageFolder;
-        }
-
         $pageFolder = $this->configService->getContainerParameter('kernel.project_dir') . '/templates/';
-        $pageFolder = str_starts_with(Kernel::VERSION, '3') ? $this->container->getParameter('kernel.root_dir') . '/Resources/views/' : $pageFolder;
 
         return $pageFolder . $this->configService->getParameter('c975LPageEdit.folderPages') . '/';
     }

@@ -1,5 +1,10 @@
 # ChangeLog
 
+## v6.1
+
+- Removed use of static variables (26/03/2024)
+- Removed support for SF 3 structure (26/03/2024)
+
 ## v6.0.5
 
 - Correction for sitemap to remove the "/pages/home" part (25/03/2024)

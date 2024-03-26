@@ -53,7 +53,7 @@ class SitemapCreateCommand extends Command
         $fs = new Filesystem();
         $root = $this->configService->getContainerParameter('kernel.project_dir');
         $folderPages = $this->configService->getParameter('c975LPageEdit.folderPages');
-        $templatesFolder = str_starts_with(Kernel::VERSION, '3') ? '/Resources/views/' : '/templates/';
+        $templatesFolder = '/templates/';
         $folderPath = $root . $templatesFolder . $folderPages;
         $protectedFolderPath = $root . $templatesFolder . $folderPages . '/protected';
         $fs->mkdir([$folderPath, $protectedFolderPath] , 0770);
@@ -98,7 +98,7 @@ class SitemapCreateCommand extends Command
 
         //Writes file
         $sitemapContent = $this->environment->render('@c975LPageEdit/sitemap.xml.twig', ['pages' => $pages]);
-        $sitemapFile = str_starts_with(Kernel::VERSION, '3') ? $root . '/../web/sitemap-' . $folderPages . '.xml' : $root . '/public/sitemap-' . $folderPages . '.xml';
+        $sitemapFile = $root . '/public/sitemap-' . $folderPages . '.xml';
         file_put_contents($sitemapFile, $sitemapContent);
 
         //Ouputs message

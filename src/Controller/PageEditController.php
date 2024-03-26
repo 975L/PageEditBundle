@@ -130,7 +130,7 @@ class PageEditController extends AbstractController
             }
 
             //Renders page
-            $filePath = str_starts_with(Kernel::VERSION, '3') ? substr($filePath, strpos($filePath, '/views') + 6) : substr($filePath, strpos($filePath, '/templates') + 10);
+            $filePath = substr($filePath, strpos($filePath, '/templates') + 10);
 
             return $this->render(
                 $filePath,
