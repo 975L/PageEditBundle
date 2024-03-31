@@ -1,21 +1,26 @@
 <?php
 namespace c975L\PageEditBundle\Command;
 
-use c975L\ConfigBundle\Service\ConfigServiceInterface;
-use c975L\PageEditBundle\Service\PageEditServiceInterface;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
+use Twig\Environment;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Kernel;
-use Twig\Environment;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use c975L\ConfigBundle\Service\ConfigServiceInterface;
+use c975L\PageEditBundle\Service\PageEditServiceInterface;
 
 /**
  * Console command to create sitemap of pages, executed with 'pageedit:createSitemap'
  * @author Laurent Marquet <laurent.marquet@laposte.net>
  * @copyright 2017 975L <contact@975l.com>
  */
+#[AsCommand(
+    name: 'pageedit:createSitemap',
+    description: 'Creates the sitemap of pages managed viaPageEdit'
+)]
 class SitemapCreateCommand extends Command
 {
     public function __construct(
@@ -34,14 +39,6 @@ class SitemapCreateCommand extends Command
     )
     {
         parent::__construct();
-    }
-
-    protected function configure(): void
-    {
-        $this
-            ->setName('pageedit:createSitemap')
-            ->setDescription('Creates the sitemap of pages managed via PageEdit')
-        ;
     }
 
     /**
@@ -108,6 +105,6 @@ class SitemapCreateCommand extends Command
             return Command::SUCCESS;
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
