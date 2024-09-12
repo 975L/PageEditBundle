@@ -1,6 +1,5 @@
 {% trans_default_domain 'toolbar' %}
 
-{% apply spaceless %}
 {# Dashboard #}
 {{ toolbar_button(path('pageedit_dashboard'), 'dashboard', 'md', 'label.pageedit'|trans) }}
 
@@ -70,4 +69,3 @@
 
 {# Other dashboards #}
 {{ toolbar_dashboards('md') }}
-{% endapply %}

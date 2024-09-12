@@ -1,5 +1,9 @@
 # ChangeLog
 
+## v6.2
+
+- Suppressed spaceless filter as it's deprecated (12/09/2024)
+
 ## v6.1.2
 
 - Changed DependencyInjection Extension (10/09/2024)
