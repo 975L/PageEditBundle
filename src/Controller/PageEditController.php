@@ -65,7 +65,8 @@ class PageEditController extends AbstractController
     {
         return $this->render(
             'pages/home.html.twig',
-            ['toolbar' => $this->pageEditService->defineToolbar('display', 'home'), 'display' => 'html']);
+            ['toolbar' => $this->pageEditService->defineToolbar('display', 'home'), 'display' => 'html']
+        )->setMaxAge(3600);
     }
 
 //DASHBOARD
@@ -91,7 +92,8 @@ class PageEditController extends AbstractController
         );
         return $this->render(
             '@c975LPageEdit/pages/dashboard.html.twig',
-            ['pages' => $pages]);
+            ['pages' => $pages]
+        )->setMaxAge(3600);
     }
 
 //DISPLAY
@@ -134,7 +136,8 @@ class PageEditController extends AbstractController
 
             return $this->render(
                 $filePath,
-                ['toolbar' => $this->pageEditService->defineToolbar('display', $page), 'display' => 'html']);
+                ['toolbar' => $this->pageEditService->defineToolbar('display', $page), 'display' => 'html']
+            )->setMaxAge(3600);
         }
 
         throw $this->createNotFoundException();
@@ -172,7 +175,8 @@ class PageEditController extends AbstractController
         //Returns the create form
         return $this->render(
             '@c975LPageEdit/forms/create.html.twig',
-            ['form' => $form->createView(), 'pageEdit' => $pageEdit]);
+            ['form' => $form->createView(), 'pageEdit' => $pageEdit]
+        )->setMaxAge(3600);
     }
 
 //MODIFY
@@ -212,7 +216,8 @@ class PageEditController extends AbstractController
             //Returns the modify form
             return $this->render(
                 '@c975LPageEdit/forms/modify.html.twig',
-                ['form' => $form->createView(), 'pageEdit' => $pageEdit]);
+                ['form' => $form->createView(), 'pageEdit' => $pageEdit]
+            )->setMaxAge(3600);
         }
 
         throw $this->createNotFoundException();
@@ -256,7 +261,8 @@ class PageEditController extends AbstractController
             //Returns the duplicate form
             return $this->render(
                 '@c975LPageEdit/forms/duplicate.html.twig',
-                ['form' => $form->createView(), 'pageEdit' => $pageEditClone]);
+                ['form' => $form->createView(), 'pageEdit' => $pageEditClone]
+            )->setMaxAge(3600);
         }
 
         throw $this->createNotFoundException();
@@ -297,7 +303,8 @@ class PageEditController extends AbstractController
             //Returns the delete form
             return $this->render(
                 '@c975LPageEdit/forms/delete.html.twig',
-                ['form' => $form->createView(), 'pageEdit' => $pageEdit]);
+                ['form' => $form->createView(), 'pageEdit' => $pageEdit]
+            )->setMaxAge(3600);
         }
 
         //Not found
@@ -334,7 +341,8 @@ class PageEditController extends AbstractController
         //Renders the config form
         return $this->render(
             '@c975LConfig/forms/config.html.twig',
-            ['form' => $form->createView(), 'toolbar' => '@c975LPageEdit']);
+            ['form' => $form->createView(), 'toolbar' => '@c975LPageEdit']
+        )->setMaxAge(3600);
     }
 
 //HELP
@@ -353,6 +361,6 @@ class PageEditController extends AbstractController
         $this->denyAccessUnlessGranted('c975LPageEdit-help', null);
 
         //Renders the help
-        return $this->render('@c975LPageEdit/pages/help.html.twig');
+        return $this->render('@c975LPageEdit/pages/help.html.twig')->setMaxAge(3600);
     }
 }

@@ -56,7 +56,8 @@ class RedirectedController extends AbstractController
         if ($pageEdit instanceof PageEdit) {
             return $this->render(
                 '@c975LPageEdit/pages/redirected.html.twig',
-                ['pageEdit' => $pageEdit]);
+                ['pageEdit' => $pageEdit]
+            )->setMaxAge(3600);
         }
 
         throw $this->createNotFoundException();
@@ -97,7 +98,8 @@ class RedirectedController extends AbstractController
             //Renders the delete form
             return $this->render(
                 '@c975LPageEdit/forms/deleteArchived.html.twig',
-                ['form' => $form->createView(), 'pageEdit' => $pageEdit]);
+                ['form' => $form->createView(), 'pageEdit' => $pageEdit]
+            )->setMaxAge(3600);
         }
 
         throw $this->createNotFoundException();
