@@ -1,5 +1,5 @@
 {# For options, see: https://www.tinymce.com/docs/get-started-cloud/editor-and-features/ #}
-{{ inc_lib('tinymce', 'js', 'stable', '?apiKey=' ~ tinymceApiKey)|replace({'API-KEY': tinymceApiKey}) }}
+{# {{ inc_lib('tinymce', 'js', 'stable', '?apiKey=' ~ tinymceApiKey)|replace({'API-KEY': tinymceApiKey}) }} #}
 <script>
     tinymce.init({
         selector: 'textarea.tinymce',
@@ -9,7 +9,7 @@
         contextmenu: false,
         schema: 'html5 strict',
         content_css : [
-            '{{ inc_link('bootstrap', 'css', '3.*') }}',
+            // '{{ inc_link('bootstrap', 'css', '3.*') }}',
         ],
         {% if config('c975LCommon.tinymceLanguage') != null %}
             language_url : '{{ absolute_url(asset('vendor/tinymce/' ~ config('c975LCommon.tinymceLanguage') ~ '.js')) }}',

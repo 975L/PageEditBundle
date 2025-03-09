@@ -1,5 +1,10 @@
 # ChangeLog
 
+## v6.4
+
+- Removed use of`c975L/ServicesBundle` and replaced by `c975L/SiteBundle` (09/03/2025)
+- Removed use of`c975L/IncludeLibraryBundle` (09/03/2025)
+
 ## v6.3
 
 - Added ->setMaxAge(3600) to controllers (15/09/2024)
