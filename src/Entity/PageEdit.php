@@ -19,251 +19,131 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class PageEdit
 {
-    /**
-     * Stores title
-     * @var string
-     *
-     * @Assert\NotBlank()
-     */
-    protected $title;
+    #[Assert\NotBlank]
+    protected ?string $title = null;
 
-    /**
-     * Stores titleTranslated
-     * @var string
-     */
-    protected $titleTranslated;
+    protected ?string $titleTranslated = null;
 
-    /**
-     * Stores slug
-     * @var string
-     *
-     * @Assert\NotBlank()
-     */
-    protected $slug;
+    #[Assert\NotBlank]
+    protected ?string $slug = null;
 
-    /**
-     * Stores content
-     * @var string
-     *
-     * @Assert\NotBlank()
-     */
-    protected $content;
+    #[Assert\NotBlank]
+    protected ?string $content = null;
 
-    /**
-     * Stores filePath
-     * @var string
-     */
-    protected $filePath;
+    protected ?string $filePath = null;
 
-    /**
-     * Stores changeFrequency
-     * @var string
-     */
-    protected $changeFrequency;
+    protected ?string $changeFrequency = null;
 
-    /**
-     * Stores priority
-     * @var int
-     */
-    protected $priority;
+    protected ?int $priority = null;
 
-    /**
-     * Stores description
-     * @var string
-     */
-    protected $description;
+    protected ?string $description = null;
 
-    /**
-     * Stores modification
-     * @var DateTime
-     */
-    protected $modification;
+    protected ?DateTime $modification = null;
 
-    /**
-     * Set title
-     * @param string
-     * @return PageEdit
-     */
-    public function setTitle($title)
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * Get title
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     * Set titleTranslated
-     * @param string
-     * @return PageEdit
-     */
-    public function setTitleTranslated($titleTranslated)
+    public function setTitleTranslated(?string $titleTranslated): self
     {
         $this->titleTranslated = $titleTranslated;
 
         return $this;
     }
 
-    /**
-     * Get titleTranslated
-     * @return string
-     */
-    public function getTitleTranslated()
+    public function getTitleTranslated(): ?string
     {
         return $this->titleTranslated;
     }
 
-    /**
-     * Set slug
-     * @param string
-     * @return PageEdit
-     */
-    public function setSlug($slug)
+    public function setSlug(?string $slug): self
     {
         $this->slug = $slug;
 
         return $this;
     }
 
-    /**
-     * Get slug
-     * @return string
-     */
-    public function getSlug()
+    public function getSlug(): ?string
     {
         return $this->slug;
     }
 
-    /**
-     * Set content
-     * @param string
-     * @return PageEdit
-     */
-    public function setContent($content)
+    public function setContent(?string $content): self
     {
         $this->content = $content;
 
         return $this;
     }
 
-    /**
-     * Get content
-     * @return string
-     */
-    public function getContent()
+    public function getContent(): ?string
     {
         return $this->content;
     }
 
-    /**
-     * Set filePath
-     * @param string
-     * @return PageEdit
-     */
-    public function setFilePath($filePath)
+    public function setFilePath(?string $filePath): self
     {
         $this->filePath = $filePath;
 
         return $this;
     }
 
-    /**
-     * Get filePath
-     * @return string
-     */
-    public function getFilePath()
+    public function getFilePath(): ?string
     {
         return $this->filePath;
     }
 
-    /**
-     * Set changeFrequency
-     * @param string
-     * @return PageEdit
-     */
-    public function setChangeFrequency($changeFrequency)
+    public function setChangeFrequency(?string $changeFrequency): self
     {
         $this->changeFrequency = $changeFrequency;
 
         return $this;
     }
 
-    /**
-     * Get changeFrequency
-     * @return string
-     */
-    public function getChangeFrequency()
+    public function getChangeFrequency(): ?string
     {
         return $this->changeFrequency;
     }
 
-    /**
-     * Set priority
-     * @param int
-     * @return PageEdit
-     */
-    public function setPriority($priority)
+    public function setPriority(?int $priority): self
     {
         $this->priority = $priority;
 
         return $this;
     }
 
-    /**
-     * Get priority
-     * @return int
-     */
-    public function getPriority()
+    public function getPriority(): ?int
     {
         return $this->priority;
     }
 
-    /**
-     * Set description
-     * @param string
-     * @return PageEdit
-     */
-    public function setDescription($description)
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * Get description
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * Set modification
-     * @param DateTime
-     * @return PageEdit
-     */
-    public function setModification($modification)
+    public function setModification(?DateTime $modification): self
     {
         $this->modification = $modification;
 
         return $this;
     }
 
-    /**
-     * Get modification
-     * @return DateTime
-     */
-    public function getModification()
+    public function getModification(): ?DateTime
     {
         return $this->modification;
     }

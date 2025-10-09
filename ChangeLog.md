@@ -1,5 +1,9 @@
 # ChangeLog
 
+## v6.5.1
+
+- Converted entity to attributes (09/10/2025)
+
 ## v6.5
 
 - Replaced Symfony\Component\Routing\Annotation\Route by Symfony\Component\Routing\Attribute\Route (09/10/2025)
