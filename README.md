@@ -92,7 +92,7 @@ Then, enable the routes by adding them to the `app/config/routing.yml` file of y
 ```yml
 c975_l_page_edit:
     resource: "@c975LPageEditBundle/Controller/"
-    type: annotation
+    type: attribute
     prefix: /
     #Multilingual website use the following
     #prefix: /{_locale}

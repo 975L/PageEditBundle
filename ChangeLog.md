@@ -1,5 +1,9 @@
 # ChangeLog
 
+## v6.5
+
+- Replaced Symfony\Component\Routing\Annotation\Route by Symfony\Component\Routing\Attribute\Route (09/10/2025)
+
 ## v6.4
 
 - Removed use of`c975L/ServicesBundle` and replaced by `c975L/SiteBundle` (09/03/2025)
