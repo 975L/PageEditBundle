@@ -65,7 +65,9 @@
 {% endif %}
 
 {# Signout #}
-{{ toolbar_button(path('user_signout'), 'signout') }}
+{% if route_exists('user_signout') %}
+    {{ toolbar_button(path('user_signout'), 'signout') }}
+{% endif %}
 
 {# Other dashboards #}
 {{ toolbar_dashboards('md') }}

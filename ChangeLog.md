@@ -1,5 +1,9 @@
 # ChangeLog
 
+## v6.5.2
+
+- Added test of exists route user_signout (Tools must be reviewed..) (24/10/2025)
+
 ## v6.5.1
 
 - Converted entity to attributes (09/10/2025)
