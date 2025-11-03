@@ -65,7 +65,7 @@ class PageEditController extends AbstractController
     {
         return $this->render(
             'pages/home.html.twig',
-            ['toolbar' => $this->pageEditService->defineToolbar('display', 'home'), 'display' => 'html']
+// ['toolbar' => $this->pageEditService->defineToolbar('display', 'home'), 'display' => 'html']
         )->setMaxAge(3600);
     }
 
@@ -136,7 +136,7 @@ class PageEditController extends AbstractController
 
             return $this->render(
                 $filePath,
-                ['toolbar' => $this->pageEditService->defineToolbar('display', $page), 'display' => 'html']
+// ['toolbar' => $this->pageEditService->defineToolbar('display', $page), 'display' => 'html']
             )->setMaxAge(3600);
         }
 

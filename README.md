@@ -1,5 +1,8 @@
 # PageEditBundle
 
+**[This bundle is now DEPRECATED, part of its content (display pages) has been transferred to [c975L/SiteBundle](https://github.com/975L/SiteBundle)]**
+
+
 PageEditBundle does the following:
 
 - Displays pages requested,

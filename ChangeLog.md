@@ -1,5 +1,9 @@
 # ChangeLog
 
+## v6.6
+
+- Marked the bundle as DREPRECATED (03/11/2025)
+
 ## v6.5.2
 
 - Added test of exists route user_signout (Tools must be reviewed..) (24/10/2025)
